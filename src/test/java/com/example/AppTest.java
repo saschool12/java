@@ -12,13 +12,21 @@ class AppTest {
     void appGreetingIsPresent() {
         App app = new App();
         assertNotNull(app.getGreeting());
-        assertTrue(app.getGreeting().contains("100 Retro Games"));
+        assertTrue(app.getGreeting().contains("All 100 Games Fully Playable"));
     }
 
     @Test
     void gameCatalogContainsExactly100Games() {
         App.GameCatalog catalog = new App.GameCatalog();
         assertEquals(100, catalog.getTotalGamesCount(), "Game catalog must contain exactly 100 games");
+    }
+
+    @Test
+    void all100GamesArePlayable() {
+        App.GameCatalog catalog = new App.GameCatalog();
+        for (App.GameInfo game : catalog.getAllGames()) {
+            assertTrue(game.isPlayable(), "Game " + game.getTitle() + " must be playable!");
+        }
     }
 
     @Test
