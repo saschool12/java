@@ -1,39 +1,49 @@
-# Java Games Retro Arcade 🕹️
+# 100 Java Games Retro Vault 🕹️
 
-Play classic J2ME-style retro mobile games in your browser, powered by Java 17 and ready for 1-click deployment on **Vercel**, **Railway**, and **Render**.
+A comprehensive **100-in-1** retro mobile gaming arcade celebrating the golden era of **J2ME Java games (2000–2010)**. Built with Java 17, Gradle, and ready for instant deployment on **Vercel**, **Railway**, and **Render**.
 
-![Java Retro Games](https://img.shields.io/badge/Java-17-orange?logo=java)
+![100 Java Games](https://img.shields.io/badge/Catalog-100%20Games-gold?logo=java)
+![Java 17](https://img.shields.io/badge/Java-17-orange?logo=java)
 ![Vercel Ready](https://img.shields.io/badge/Vercel-Edge%20Ready-black?logo=vercel)
-![Gradle](https://img.shields.io/badge/Gradle-8.14.3-blue?logo=gradle)
 
 ---
 
-## 🎮 Playable Games Included
+## 🎮 The 100 Java Games Catalog
 
-1. **🚀 Space Impact (J2ME Classic)**: Pilot your spaceship, dodge alien lasers, take down heavy enemy cruisers, and fight through infinite waves.
-2. **🐍 Nokia Snake II**: The legendary green LCD monochrome phone classic. Eat apples, collect bonus creatures, and avoid running into your tail or walls.
-3. **🧱 Bounce / Brick Breaker**: Paddle arcade action with realistic ball reflections, destruction combos, and level progression.
+Explore and search all 100 legendary J2ME titles across 6 categories:
 
----
-
-## ✨ Features
-
-- **Retro Mobile Chassis**: Authentic retro phone layout with D-pad, action buttons (A/B), and keyboard controls (Arrow keys / WASD + Space).
-- **8-Bit Sound Synthesizer**: Web Audio API retro chimes, laser chirps, explosion rumbles, and audio mute toggle (zero audio assets required).
-- **Embedded Java 17 Backend**: Built-in HTTP server using Java's standard `jdk.httpserver` with zero heavy dependencies.
-- **REST Leaderboard API**: Real-time high-score submission and tracking (`GET /api/scores`, `POST /api/scores`, `GET /api/games`).
-- **Instant Vercel Deployment**: Configured with [`vercel.json`](file:///workspace/java/vercel.json) to deploy immediately to Vercel Edge.
+| Category | Count | Notable Classic Titles |
+| :--- | :--- | :--- |
+| **Action & Adventure** | 20 | Space Impact, Doom RPG, Gangstar, Assassin's Creed, Prince of Persia, Splinter Cell, Metal Slug 4, N.O.V.A., Call of Duty 4 |
+| **Arcade & Classics** | 20 | Nokia Snake II, Bounce Classic, Brick Breaker, Tetris, Pac-Man, Space Invaders, Sonic, Mega Man, Street Fighter II |
+| **Racing & Speed** | 15 | Asphalt 3: Street Rules, Asphalt 4, NFS Most Wanted, NFS Underground 2, Rally Pro Contest 3D, Ferrari GT, Moto GP |
+| **Puzzle & Brain** | 20 | Diamond Rush, Tower Bloxx, Bubble Bash, Bejeweled, Zuma, Bobby Carrot, Plants vs. Zombies J2ME, Peggle, Café Sudoku |
+| **Sports & Athletics** | 13 | Real Football 2008, FIFA 07, PES 2009, Playman World Athletics, Midnight Pool 3D, Tony Hawk 4, NBA Live 08 |
+| **RPG & Strategy** | 12 | Galaxy On Fire 2, Ancient Empires II, Heroes of Might & Magic, Age of Empires III, Townsmen 6, Gothic 3, Worms Forts |
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Features
+
+- **Retro Mobile Chassis & Controls**: Classic mobile phone frame with responsive on-screen **D-Pad** (▲ ◀ ▶ ▼) and action buttons (**[A] / [B]**), touch-optimized for mobile Android devices and keyboard (`Arrows` / `WASD` + `Space`).
+- **8-Bit Sound Synthesizer**: Web Audio API sound generator for retro laser chirps, explosion rumbles, powerup chimes, and audio mute toggle (no external audio files needed).
+- **Search & Filter**: Real-time search across all 100 games by title, developer (Gameloft, Nokia, EA Mobile, Digital Chocolate, Konami), or genre.
+- **Java 17 REST API**:
+  - `GET /api/games` – Returns all 100 games (supports `?category=...` and `?search=...`).
+  - `GET /api/scores` & `POST /api/scores` – High score leaderboard.
+  - `GET /api/status` – JVM memory and server health metrics.
+- **Vercel Ready**: Preconfigured [`vercel.json`](file:///workspace/java/vercel.json) for 1-click edge deployment.
+
+---
+
+## 💻 Quick Start
 
 ### Run Locally with Java
 ```bash
-# 1. Run tests
+# 1. Run unit tests
 ./gradlew test
 
-# 2. Start the local Java arcade server
+# 2. Start the local server
 ./gradlew run
 ```
 Open **`http://localhost:8080`** in your browser.
@@ -42,18 +52,6 @@ Open **`http://localhost:8080`** in your browser.
 
 ## 🌐 Deploy to Vercel
 
-1. Go to [vercel.com/new](https://vercel.com/new).
-2. Select repository **`saschool12/java`**.
-3. Click **Deploy**. Vercel will immediately deploy the retro game arcade to your personal `.vercel.app` URL!
-
----
-
-## 🕹️ Controls
-
-| Action | Keyboard | Touch / On-Screen |
-| :--- | :--- | :--- |
-| **Move Up / Down / Left / Right** | Arrow Keys or `W, A, S, D` | D-Pad Buttons |
-| **Fire / Action (A)** | `Space` or Enter | Pink `[A]` Button |
-| **Secondary Action (B)** | `X` | Cyan `[B]` Button |
-| **Pause / Resume** | `P` | `[PAUSE]` Button |
-| **Toggle Audio** | Click Audio Button | `[AUDIO]` Button |
+1. Visit [**vercel.com/new**](https://vercel.com/new).
+2. Connect your GitHub repository [**`saschool12/java`**](https://github.com/saschool12/java).
+3. Click **Deploy** to launch the 100-game retro arcade live!

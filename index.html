@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Java Retro Games Arcade | Play Classic J2ME Games</title>
-  <meta name="description" content="Nostalgic Java mobile games emulator & arcade. Play Space Impact, Nokia Snake II, and Brick Breaker directly in your browser.">
+  <title>100 Java Games Vault | Retro J2ME Mobile Arcade</title>
+  <meta name="description" content="100 Classic Java mobile games in one retro arcade vault. Play Space Impact, Nokia Snake II, Bounce, and explore 100 legendary J2ME titles.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
@@ -16,10 +16,11 @@
       --gold: #f9d423;
       --bg: #070913;
       --panel: #0d1224;
-      --panel-border: rgba(0, 242, 254, 0.25);
+      --panel-border: rgba(0, 242, 254, 0.22);
+      --card-bg: rgba(15, 22, 41, 0.75);
       --screen-bg: #040810;
       --text: #e2e8f0;
-      --text-dim: #7987a5;
+      --text-dim: #7e8da9;
     }
 
     * {
@@ -41,12 +42,13 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 1rem 0.5rem 3rem;
+      padding: 1rem 0.75rem 4rem;
     }
 
     header {
       text-align: center;
-      margin-bottom: 1rem;
+      margin-bottom: 1.25rem;
+      max-width: 900px;
     }
 
     .retro-badge {
@@ -55,65 +57,29 @@
       font-size: 0.65rem;
       background: linear-gradient(135deg, #f97316, #ea580c);
       color: #fff;
-      padding: 0.35rem 0.75rem;
+      padding: 0.35rem 0.85rem;
       border-radius: 4px;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
       letter-spacing: 1px;
-      box-shadow: 0 0 12px rgba(249, 115, 22, 0.5);
+      box-shadow: 0 0 14px rgba(249, 115, 22, 0.5);
     }
 
     h1 {
       font-family: 'Press Start 2P', monospace;
-      font-size: 1.35rem;
+      font-size: 1.45rem;
       color: #fff;
-      text-shadow: 0 0 10px rgba(0, 242, 254, 0.8), 0 0 20px rgba(79, 172, 254, 0.4);
-      margin-bottom: 0.25rem;
+      text-shadow: 0 0 10px rgba(0, 242, 254, 0.8), 0 0 25px rgba(79, 172, 254, 0.4);
+      margin-bottom: 0.4rem;
+      line-height: 1.4;
     }
 
     .sub-title {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       color: var(--text-dim);
       font-weight: 600;
     }
 
-    /* Game Selector Bar */
-    .game-tabs {
-      display: flex;
-      gap: 0.5rem;
-      margin: 1rem 0;
-      flex-wrap: wrap;
-      justify-content: center;
-      max-width: 600px;
-    }
-
-    .game-tab-btn {
-      background: var(--panel);
-      border: 1px solid var(--panel-border);
-      color: var(--text);
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 700;
-      font-size: 1rem;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.2s;
-    }
-
-    .game-tab-btn.active {
-      background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(255, 0, 127, 0.2));
-      border-color: var(--primary);
-      color: #fff;
-      box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
-    }
-
-    .game-tab-btn:hover {
-      border-color: var(--primary);
-    }
-
-    /* Retro Device Enclosure */
+    /* Emulator Container */
     .arcade-chassis {
       background: linear-gradient(180deg, #151d33 0%, #0d1222 100%);
       border: 2px solid rgba(0, 242, 254, 0.4);
@@ -124,8 +90,9 @@
         0 0 25px rgba(0, 242, 254, 0.15),
         inset 0 1px 2px rgba(255, 255, 255, 0.15);
       width: 100%;
-      max-width: 480px;
+      max-width: 490px;
       position: relative;
+      margin-bottom: 2.5rem;
     }
 
     .top-phone-bar {
@@ -143,7 +110,6 @@
       height: 4px;
       background: #25334d;
       border-radius: 2px;
-      margin: 0 auto;
     }
 
     /* Screen Bezel */
@@ -158,7 +124,6 @@
     }
 
     .screen-bezel::after {
-      /* CRT scanline effect */
       content: " ";
       display: block;
       position: absolute;
@@ -173,24 +138,23 @@
     #gameCanvas {
       display: block;
       width: 100%;
-      height: 320px;
+      height: 280px;
       background: var(--screen-bg);
       border-radius: 6px;
       image-rendering: pixelated;
     }
 
-    /* Game HUD overlay */
     .game-hud {
       display: flex;
       justify-content: space-between;
-      padding: 0.5rem 0.25rem;
+      padding: 0.4rem 0.25rem;
       font-family: 'Press Start 2P', monospace;
       font-size: 0.65rem;
       color: var(--primary);
       text-shadow: 0 0 5px var(--primary);
     }
 
-    /* Physical Phone Controls */
+    /* Controls */
     .controls-panel {
       margin-top: 1rem;
       display: flex;
@@ -205,7 +169,6 @@
       padding: 0 0.5rem;
     }
 
-    /* D-PAD */
     .dpad-container {
       display: grid;
       grid-template-columns: repeat(3, 44px);
@@ -224,15 +187,13 @@
       font-size: 1.1rem;
       cursor: pointer;
       touch-action: manipulation;
-      transition: background 0.1s, transform 0.1s;
       box-shadow: 0 3px 0 #0f172a;
     }
 
-    .dpad-btn:active, .dpad-btn.pressed {
+    .dpad-btn:active {
       background: var(--primary);
       color: #000;
       transform: translateY(2px);
-      box-shadow: 0 1px 0 #0f172a;
     }
 
     .dpad-center {
@@ -241,7 +202,6 @@
       border: 1px solid #1f293d;
     }
 
-    /* Action Buttons */
     .action-group {
       display: flex;
       gap: 0.75rem;
@@ -262,7 +222,6 @@
       cursor: pointer;
       box-shadow: 0 4px 0 #70002e, 0 0 12px rgba(255, 0, 127, 0.4);
       touch-action: manipulation;
-      transition: transform 0.1s, box-shadow 0.1s;
     }
 
     .action-btn.btn-b {
@@ -271,21 +230,15 @@
       box-shadow: 0 4px 0 #005580, 0 0 12px rgba(0, 242, 254, 0.4);
     }
 
-    .action-btn:active, .action-btn.pressed {
+    .action-btn:active {
       transform: translateY(3px);
-      box-shadow: 0 1px 0 #70002e;
     }
 
-    .action-btn.btn-b:active, .action-btn.btn-b.pressed {
-      box-shadow: 0 1px 0 #005580;
-    }
-
-    /* System Utility Buttons */
     .system-buttons {
       display: flex;
       justify-content: center;
       gap: 0.5rem;
-      margin-top: 0.5rem;
+      margin-top: 0.25rem;
     }
 
     .sys-btn {
@@ -300,86 +253,205 @@
       box-shadow: 0 2px 0 #0b1120;
     }
 
-    .sys-btn:active {
-      transform: translateY(1px);
+    /* 100 Games Catalog Section */
+    .vault-section {
+      width: 100%;
+      max-width: 1100px;
+      margin-top: 1rem;
     }
 
-    /* Leaderboard & Info Section */
-    .arcade-drawer {
-      margin-top: 1.5rem;
-      width: 100%;
-      max-width: 480px;
+    .vault-header {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
       background: var(--panel);
       border: 1px solid var(--panel-border);
       border-radius: 16px;
       padding: 1.25rem;
     }
 
-    .drawer-title {
+    .vault-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .vault-title {
       font-family: 'Press Start 2P', monospace;
-      font-size: 0.8rem;
+      font-size: 0.95rem;
       color: var(--gold);
-      margin-bottom: 0.75rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .leaderboard-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
+    .search-box {
+      width: 100%;
+      position: relative;
     }
 
-    .leaderboard-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.4rem 0.6rem;
-      background: rgba(0, 0, 0, 0.35);
-      border-radius: 6px;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.65rem;
-    }
-
-    .leaderboard-item.rank-1 {
-      color: var(--gold);
-      border: 1px solid rgba(249, 212, 35, 0.3);
-    }
-
-    .submit-score-box {
-      margin-top: 0.75rem;
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .submit-input {
-      background: #060913;
+    .search-input {
+      width: 100%;
+      background: #060914;
       border: 1px solid var(--panel-border);
       color: #fff;
-      padding: 0.4rem 0.6rem;
-      border-radius: 6px;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.65rem;
+      padding: 0.65rem 1rem;
+      border-radius: 8px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+    }
+
+    .category-pills {
+      display: flex;
+      gap: 0.4rem;
+      overflow-x: auto;
+      padding-bottom: 0.25rem;
+    }
+
+    .cat-pill {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-dim);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.3rem 0.85rem;
+      border-radius: 20px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .cat-pill.active {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+      box-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
+    }
+
+    /* 100 Game Cards Grid */
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .game-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      backdrop-filter: blur(8px);
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .game-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .game-card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .game-icon {
+      font-size: 1.75rem;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 0.4rem;
+      border-radius: 8px;
+      line-height: 1;
+    }
+
+    .game-meta {
       flex: 1;
     }
 
-    .submit-btn {
-      background: var(--primary);
+    .game-id {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.55rem;
+      color: var(--gold);
+    }
+
+    .game-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      margin: 0.15rem 0;
+    }
+
+    .game-dev {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    .game-desc {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      line-height: 1.35;
+      margin-bottom: 0.75rem;
+      flex-grow: 1;
+    }
+
+    .game-card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 0.5rem;
+    }
+
+    .game-genre-tag {
+      font-size: 0.75rem;
+      background: rgba(0, 242, 254, 0.12);
+      color: var(--primary);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .play-card-btn {
+      background: linear-gradient(135deg, #00f2fe, #4facfe);
       border: none;
       color: #000;
       font-family: 'Press Start 2P', monospace;
-      font-size: 0.65rem;
-      padding: 0.4rem 0.75rem;
+      font-size: 0.55rem;
+      padding: 0.35rem 0.65rem;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 700;
+      transition: opacity 0.15s;
+    }
+
+    .play-card-btn:hover {
+      opacity: 0.9;
+    }
+
+    .play-card-btn.sim-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
     }
 
     footer {
-      margin-top: 2rem;
+      margin-top: 3rem;
       text-align: center;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       color: var(--text-dim);
     }
 
@@ -392,30 +464,17 @@
 <body>
 
   <header>
-    <div class="retro-badge">JAVA 17 • J2ME RETRO ARCADE</div>
-    <h1>JAVA GAMES</h1>
-    <p class="sub-title">Classic J2ME Mobile Phone Gaming in Your Browser</p>
+    <div class="retro-badge">100-IN-1 VAULT • JAVA 17 • J2ME RETRO</div>
+    <h1>100 JAVA GAMES</h1>
+    <p class="sub-title">100 Legendary Nokia & Mobile Phone Classics in One Web Arcade</p>
   </header>
-
-  <!-- Game Selector -->
-  <div class="game-tabs">
-    <button class="game-tab-btn active" onclick="switchGame('space-impact')">
-      <span>🚀</span> Space Impact
-    </button>
-    <button class="game-tab-btn" onclick="switchGame('snake-retro')">
-      <span>🐍</span> Nokia Snake II
-    </button>
-    <button class="game-tab-btn" onclick="switchGame('brick-breaker')">
-      <span>🧱</span> Brick Breaker
-    </button>
-  </div>
 
   <!-- Retro Phone Arcade Device -->
   <div class="arcade-chassis">
     <div class="top-phone-bar">
-      <span>JAVA ME</span>
+      <span id="active-game-title">SPACE IMPACT</span>
       <div class="speaker-grill"></div>
-      <span id="sound-indicator">🔊 ON</span>
+      <span id="sound-indicator" style="cursor: pointer;" onclick="toggleSound()">🔊 ON</span>
     </div>
 
     <!-- Screen Bezel -->
@@ -428,7 +487,7 @@
       <canvas id="gameCanvas" width="360" height="260"></canvas>
     </div>
 
-    <!-- Device Controls -->
+    <!-- Controls -->
     <div class="controls-panel">
       <div class="keypad-row">
         <!-- D-PAD -->
@@ -459,42 +518,52 @@
     </div>
   </div>
 
-  <!-- Leaderboard & Java Server Drawer -->
-  <div class="arcade-drawer">
-    <div class="drawer-title">
-      <span>🏆</span>
-      <span>HALL OF FAME (JAVA API)</span>
-    </div>
-    <ul id="leaderboard-list" class="leaderboard-list">
-      <li class="leaderboard-item rank-1"><span>1. DUKE</span><span>4200 PTS</span></li>
-      <li class="leaderboard-item"><span>2. NEO</span><span>3100 PTS</span></li>
-      <li class="leaderboard-item"><span>3. PIXELKING</span><span>2850 PTS</span></li>
-    </ul>
+  <!-- 100 Games Catalog -->
+  <section class="vault-section">
+    <div class="vault-header">
+      <div class="vault-title-row">
+        <div class="vault-title">
+          <span>🕹️</span>
+          <span>100-IN-1 GAME VAULT</span>
+        </div>
+        <span id="game-count-label" style="font-size: 0.9rem; color: var(--gold); font-weight: 700;">Showing 100 Games</span>
+      </div>
 
-    <div class="submit-score-box">
-      <input type="text" id="player-name" class="submit-input" placeholder="YOUR INITIALS" maxlength="8">
-      <button class="submit-btn" onclick="submitCurrentScore()">SUBMIT</button>
+      <div class="search-box">
+        <input type="text" id="game-search" class="search-input" placeholder="🔍 Search by name, developer (e.g. Asphalt, Gameloft, Nokia, Doom, Snake)..." oninput="filterGames()">
+      </div>
+
+      <div class="category-pills">
+        <button class="cat-pill active" onclick="setCategory('all')">All (100)</button>
+        <button class="cat-pill" onclick="setCategory('Action')">Action (20)</button>
+        <button class="cat-pill" onclick="setCategory('Arcade')">Arcade (20)</button>
+        <button class="cat-pill" onclick="setCategory('Racing')">Racing (15)</button>
+        <button class="cat-pill" onclick="setCategory('Puzzle')">Puzzle (20)</button>
+        <button class="cat-pill" onclick="setCategory('Sports')">Sports (13)</button>
+        <button class="cat-pill" onclick="setCategory('RPG')">RPG & Strategy (12)</button>
+      </div>
     </div>
-  </div>
+
+    <!-- 100 Game Cards -->
+    <div id="games-grid" class="games-grid">
+      <!-- Injected by JavaScript -->
+    </div>
+  </section>
 
   <footer>
-    <p>Powered by Java 17 & Vercel Edge • <a href="https://github.com/saschool12/java" target="_blank">saschool12/java</a></p>
+    <p>100 Java Games Archive • Powered by Java 17 & Vercel Edge • <a href="https://github.com/saschool12/java" target="_blank">github.com/saschool12/java</a></p>
   </footer>
 
   <script>
     // -------------------------------------------------------------
-    // 8-BIT AUDIO SYNTHESIZER (Web Audio API)
+    // 8-BIT AUDIO SYNTHESIZER
     // -------------------------------------------------------------
     let audioCtx = null;
     let soundEnabled = true;
 
     function initAudio() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
     }
 
     function playBeep(freq, type = 'square', duration = 0.08, volume = 0.12) {
@@ -539,8 +608,8 @@
 
     function playPowerupSound() {
       if (!soundEnabled) return;
-      [300, 450, 600, 850].forEach((freq, idx) => {
-        setTimeout(() => playBeep(freq, 'triangle', 0.07, 0.12), idx * 50);
+      [320, 480, 640, 960].forEach((freq, idx) => {
+        setTimeout(() => playBeep(freq, 'triangle', 0.06, 0.12), idx * 45);
       });
     }
 
@@ -551,7 +620,7 @@
     }
 
     // -------------------------------------------------------------
-    // ARCADE ENGINE & CANVAS
+    // ARCADE GAME ENGINES (Space Impact, Snake II, Bounce, Asteroids, Racer, Flappy)
     // -------------------------------------------------------------
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
@@ -573,9 +642,7 @@
 
     function handleInput(code, isDown) {
       if (isDown) initAudio();
-      if (code === 'Space' || code === 'KeyX' || code.startsWith('Arrow')) {
-        keys[code] = isDown;
-      }
+      if (keys.hasOwnProperty(code)) keys[code] = isDown;
       if (isDown && (code === 'Space' || code === 'KeyX') && gameOver) {
         restartCurrentGame();
       }
@@ -596,93 +663,58 @@
       }
     });
 
-    // -------------------------------------------------------------
-    // GAME 1: SPACE IMPACT (J2ME Classic)
-    // -------------------------------------------------------------
+    // Space Impact Engine
     const spaceImpact = {
-      player: { x: 30, y: 120, w: 24, h: 14, speed: 3.5, shootCooldown: 0 },
-      bullets: [],
-      enemies: [],
-      particles: [],
-      stars: [],
-      spawnTimer: 0,
-
+      player: { x: 30, y: 120, w: 24, h: 14, speed: 3.5, cooldown: 0 },
+      bullets: [], enemies: [], particles: [], stars: [], spawnTimer: 0,
       init() {
-        this.player.x = 30;
-        this.player.y = canvas.height / 2 - 7;
-        this.bullets = [];
-        this.enemies = [];
-        this.particles = [];
-        this.stars = [];
+        this.player.x = 30; this.player.y = canvas.height / 2 - 7;
+        this.bullets = []; this.enemies = []; this.particles = []; this.stars = [];
         for (let i = 0; i < 35; i++) {
-          this.stars.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            speed: 0.5 + Math.random() * 2
-          });
+          this.stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, speed: 0.5 + Math.random() * 2 });
         }
       },
-
       update() {
         if (gameOver || isPaused) return;
-
-        // Player Movement
         if (keys.ArrowUp && this.player.y > 5) this.player.y -= this.player.speed;
         if (keys.ArrowDown && this.player.y < canvas.height - this.player.h - 5) this.player.y += this.player.speed;
         if (keys.ArrowLeft && this.player.x > 5) this.player.x -= this.player.speed;
         if (keys.ArrowRight && this.player.x < canvas.width / 2) this.player.x += this.player.speed;
 
-        // Shooting
-        this.player.shootCooldown--;
-        if ((keys.Space || keys.KeyX) && this.player.shootCooldown <= 0) {
+        this.player.cooldown--;
+        if ((keys.Space || keys.KeyX) && this.player.cooldown <= 0) {
           this.bullets.push({ x: this.player.x + this.player.w, y: this.player.y + 6, speed: 6.5, w: 8, h: 3 });
-          this.player.shootCooldown = 12;
+          this.player.cooldown = 12;
           playLaserSound();
         }
 
-        // Stars
-        this.stars.forEach(s => {
-          s.x -= s.speed;
-          if (s.x < 0) s.x = canvas.width;
-        });
+        this.stars.forEach(s => { s.x -= s.speed; if (s.x < 0) s.x = canvas.width; });
 
-        // Bullets
         for (let i = this.bullets.length - 1; i >= 0; i--) {
-          const b = this.bullets[i];
-          b.x += b.speed;
-          if (b.x > canvas.width) this.bullets.splice(i, 1);
+          this.bullets[i].x += this.bullets[i].speed;
+          if (this.bullets[i].x > canvas.width) this.bullets.splice(i, 1);
         }
 
-        // Spawn Enemies
         this.spawnTimer++;
         if (this.spawnTimer > Math.max(25, 60 - level * 5)) {
           this.spawnTimer = 0;
           const isHeavy = Math.random() > 0.7;
           this.enemies.push({
-            x: canvas.width + 10,
-            y: 15 + Math.random() * (canvas.height - 40),
-            w: isHeavy ? 24 : 16,
-            h: isHeavy ? 20 : 12,
-            hp: isHeavy ? 3 : 1,
-            speed: isHeavy ? 1.5 : 2.5 + Math.random() * 1.5,
-            isHeavy
+            x: canvas.width + 10, y: 15 + Math.random() * (canvas.height - 40),
+            w: isHeavy ? 24 : 16, h: isHeavy ? 20 : 12, hp: isHeavy ? 3 : 1,
+            speed: isHeavy ? 1.5 : 2.5 + Math.random() * 1.5, isHeavy
           });
         }
 
-        // Enemies
         for (let i = this.enemies.length - 1; i >= 0; i--) {
           const e = this.enemies[i];
           e.x -= e.speed;
-
-          // Bullet collision
           for (let j = this.bullets.length - 1; j >= 0; j--) {
             const b = this.bullets[j];
             if (b.x < e.x + e.w && b.x + b.w > e.x && b.y < e.y + e.h && b.y + b.h > e.y) {
               this.bullets.splice(j, 1);
               e.hp--;
-              this.createExplosion(b.x, b.y, '#00f2fe', 4);
               if (e.hp <= 0) {
-                this.createExplosion(e.x + e.w/2, e.y + e.h/2, e.isHeavy ? '#f97316' : '#ff007f', 12);
                 playExplosionSound();
                 score += e.isHeavy ? 150 : 50;
                 if (score > level * 800) level++;
@@ -692,71 +724,34 @@
               }
             }
           }
-
-          // Player collision
           if (this.enemies[i] && this.player.x < e.x + e.w && this.player.x + this.player.w > e.x &&
               this.player.y < e.y + e.h && this.player.y + this.player.h > e.y) {
             this.enemies.splice(i, 1);
-            this.createExplosion(this.player.x, this.player.y, '#ff0055', 18);
             playExplosionSound();
             lives--;
             updateHud();
-            if (lives <= 0) {
-              gameOver = true;
-            }
+            if (lives <= 0) gameOver = true;
           }
-
           if (e.x < -30) this.enemies.splice(i, 1);
         }
-
-        // Particles
-        for (let i = this.particles.length - 1; i >= 0; i--) {
-          const p = this.particles[i];
-          p.x += p.vx;
-          p.y += p.vy;
-          p.life--;
-          if (p.life <= 0) this.particles.splice(i, 1);
-        }
       },
-
-      createExplosion(x, y, color, count) {
-        for (let i = 0; i < count; i++) {
-          this.particles.push({
-            x, y,
-            vx: (Math.random() - 0.5) * 4,
-            vy: (Math.random() - 0.5) * 4,
-            color,
-            life: 15 + Math.random() * 10
-          });
-        }
-      },
-
       draw() {
         ctx.fillStyle = '#050711';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Stars
         ctx.fillStyle = '#475569';
-        this.stars.forEach(s => {
-          ctx.fillRect(s.x, s.y, 2, 2);
-        });
+        this.stars.forEach(s => ctx.fillRect(s.x, s.y, 2, 2));
 
-        // Player Spacecraft (Pixel Art)
+        // Player
         ctx.fillStyle = '#00f2fe';
         const p = this.player;
         ctx.fillRect(p.x, p.y + 4, p.w, 6);
         ctx.fillRect(p.x + 6, p.y, 10, 14);
-        ctx.fillStyle = '#38bdf8';
-        ctx.fillRect(p.x + p.w - 4, p.y + 5, 6, 4); // cockpit
-        // Thruster flame
         ctx.fillStyle = Math.random() > 0.5 ? '#f97316' : '#ef4444';
         ctx.fillRect(p.x - 5, p.y + 5, 5, 4);
 
         // Bullets
         ctx.fillStyle = '#f9d423';
-        this.bullets.forEach(b => {
-          ctx.fillRect(b.x, b.y, b.w, b.h);
-        });
+        this.bullets.forEach(b => ctx.fillRect(b.x, b.y, b.w, b.h));
 
         // Enemies
         this.enemies.forEach(e => {
@@ -765,276 +760,184 @@
           ctx.fillStyle = '#fff';
           ctx.fillRect(e.x + 3, e.y + 3, 3, 3);
         });
-
-        // Particles
-        this.particles.forEach(p => {
-          ctx.fillStyle = p.color;
-          ctx.fillRect(p.x, p.y, 3, 3);
-        });
       }
     };
 
-    // -------------------------------------------------------------
-    // GAME 2: NOKIA SNAKE II (Classic Nokia style)
-    // -------------------------------------------------------------
+    // Snake II Engine
     const snakeGame = {
-      gridSize: 10,
-      snake: [],
-      dir: { x: 1, y: 0 },
-      nextDir: { x: 1, y: 0 },
-      food: { x: 15, y: 12 },
-      bonus: null,
-      bonusTimer: 0,
-      moveTimer: 0,
-
+      gridSize: 10, snake: [], dir: { x: 1, y: 0 }, nextDir: { x: 1, y: 0 }, food: { x: 15, y: 12 }, moveTimer: 0,
       init() {
-        this.snake = [
-          { x: 10, y: 10 },
-          { x: 9, y: 10 },
-          { x: 8, y: 10 }
-        ];
-        this.dir = { x: 1, y: 0 };
-        this.nextDir = { x: 1, y: 0 };
+        this.snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
+        this.dir = { x: 1, y: 0 }; this.nextDir = { x: 1, y: 0 };
         this.spawnFood();
-        this.bonus = null;
-        this.bonusTimer = 0;
       },
-
       spawnFood() {
         const cols = Math.floor(canvas.width / this.gridSize);
         const rows = Math.floor(canvas.height / this.gridSize);
-        this.food = {
-          x: Math.floor(Math.random() * (cols - 2)) + 1,
-          y: Math.floor(Math.random() * (rows - 2)) + 1
-        };
+        this.food = { x: Math.floor(Math.random() * (cols - 2)) + 1, y: Math.floor(Math.random() * (rows - 2)) + 1 };
       },
-
       update() {
         if (gameOver || isPaused) return;
-
         if (keys.ArrowUp && this.dir.y === 0) this.nextDir = { x: 0, y: -1 };
         if (keys.ArrowDown && this.dir.y === 0) this.nextDir = { x: 0, y: 1 };
         if (keys.ArrowLeft && this.dir.x === 0) this.nextDir = { x: -1, y: 0 };
         if (keys.ArrowRight && this.dir.x === 0) this.nextDir = { x: 1, y: 0 };
 
         this.moveTimer++;
-        const speedThreshold = Math.max(4, 9 - level);
-        if (this.moveTimer < speedThreshold) return;
+        if (this.moveTimer < Math.max(4, 9 - level)) return;
         this.moveTimer = 0;
 
         this.dir = { ...this.nextDir };
         const head = { x: this.snake[0].x + this.dir.x, y: this.snake[0].y + this.dir.y };
-
         const cols = Math.floor(canvas.width / this.gridSize);
         const rows = Math.floor(canvas.height / this.gridSize);
 
-        // Screen wrap or wall hit
         if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows) {
-          playExplosionSound();
-          lives--;
-          updateHud();
-          if (lives <= 0) gameOver = true;
-          else this.init();
+          playExplosionSound(); lives--; updateHud();
+          if (lives <= 0) gameOver = true; else this.init();
           return;
         }
 
-        // Self collision
         for (let i = 0; i < this.snake.length; i++) {
           if (head.x === this.snake[i].x && head.y === this.snake[i].y) {
-            playExplosionSound();
-            lives--;
-            updateHud();
-            if (lives <= 0) gameOver = true;
-            else this.init();
+            playExplosionSound(); lives--; updateHud();
+            if (lives <= 0) gameOver = true; else this.init();
             return;
           }
         }
 
         this.snake.unshift(head);
-
-        // Food hit
         if (head.x === this.food.x && head.y === this.food.y) {
-          score += 100 * level;
-          playPowerupSound();
-          this.spawnFood();
+          score += 100 * level; playPowerupSound(); this.spawnFood();
           if (score >= level * 500) level++;
           updateHud();
         } else {
           this.snake.pop();
         }
       },
-
       draw() {
-        // Classic Nokia green monochrome LCD tone
         ctx.fillStyle = '#879b6f';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Snake Body
         ctx.fillStyle = '#1e2d14';
-        this.snake.forEach((part, i) => {
-          ctx.fillRect(part.x * this.gridSize + 1, part.y * this.gridSize + 1, this.gridSize - 2, this.gridSize - 2);
-        });
-
-        // Food (Pixel Apple)
+        this.snake.forEach(part => ctx.fillRect(part.x * this.gridSize + 1, part.y * this.gridSize + 1, this.gridSize - 2, this.gridSize - 2));
         ctx.fillStyle = '#14200d';
         ctx.fillRect(this.food.x * this.gridSize + 2, this.food.y * this.gridSize + 2, this.gridSize - 4, this.gridSize - 4);
       }
     };
 
-    // -------------------------------------------------------------
-    // GAME 3: BRICK BREAKER (Bounce arcade)
-    // -------------------------------------------------------------
+    // Brick Breaker Engine
     const brickBreaker = {
       paddle: { x: 140, y: 240, w: 60, h: 8, speed: 5 },
       ball: { x: 180, y: 220, r: 4, vx: 3, vy: -3 },
       bricks: [],
-
       init() {
         this.paddle.x = canvas.width / 2 - 30;
-        this.ball.x = canvas.width / 2;
-        this.ball.y = canvas.height - 40;
-        this.ball.vx = 2.5 * (Math.random() > 0.5 ? 1 : -1);
-        this.ball.vy = -3;
-
+        this.ball.x = canvas.width / 2; this.ball.y = canvas.height - 40;
+        this.ball.vx = 2.5 * (Math.random() > 0.5 ? 1 : -1); this.ball.vy = -3;
         this.bricks = [];
-        const rows = 4;
-        const cols = 8;
-        const bW = 38;
-        const bH = 12;
-        const offsetLeft = 20;
-        const offsetTop = 25;
-
         const colors = ['#ff007f', '#f97316', '#00f2fe', '#10b981'];
-
-        for (let r = 0; r < rows; r++) {
-          for (let c = 0; c < cols; c++) {
-            this.bricks.push({
-              x: offsetLeft + c * (bW + 5),
-              y: offsetTop + r * (bH + 6),
-              w: bW,
-              h: bH,
-              color: colors[r % colors.length],
-              alive: true
-            });
+        for (let r = 0; r < 4; r++) {
+          for (let c = 0; c < 8; c++) {
+            this.bricks.push({ x: 20 + c * 43, y: 25 + r * 18, w: 38, h: 12, color: colors[r], alive: true });
           }
         }
       },
-
       update() {
         if (gameOver || isPaused) return;
-
-        // Paddle move
         if (keys.ArrowLeft && this.paddle.x > 5) this.paddle.x -= this.paddle.speed;
         if (keys.ArrowRight && this.paddle.x < canvas.width - this.paddle.w - 5) this.paddle.x += this.paddle.speed;
 
-        // Ball movement
-        this.ball.x += this.ball.vx;
-        this.ball.y += this.ball.vy;
+        this.ball.x += this.ball.vx; this.ball.y += this.ball.vy;
+        if (this.ball.x - this.ball.r < 0 || this.ball.x + this.ball.r > canvas.width) { this.ball.vx = -this.ball.vx; playBeep(320); }
+        if (this.ball.y - this.ball.r < 0) { this.ball.vy = -this.ball.vy; playBeep(350); }
 
-        // Wall collisions
-        if (this.ball.x - this.ball.r < 0 || this.ball.x + this.ball.r > canvas.width) {
-          this.ball.vx = -this.ball.vx;
-          playBeep(320);
-        }
-        if (this.ball.y - this.ball.r < 0) {
-          this.ball.vy = -this.ball.vy;
-          playBeep(350);
-        }
-
-        // Paddle hit
-        if (this.ball.y + this.ball.r >= this.paddle.y &&
-            this.ball.y - this.ball.r <= this.paddle.y + this.paddle.h &&
+        if (this.ball.y + this.ball.r >= this.paddle.y && this.ball.y - this.ball.r <= this.paddle.y + this.paddle.h &&
             this.ball.x >= this.paddle.x && this.ball.x <= this.paddle.x + this.paddle.w) {
           this.ball.vy = -Math.abs(this.ball.vy);
-          // Angle modifier based on hit position
-          const hitPos = (this.ball.x - (this.paddle.x + this.paddle.w / 2)) / (this.paddle.w / 2);
-          this.ball.vx = hitPos * 4.5;
+          const hit = (this.ball.x - (this.paddle.x + this.paddle.w / 2)) / (this.paddle.w / 2);
+          this.ball.vx = hit * 4.5;
           playBeep(520, 'triangle');
         }
 
-        // Brick collision
-        let remaining = 0;
+        let left = 0;
         this.bricks.forEach(b => {
           if (!b.alive) return;
-          remaining++;
-          if (this.ball.x > b.x && this.ball.x < b.x + b.w &&
-              this.ball.y > b.y && this.ball.y < b.y + b.h) {
-            b.alive = false;
-            this.ball.vy = -this.ball.vy;
-            score += 120;
-            playPowerupSound();
-            updateHud();
+          left++;
+          if (this.ball.x > b.x && this.ball.x < b.x + b.w && this.ball.y > b.y && this.ball.y < b.y + b.h) {
+            b.alive = false; this.ball.vy = -this.ball.vy; score += 120;
+            playPowerupSound(); updateHud();
           }
         });
 
-        // Check if cleared
-        if (remaining === 0) {
-          level++;
-          updateHud();
-          this.init();
-        }
-
-        // Ball drop out
+        if (left === 0) { level++; updateHud(); this.init(); }
         if (this.ball.y > canvas.height) {
-          lives--;
-          playExplosionSound();
-          updateHud();
-          if (lives <= 0) {
-            gameOver = true;
-          } else {
-            this.ball.x = this.paddle.x + this.paddle.w / 2;
-            this.ball.y = this.paddle.y - 10;
-            this.ball.vy = -3;
-          }
+          lives--; playExplosionSound(); updateHud();
+          if (lives <= 0) gameOver = true;
+          else { this.ball.x = this.paddle.x + 30; this.ball.y = this.paddle.y - 10; this.ball.vy = -3; }
         }
       },
-
       draw() {
         ctx.fillStyle = '#050711';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // Paddle
         ctx.fillStyle = '#00f2fe';
         ctx.fillRect(this.paddle.x, this.paddle.y, this.paddle.w, this.paddle.h);
-
-        // Ball
         ctx.fillStyle = '#fff';
-        ctx.beginPath();
-        ctx.arc(this.ball.x, this.ball.y, this.ball.r, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Bricks
-        this.bricks.forEach(b => {
-          if (!b.alive) return;
-          ctx.fillStyle = b.color;
-          ctx.fillRect(b.x, b.y, b.w, b.h);
-        });
+        ctx.beginPath(); ctx.arc(this.ball.x, this.ball.y, this.ball.r, 0, Math.PI * 2); ctx.fill();
+        this.bricks.forEach(b => { if (b.alive) { ctx.fillStyle = b.color; ctx.fillRect(b.x, b.y, b.w, b.h); } });
       }
     };
 
-    // -------------------------------------------------------------
-    // ENGINE CONTROLLER & MAIN LOOP
-    // -------------------------------------------------------------
-    function switchGame(gameId) {
-      currentGame = gameId;
-      document.querySelectorAll('.game-tab-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.getAttribute('onclick').includes(gameId));
-      });
+    // Pixel Racer Engine
+    const pixelRacer = {
+      carX: 180, obstacles: [], speed: 4, timer: 0,
+      init() { this.carX = canvas.width / 2; this.obstacles = []; this.timer = 0; },
+      update() {
+        if (gameOver || isPaused) return;
+        if (keys.ArrowLeft && this.carX > 60) this.carX -= 4.5;
+        if (keys.ArrowRight && this.carX < canvas.width - 80) this.carX += 4.5;
+        this.timer++;
+        if (this.timer > 35) {
+          this.timer = 0;
+          this.obstacles.push({ x: 65 + Math.random() * (canvas.width - 150), y: -30, w: 22, h: 32, color: '#ff007f' });
+        }
+        for (let i = this.obstacles.length - 1; i >= 0; i--) {
+          const o = this.obstacles[i];
+          o.y += this.speed + level * 0.5;
+          if (o.x < this.carX + 20 && o.x + o.w > this.carX && o.y < 210 + 35 && o.y + o.h > 210) {
+            playExplosionSound(); lives--; updateHud();
+            this.obstacles.splice(i, 1);
+            if (lives <= 0) gameOver = true;
+          }
+          if (o.y > canvas.height) { this.obstacles.splice(i, 1); score += 50; updateHud(); }
+        }
+      },
+      draw() {
+        ctx.fillStyle = '#1e293b'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#0f172a'; ctx.fillRect(50, 0, canvas.width - 100, canvas.height);
+        ctx.fillStyle = '#f9d423';
+        for (let y = 0; y < canvas.height; y += 40) ctx.fillRect(canvas.width / 2 - 2, (y + (Date.now() / 10) % 40), 4, 20);
+
+        // Player Car
+        ctx.fillStyle = '#00f2fe'; ctx.fillRect(this.carX, 210, 20, 32);
+        ctx.fillStyle = '#fff'; ctx.fillRect(this.carX + 4, 215, 12, 8);
+        this.obstacles.forEach(o => { ctx.fillStyle = o.color; ctx.fillRect(o.x, o.y, o.w, o.h); });
+      }
+    };
+
+    function switchGame(slug, title) {
+      currentGame = slug;
+      document.getElementById('active-game-title').innerText = (title || slug).toUpperCase();
       restartCurrentGame();
-      fetchLeaderboard();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function restartCurrentGame() {
-      score = 0;
-      lives = 3;
-      level = 1;
-      gameOver = false;
-      isPaused = false;
+      score = 0; lives = 3; level = 1; gameOver = false; isPaused = false;
       updateHud();
-
-      if (currentGame === 'space-impact') spaceImpact.init();
-      else if (currentGame === 'snake-retro') snakeGame.init();
-      else if (currentGame === 'brick-breaker') brickBreaker.init();
+      if (currentGame === 'snake-retro') snakeGame.init();
+      else if (currentGame === 'brick-breaker' || currentGame === 'bounce') brickBreaker.init();
+      else if (currentGame === 'pixel-racer' || currentGame.includes('asphalt') || currentGame.includes('racing') || currentGame.includes('nfs')) pixelRacer.init();
+      else spaceImpact.init();
     }
 
     function togglePause() {
@@ -1049,104 +952,209 @@
     }
 
     function loop() {
-      if (currentGame === 'space-impact') {
-        spaceImpact.update();
-        spaceImpact.draw();
-      } else if (currentGame === 'snake-retro') {
-        snakeGame.update();
-        snakeGame.draw();
-      } else if (currentGame === 'brick-breaker') {
-        brickBreaker.update();
-        brickBreaker.draw();
-      }
+      if (currentGame === 'snake-retro') { snakeGame.update(); snakeGame.draw(); }
+      else if (currentGame === 'brick-breaker' || currentGame === 'bounce') { brickBreaker.update(); brickBreaker.draw(); }
+      else if (currentGame === 'pixel-racer' || currentGame.includes('asphalt') || currentGame.includes('racing') || currentGame.includes('nfs')) { pixelRacer.update(); pixelRacer.draw(); }
+      else { spaceImpact.update(); spaceImpact.draw(); }
 
-      // Overlays
       if (gameOver) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#ff0055';
-        ctx.font = '16px "Press Start 2P"';
-        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.75)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#ff0055'; ctx.font = '16px "Press Start 2P"'; ctx.textAlign = 'center';
         ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 10);
-        ctx.fillStyle = '#fff';
-        ctx.font = '10px "Press Start 2P"';
+        ctx.fillStyle = '#fff'; ctx.font = '10px "Press Start 2P"';
         ctx.fillText(`FINAL SCORE: ${score}`, canvas.width / 2, canvas.height / 2 + 15);
         ctx.fillText('PRESS [A] TO RESTART', canvas.width / 2, canvas.height / 2 + 35);
       } else if (isPaused) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#00f2fe';
-        ctx.font = '14px "Press Start 2P"';
-        ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.6)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#00f2fe'; ctx.font = '14px "Press Start 2P"'; ctx.textAlign = 'center';
         ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2);
       }
-
       requestAnimationFrame(loop);
     }
 
     // -------------------------------------------------------------
-    // LEADERBOARD API INTEGRATION
+    // 100 GAMES DATA & FILTERING
     // -------------------------------------------------------------
-    async function fetchLeaderboard() {
+    let allGames = [];
+    let currentCategory = 'all';
+
+    async function loadGames() {
       try {
-        const res = await fetch(`/api/scores?game=${currentGame}`);
+        const res = await fetch('/api/games');
         if (res.ok) {
-          const list = await res.json();
-          renderLeaderboard(list);
+          allGames = await res.json();
+          renderGamesGrid(allGames);
           return;
         }
       } catch (e) {}
 
-      // Fallback local records for Vercel edge / static preview
-      const local = JSON.parse(localStorage.getItem(`java_scores_${currentGame}`) || '[]');
-      const defaultScores = [
-        { player: 'DUKE', score: 4200 },
-        { player: 'NEO', score: 3100 },
-        { player: 'PIXELKING', score: 2850 }
-      ];
-      renderLeaderboard(local.length ? local : defaultScores);
+      // Fallback local dataset for static Vercel Edge hosting
+      allGames = generateLocal100Games();
+      renderGamesGrid(allGames);
     }
 
-    function renderLeaderboard(scores) {
-      const ul = document.getElementById('leaderboard-list');
-      ul.innerHTML = '';
-      scores.slice(0, 5).forEach((s, idx) => {
-        const li = document.createElement('li');
-        li.className = `leaderboard-item ${idx === 0 ? 'rank-1' : ''}`;
-        li.innerHTML = `<span>${idx + 1}. ${s.player}</span><span>${s.score} PTS</span>`;
-        ul.appendChild(li);
+    function renderGamesGrid(games) {
+      const container = document.getElementById('games-grid');
+      container.innerHTML = '';
+      document.getElementById('game-count-label').innerText = `Showing ${games.length} of 100 Games`;
+
+      games.forEach(g => {
+        const card = document.createElement('div');
+        card.className = 'game-card';
+        card.innerHTML = `
+          <div>
+            <div class="game-card-top">
+              <span class="game-icon">${g.icon}</span>
+              <div class="game-meta">
+                <span class="game-id">#${g.id}</span>
+                <h3 class="game-title">${g.title}</h3>
+                <div class="game-dev">${g.developer} • ${g.year}</div>
+              </div>
+            </div>
+            <p class="game-desc">${g.description}</p>
+          </div>
+          <div class="game-card-bottom">
+            <span class="game-genre-tag">${g.category}</span>
+            <button class="play-card-btn ${g.playable ? '' : 'sim-btn'}" onclick="switchGame('${g.slug}', '${g.title}')">
+              ${g.playable ? '▶ PLAY' : '🎮 SIMULATE'}
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
       });
     }
 
-    async function submitCurrentScore() {
-      const nameInput = document.getElementById('player-name');
-      const player = (nameInput.value || 'GUEST').trim().toUpperCase();
-      if (!player) return;
-
-      const newEntry = { player, game: currentGame, score: Math.max(score, 100) };
-
-      try {
-        await fetch('/api/scores', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(newEntry)
-        });
-      } catch (e) {
-        // Save locally if Java backend offline
-        const local = JSON.parse(localStorage.getItem(`java_scores_${currentGame}`) || '[]');
-        local.push(newEntry);
-        local.sort((a, b) => b.score - a.score);
-        localStorage.setItem(`java_scores_${currentGame}`, JSON.stringify(local));
-      }
-
-      playPowerupSound();
-      nameInput.value = '';
-      fetchLeaderboard();
+    function setCategory(cat) {
+      currentCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText.toLowerCase().includes(cat.toLowerCase()));
+      });
+      filterGames();
     }
 
-    // Start Arcade
+    function filterGames() {
+      const query = document.getElementById('game-search').value.toLowerCase().trim();
+      const filtered = allGames.filter(g => {
+        const matchCat = currentCategory === 'all' || g.category.toLowerCase().includes(currentCategory.toLowerCase());
+        const matchQuery = !query || 
+          g.title.toLowerCase().includes(query) || 
+          g.developer.toLowerCase().includes(query) ||
+          g.category.toLowerCase().includes(query);
+        return matchCat && matchQuery;
+      });
+      renderGamesGrid(filtered);
+    }
+
+    function generateLocal100Games() {
+      // 100 curated classic Java games for standalone fallback
+      const list = [
+        {id:1, slug:"space-impact", title:"Space Impact", category:"Action", developer:"Nokia", year:2000, icon:"🚀", playable:true, description:"The legendary Nokia 3310 space shooter."},
+        {id:2, slug:"doom-rpg", title:"Doom RPG", category:"Action", developer:"id Software", year:2005, icon:"👹", playable:false, description:"Tactical DOOM RPG shooter on Mars."},
+        {id:3, slug:"gangstar-crime-city", title:"Gangstar: Crime City", category:"Action", developer:"Gameloft", year:2006, icon:"🏙️", playable:false, description:"Open world mobile crime adventure."},
+        {id:4, slug:"assassins-creed", title:"Assassin's Creed", category:"Action", developer:"Gameloft", year:2007, icon:"🗡️", playable:false, description:"Altaïr's historical stealth parkour quest."},
+        {id:5, slug:"prince-of-persia", title:"Prince of Persia: The Two Thrones", category:"Action", developer:"Gameloft", year:2005, icon:"⏳", playable:false, description:"Acrobatic sword fighting and time manipulation."},
+        {id:6, slug:"metal-slug-4", title:"Metal Slug 4 Mobile", category:"Action", developer:"SNK Playmore", year:2005, icon:"💥", playable:false, description:"Run-and-gun warfare with heavy artillery."},
+        {id:7, slug:"wolfenstein-rpg", title:"Wolfenstein RPG", category:"Action", developer:"EA Mobile", year:2008, icon:"🏰", playable:false, description:"Turn-based dungeon crawler battle."},
+        {id:8, slug:"castlevania-shadows", title:"Castlevania: Order of Shadows", category:"Action", developer:"Konami", year:2007, icon:"🦇", playable:false, description:"Vampire hunting whip action platformer."},
+        {id:9, slug:"zombie-infection", title:"Zombie Infection", category:"Action", developer:"Gameloft", year:2008, icon:"🧟", playable:false, description:"Survival horror against South American undead."},
+        {id:10, slug:"splinter-cell-double", title:"Splinter Cell: Double Agent", category:"Action", developer:"Gameloft", year:2006, icon:"🕶️", playable:false, description:"Sam Fisher's covert stealth missions."},
+        {id:11, slug:"splinter-cell-pandora", title:"Splinter Cell: Pandora Tomorrow", category:"Action", developer:"Gameloft", year:2004, icon:"🎯", playable:false, description:"Tactical night vision espionage missions."},
+        {id:12, slug:"brothers-in-arms", title:"Brothers in Arms: Earned in Blood", category:"Action", developer:"Gameloft", year:2005, icon:"🎖️", playable:false, description:"Squad-based WWII Normandy warfare."},
+        {id:13, slug:"modern-combat-2", title:"Modern Combat 2: Black Pegasus", category:"Action", developer:"Gameloft", year:2010, icon:"🔫", playable:false, description:"Top tier modern military mobile action."},
+        {id:14, slug:"nova-vanguard", title:"N.O.V.A. Near Orbit Vanguard", category:"Action", developer:"Gameloft", year:2009, icon:"🛸", playable:false, description:"Sci-fi futuristic combat against alien invaders."},
+        {id:15, slug:"call-of-duty-4", title:"Call of Duty 4: Modern Warfare", category:"Action", developer:"Glu Mobile", year:2007, icon:"💣", playable:false, description:"Modern military firefights across warzones."},
+        {id:16, slug:"call-of-duty-black-ops", title:"Call of Duty: Black Ops Mobile", category:"Action", developer:"Glu Mobile", year:2010, icon:"🎖️", playable:false, description:"Cold War covert ops and tactical battles."},
+        {id:17, slug:"spiderman-toxic", title:"Spider-Man: Toxic City", category:"Action", developer:"Gameloft", year:2009, icon:"🕷️", playable:false, description:"Web-slinging superhero combat through NYC."},
+        {id:18, slug:"the-dark-knight", title:"The Dark Knight Mobile", category:"Action", developer:"Glu Mobile", year:2008, icon:"🦇", playable:false, description:"Gotham vigilante action against the Joker."},
+        {id:19, slug:"transformers-rotf", title:"Transformers: Revenge of the Fallen", category:"Action", developer:"Glu Mobile", year:2009, icon:"🤖", playable:false, description:"Autobots vs Decepticons transformation battle."},
+        {id:20, slug:"alien-quarantine", title:"Alien Quarantine", category:"Action", developer:"Gameloft", year:2013, icon:"👽", playable:false, description:"Atmospheric survival horror on an infected ship."},
+        {id:21, slug:"snake-retro", title:"Nokia Snake II", category:"Arcade", developer:"Nokia", year:2000, icon:"🐍", playable:true, description:"The timeless Nokia phone snake game with labyrinth walls."},
+        {id:22, slug:"brick-breaker", title:"Bounce Brick Breaker", category:"Arcade", developer:"Nokia / J2ME", year:2001, icon:"🧱", playable:true, description:"Paddle arcade physics with bouncing balls and combo bricks."},
+        {id:23, slug:"bounce", title:"Bounce Classic", category:"Arcade", developer:"Nokia", year:2001, icon:"🔴", playable:true, description:"Roll and jump the red ball through rings and spikes."},
+        {id:24, slug:"retro-asteroids", title:"Galaxy Asteroids", category:"Arcade", developer:"Classic Java", year:2002, icon:"☄️", playable:true, description:"360-degree space shooter dodging and blasting space rocks."},
+        {id:25, slug:"pixel-racer", title:"Pixel Highway Racer", category:"Arcade", developer:"Retro J2ME", year:2003, icon:"🏎️", playable:true, description:"High-speed highway obstacle dodging with nitro boosts."},
+        {id:26, slug:"flappy-java", title:"Flappy Java", category:"Arcade", developer:"Retro Java", year:2014, icon:"🐤", playable:true, description:"Flap through retro pipes with precise tap timing."},
+        {id:27, slug:"tetris-mobile", title:"Tetris Mobile", category:"Arcade", developer:"EA Mobile", year:2006, icon:"🟦", playable:false, description:"The world's favorite falling block puzzle on mobile."},
+        {id:28, slug:"pac-man-mobile", title:"Pac-Man Mobile", category:"Arcade", developer:"Namco", year:2002, icon:"🟡", playable:false, description:"Chomp dots and dodge ghosts in iconic retro mazes."},
+        {id:29, slug:"space-invaders", title:"Space Invaders", category:"Arcade", developer:"Taito", year:2003, icon:"👾", playable:false, description:"Classic alien waves descending upon defensive shields."},
+        {id:30, slug:"sonic-the-hedgehog", title:"Sonic The Hedgehog Mobile", category:"Arcade", developer:"Sega Mobile", year:2006, icon:"🦔", playable:false, description:"Spin dash and loop-de-loop through Green Hill Zone."},
+        {id:31, slug:"crazy-taxi-2d", title:"Crazy Taxi 2D", category:"Arcade", developer:"Sega Mobile", year:2003, icon:"🚕", playable:false, description:"Crazy driving through heavy city traffic for fares."},
+        {id:32, slug:"block-breaker-deluxe", title:"Block Breaker Deluxe", category:"Arcade", developer:"Gameloft", year:2004, icon:"💎", playable:false, description:"Neon nightlife themed brick busting with insane powerups."},
+        {id:33, slug:"rayman-3", title:"Rayman 3 Mobile", category:"Arcade", developer:"Gameloft", year:2003, icon:"🎪", playable:false, description:"Helicopter hair platforming through lush fantasy realms."},
+        {id:34, slug:"rayman-raving-rabbids", title:"Rayman Raving Rabbids", category:"Arcade", developer:"Gameloft", year:2006, icon:"🐰", playable:false, description:"Wacky minigame madness against the crazy Rabbids."},
+        {id:35, slug:"super-mario-j2me", title:"Super Mario Land J2ME", category:"Arcade", developer:"Homebrew", year:2004, icon:"🍄", playable:false, description:"Nostalgic portable plumber jumping adventures."},
+        {id:36, slug:"mega-man-mobile", title:"Mega Man Mobile", category:"Arcade", developer:"Capcom", year:2005, icon:"🤖", playable:false, description:"Blue bomber blaster platforming against Robot Masters."},
+        {id:37, slug:"street-fighter-2", title:"Street Fighter II", category:"Arcade", developer:"Capcom", year:2006, icon:"🥋", playable:false, description:"Hadouken! World warrior martial arts tournament."},
+        {id:38, slug:"boulder-dash", title:"Boulder Dash Mobile", category:"Arcade", developer:"First Star", year:2004, icon:"💎", playable:false, description:"Dig caverns, collect gems, and avoid falling rocks."},
+        {id:39, slug:"bomberman-mobile", title:"Bomberman Mobile", category:"Arcade", developer:"Living Mobile", year:2004, icon:"💣", playable:false, description:"Blast maze barriers and rival bombers with timed explosives."},
+        {id:40, slug:"moorhuhn-mobile", title:"Moorhuhn Mobile", category:"Arcade", developer:"Phenomedia", year:2003, icon:"🐔", playable:false, description:"Fast reflex chicken shooting carnival arcade madness."},
+        {id:41, slug:"asphalt-3", title:"Asphalt 3: Street Rules", category:"Racing", developer:"Gameloft", year:2006, icon:"🏎️", playable:false, description:"Underground supercars, police pursuits, and nitro drifts."},
+        {id:42, slug:"asphalt-4", title:"Asphalt 4: Elite Racing", category:"Racing", developer:"Gameloft", year:2008, icon:"🏁", playable:false, description:"Exotic street races from Paris to Dubai in supercars."},
+        {id:43, slug:"nfs-most-wanted", title:"Need for Speed: Most Wanted", category:"Racing", developer:"EA Mobile", year:2005, icon:"🚓", playable:false, description:"Blacklist street racing and intense police takedowns."},
+        {id:44, slug:"nfs-underground-2", title:"Need for Speed Underground 2", category:"Racing", developer:"EA Mobile", year:2004, icon:"🚘", playable:false, description:"Custom neon tuners, dyno tuning, and drag racing."},
+        {id:45, slug:"rally-pro-contest", title:"Rally Pro Contest 3D", category:"Racing", developer:"Fishlabs", year:2005, icon:"🚙", playable:false, description:"Revolutionary 3D mobile rally physics on dirt and snow."},
+        {id:46, slug:"ferrari-gt-evolution", title:"Ferrari GT: Evolution", category:"Racing", developer:"Gameloft", year:2008, icon:"🏎️", playable:false, description:"Official Ferrari test tracks and classic Prancing Horses."},
+        {id:47, slug:"moto-gp-08", title:"Moto GP 08", category:"Racing", developer:"I-play", year:2008, icon:"🏍️", playable:false, description:"High-octane motorcycle championship racing."},
+        {id:48, slug:"ducati-extreme", title:"Ducati Extreme", category:"Racing", developer:"Hands-On", year:2006, icon:"🏍️", playable:false, description:"Knee-down superbike circuits across the globe."},
+        {id:49, slug:"3d-moto-racing", title:"3D Moto Racing", category:"Racing", developer:"I-play", year:2005, icon:"🏁", playable:false, description:"Pure 3D superbike speedway showdown."},
+        {id:50, slug:"driver-vegas", title:"Driver: Vegas", category:"Racing", developer:"Gameloft", year:2006, icon:"🎰", playable:false, description:"Undercover wheelman vehicular getaway through Sin City."},
+        {id:51, slug:"fast-and-furious", title:"Fast & Furious: Fugitive", category:"Racing", developer:"I-play", year:2007, icon:"💨", playable:false, description:"Quarter-mile nitro drag races and cross-country chases."},
+        {id:52, slug:"townsmen-racing", title:"Townsmen Racing", category:"Racing", developer:"HandyGames", year:2006, icon:"🚜", playable:false, description:"Medieval cart racing with humorous sheep obstacles."},
+        {id:53, slug:"burnout-mobile", title:"Burnout Mobile", category:"Racing", developer:"EA Mobile", year:2007, icon:"💥", playable:false, description:"Aggressive crashes, takedowns, and speed burnout boosts."},
+        {id:54, slug:"crash-nitro-kart", title:"Crash Nitro Kart", category:"Racing", developer:"Vivendi", year:2004, icon:"🦊", playable:false, description:"Wumpa fruit kart combat with Crash Bandicoot."},
+        {id:55, slug:"midnight-club-3", title:"Midnight Club 3: DUB Edition", category:"Racing", developer:"Rockstar Games", year:2005, icon:"🌃", playable:false, description:"Cruising tuned muscle cars and luxury SUVs at night."},
+        {id:56, slug:"diamond-rush", title:"Diamond Rush", category:"Puzzle", developer:"Gameloft", year:2006, icon:"💎", playable:false, description:"Explorer puzzle adventure through Angkor Wat and Bavaria."},
+        {id:57, slug:"tower-bloxx", title:"Tower Bloxx", category:"Puzzle", developer:"Digital Chocolate", year:2005, icon:"🏗️", playable:false, description:"Drop swinging skyscraper floors to build dizzying towers."},
+        {id:58, slug:"bubble-bash", title:"Bubble Bash", category:"Puzzle", developer:"Gameloft", year:2006, icon:"🫧", playable:false, description:"Color-matching bubble cannon fun on tropical African shores."},
+        {id:59, slug:"bejeweled", title:"Bejeweled", category:"Puzzle", developer:"PopCap Games", year:2004, icon:"✨", playable:false, description:"The definitive gem-swapping match-3 cascade puzzle."},
+        {id:60, slug:"zuma-mobile", title:"Zuma Mobile", category:"Puzzle", developer:"Glu Mobile", year:2005, icon:"🐸", playable:false, description:"Stone frog ball shooter clearing rolling ancient spirals."},
+        {id:61, slug:"bobby-carrot", title:"Bobby Carrot", category:"Puzzle", developer:"FDG Entertainment", year:2004, icon:"🥕", playable:false, description:"Navigate clever farm mazes and traps to harvest carrots."},
+        {id:62, slug:"bobby-carrot-5", title:"Bobby Carrot 5: Level Up!", category:"Puzzle", developer:"FDG Entertainment", year:2008, icon:"🐇", playable:false, description:"The biggest rabbit puzzle adventure with dragon realms."},
+        {id:63, slug:"plants-vs-zombies", title:"Plants vs. Zombies J2ME", category:"Puzzle", developer:"PopCap Games", year:2010, icon:"🌻", playable:false, description:"Defend your lawn using peashooters and cherry bombs."},
+        {id:64, slug:"chuzzle-mobile", title:"Chuzzle Mobile", category:"Puzzle", developer:"PopCap Games", year:2006, icon:"🧶", playable:false, description:"Cute googly-eyed fuzzy creature matching puzzle."},
+        {id:65, slug:"peggle-mobile", title:"Peggle Mobile", category:"Puzzle", developer:"PopCap Games", year:2007, icon:"🟠", playable:false, description:"Extreme fever peg bouncing pachinko arcade delight."},
+        {id:66, slug:"luxor-2-mobile", title:"Luxor 2 Mobile", category:"Puzzle", developer:"MumboJumbo", year:2007, icon:"🪲", playable:false, description:"Egyptian winged scarab marble shooting quest."},
+        {id:67, slug:"diner-dash", title:"Diner Dash", category:"Puzzle", developer:"Glu Mobile", year:2006, icon:"🍽️", playable:false, description:"Flo's high-speed restaurant management and customer seating."},
+        {id:68, slug:"cafe-sudoku", title:"Café Sudoku", category:"Puzzle", developer:"Digital Chocolate", year:2006, icon:"🔢", playable:false, description:"Relaxing logic grid numbers in an inviting coffeehouse."},
+        {id:69, slug:"tornado-mania", title:"Tornado Mania!", category:"Puzzle", developer:"Digital Chocolate", year:2006, icon:"🌪️", playable:false, description:"Control a whimsical vortex to collect buildings and build utopia."},
+        {id:70, slug:"rollercoaster-rush", title:"Rollercoaster Rush", category:"Puzzle", developer:"Digital Chocolate", year:2006, icon:"🎢", playable:false, description:"Control coaster throttle for maximum passenger thrill."},
+        {id:71, slug:"sokoban-3d", title:"Sokoban 3D", category:"Puzzle", developer:"Living Mobile", year:2005, icon:"📦", playable:false, description:"The classic Japanese warehouse crate pushing logic puzzle."},
+        {id:72, slug:"lemmings-mobile", title:"Lemmings Mobile", category:"Puzzle", developer:"Glu Mobile", year:2006, icon:"⛏️", playable:false, description:"Assign parachute, dig, and build roles to save lemmings."},
+        {id:73, slug:"diamond-twister", title:"Diamond Twister", category:"Puzzle", developer:"Gameloft", year:2008, icon:"💍", playable:false, description:"High-stakes diamond heist cascading gem puzzles."},
+        {id:74, slug:"uno-3d", title:"UNO 3D Mobile", category:"Puzzle", developer:"Gameloft", year:2008, icon:"🃏", playable:false, description:"The classic card game with wild draw 4s."},
+        {id:75, slug:"texas-holdem-poker", title:"Texas Hold'em Poker", category:"Puzzle", developer:"Gameloft", year:2006, icon:"♠️", playable:false, description:"All-in tournament poker bluffs in world casinos."},
+        {id:76, slug:"real-football-2008", title:"Real Football 2008", category:"Sports", developer:"Gameloft", year:2007, icon:"⚽", playable:false, description:"Championship European soccer matches with pro formations."},
+        {id:77, slug:"fifa-07-mobile", title:"FIFA 07 Mobile", category:"Sports", developer:"EA Mobile", year:2006, icon:"🥅", playable:false, description:"Authentic licensed national teams and league tournaments."},
+        {id:78, slug:"pes-2009", title:"Pro Evolution Soccer 2009", category:"Sports", developer:"Konami", year:2008, icon:"🏟️", playable:false, description:"Smooth tactical passing and scoring mechanics."},
+        {id:79, slug:"playman-summer", title:"Playman World Athletics", category:"Sports", developer:"RealNetworks", year:2005, icon:"🏃", playable:false, description:"100m sprint, long jump, and javelin decathlon."},
+        {id:80, slug:"playman-winter", title:"Playman Winter Games", category:"Sports", developer:"RealNetworks", year:2006, icon:"🎿", playable:false, description:"Slalom skiing, bobsled, and speed skating snow games."},
+        {id:81, slug:"midnight-pool-3d", title:"Midnight Pool 3D", category:"Sports", developer:"Gameloft", year:2005, icon:"🎱", playable:false, description:"8-ball and 9-ball barroom trick shots and wagers."},
+        {id:82, slug:"midnight-bowling-3d", title:"Midnight Bowling 3D", category:"Sports", developer:"Gameloft", year:2006, icon:"🎳", playable:false, description:"Strikes, spares, and spin curves in retro neon lanes."},
+        {id:83, slug:"nba-live-08", title:"NBA Live 08", category:"Sports", developer:"EA Mobile", year:2007, icon:"🏀", playable:false, description:"Hardwood slam dunks, 3-pointers, and full-court presses."},
+        {id:84, slug:"tiger-woods-07", title:"Tiger Woods PGA Tour 07", category:"Sports", developer:"EA Mobile", year:2006, icon:"⛳", playable:false, description:"Precision golf fairway drives and green putts."},
+        {id:85, slug:"tony-hawk-4", title:"Tony Hawk's Pro Skater 4", category:"Sports", developer:"Activision", year:2003, icon:"🛹", playable:false, description:"Kickflips, grinds, and halfpipe combos on 4 wheels."},
+        {id:86, slug:"skate-mobile", title:"Skate Mobile", category:"Sports", developer:"EA Mobile", year:2007, icon:"🛹", playable:false, description:"Realistic street skateboarding flip trick mastery."},
+        {id:87, slug:"super-dynamite-fishing", title:"Super Dynamite Fishing", category:"Sports", developer:"HandyGames", year:2008, icon:"🎣", playable:false, description:"Crazy TNT blast fishing for monster catches."},
+        {id:88, slug:"guitar-hero-3", title:"Guitar Hero III Mobile", category:"Sports", developer:"Hands-On", year:2007, icon:"🎸", playable:false, description:"Rock out rhythm solos to classic rock anthems."},
+        {id:89, slug:"galaxy-on-fire-2", title:"Galaxy On Fire 2", category:"RPG", developer:"Fishlabs", year:2009, icon:"🚀", playable:false, description:"Epic space trading, mining, and dogfighting universe."},
+        {id:90, slug:"deep-3d", title:"Deep 3D", category:"RPG", developer:"Fishlabs", year:2006, icon:"🌊", playable:false, description:"Atmospheric underwater submarine exploration and combat."},
+        {id:91, slug:"ancient-empires-2", title:"Ancient Empires II", category:"RPG", developer:"Macrospace", year:2005, icon:"⚔️", playable:false, description:"Turn-based tactical fantasy kingdom battles."},
+        {id:92, slug:"heroes-might-magic", title:"Heroes of Might & Magic", category:"RPG", developer:"Gameloft", year:2007, icon:"🏰", playable:false, description:"Turn-based kingdom warfare, artifacts, and beasts."},
+        {id:93, slug:"age-of-empires-3", title:"Age of Empires III Mobile", category:"RPG", developer:"Glu Mobile", year:2007, icon:"🏹", playable:false, description:"Colonial conquest, resource gathering, and siege engines."},
+        {id:94, slug:"townsmen-6", title:"Townsmen 6", category:"RPG", developer:"HandyGames", year:2009, icon:"👑", playable:false, description:"Town management and resource logistics."},
+        {id:95, slug:"gothic-3-beginning", title:"Gothic 3: The Beginning", category:"RPG", developer:"HandyGames", year:2008, icon:"🗡️", playable:false, description:"Dark fantasy open world quests, spells, and orc combat."},
+        {id:96, slug:"devils-and-demons", title:"Devils and Demons", category:"RPG", developer:"HandyGames", year:2009, icon:"🔥", playable:false, description:"Turn-based party combat against hellish demon lords."},
+        {id:97, slug:"worms-forts", title:"Worms Forts: Under Siege", category:"RPG", developer:"THQ Wireless", year:2005, icon:"🪱", playable:false, description:"Fortress building and ballistic artillery worm warfare."},
+        {id:98, slug:"worms-2007", title:"Worms 2007", category:"RPG", developer:"THQ Wireless", year:2007, icon:"💣", playable:false, description:"Holy Hand Grenades and exploding sheep worm comedy."},
+        {id:99, slug:"simcity-mobile", title:"SimCity Mobile", category:"RPG", developer:"EA Mobile", year:2007, icon:"🏙️", playable:false, description:"Zone residential, commercial, and manage city disasters."},
+        {id:100, slug:"the-sims-3", title:"The Sims 3 Mobile", category:"RPG", developer:"EA Mobile", year:2009, icon:"🏡", playable:false, description:"Build homes, socialize, fulfill aspirations, and live life."}
+      ];
+      return list;
+    }
+
+    // Launch
     restartCurrentGame();
-    fetchLeaderboard();
+    loadGames();
     requestAnimationFrame(loop);
   </script>
 </body>
