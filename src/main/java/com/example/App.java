@@ -14,15 +14,13 @@ import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Random;
 
 public class App {
     private final int port;
     private HttpServer server;
-    private final ScoreRepository scoreRepository = new ScoreRepository();
-    private final GameCatalog gameCatalog = new GameCatalog();
+    private final QuestionBank questionBank = new QuestionBank();
 
     public App() {
         this(getPortFromEnv());
@@ -44,26 +42,23 @@ public class App {
     }
 
     public String getGreeting() {
-        return "Java 100 Retro Games Vault - All 100 Games Fully Playable!";
+        return "Java Q&A Quiz & Random Question Generator is running!";
     }
 
-    public ScoreRepository getScoreRepository() {
-        return scoreRepository;
-    }
-
-    public GameCatalog getGameCatalog() {
-        return gameCatalog;
+    public QuestionBank getQuestionBank() {
+        return questionBank;
     }
 
     public void start() throws IOException {
         server = HttpServer.create(new InetSocketAddress(port), 0);
         server.createContext("/", new StaticFileHandler());
-        server.createContext("/api/games", new GamesHandler(gameCatalog));
-        server.createContext("/api/scores", new ScoresHandler(scoreRepository));
-        server.createContext("/api/status", new StatusHandler(gameCatalog));
+        server.createContext("/api/questions", new QuestionsHandler(questionBank));
+        server.createContext("/api/questions/random", new RandomQuestionHandler(questionBank));
+        server.createContext("/api/questions/check", new CheckAnswerHandler(questionBank));
+        server.createContext("/api/stats", new StatsHandler(questionBank));
         server.setExecutor(null);
         server.start();
-        System.out.println("100 Playable Java Games Server running at http://localhost:" + port);
+        System.out.println("Java Q&A Application running at http://localhost:" + port);
     }
 
     public void stop() {
@@ -87,297 +82,288 @@ public class App {
         }
     }
 
-    public static class GameInfo {
+    public static class Question {
         private final int id;
-        private final String slug;
-        private final String title;
-        private final String category;
-        private final String developer;
-        private final int year;
-        private final String icon;
-        private final boolean playable;
-        private final String description;
+        private final String question;
+        private final String codeSnippet;
+        private final List<String> options;
+        private final int correctIndex;
+        private final String explanation;
+        private final String topic;
+        private final String difficulty;
 
-        public GameInfo(int id, String slug, String title, String category, String developer, int year, String icon, boolean playable, String description) {
+        public Question(int id, String question, String codeSnippet, List<String> options, int correctIndex, String explanation, String topic, String difficulty) {
             this.id = id;
-            this.slug = slug;
-            this.title = title;
-            this.category = category;
-            this.developer = developer;
-            this.year = year;
-            this.icon = icon;
-            this.playable = playable;
-            this.description = description;
+            this.question = question;
+            this.codeSnippet = codeSnippet;
+            this.options = options;
+            this.correctIndex = correctIndex;
+            this.explanation = explanation;
+            this.topic = topic;
+            this.difficulty = difficulty;
         }
 
         public int getId() { return id; }
-        public String getSlug() { return slug; }
-        public String getTitle() { return title; }
-        public String getCategory() { return category; }
-        public String getDeveloper() { return developer; }
-        public int getYear() { return year; }
-        public String getIcon() { return icon; }
-        public boolean isPlayable() { return playable; }
-        public String getDescription() { return description; }
+        public String getQuestion() { return question; }
+        public String getCodeSnippet() { return codeSnippet; }
+        public List<String> getOptions() { return options; }
+        public int getCorrectIndex() { return correctIndex; }
+        public String getExplanation() { return explanation; }
+        public String getTopic() { return topic; }
+        public String getDifficulty() { return difficulty; }
 
-        public String toJson() {
-            return "{\"id\":" + id +
-                    ",\"slug\":\"" + escape(slug) + "\"" +
-                    ",\"title\":\"" + escape(title) + "\"" +
-                    ",\"category\":\"" + escape(category) + "\"" +
-                    ",\"developer\":\"" + escape(developer) + "\"" +
-                    ",\"year\":" + year +
-                    ",\"icon\":\"" + escape(icon) + "\"" +
-                    ",\"playable\":" + playable +
-                    ",\"description\":\"" + escape(description) + "\"}";
+        public String toJson(boolean includeAnswer) {
+            StringBuilder sb = new StringBuilder("{");
+            sb.append("\"id\":").append(id).append(",");
+            sb.append("\"question\":\"").append(escape(question)).append("\",");
+            sb.append("\"codeSnippet\":\"").append(escape(codeSnippet)).append("\",");
+            sb.append("\"topic\":\"").append(escape(topic)).append("\",");
+            sb.append("\"difficulty\":\"").append(escape(difficulty)).append("\",");
+            sb.append("\"options\":[");
+            for (int i = 0; i < options.size(); i++) {
+                sb.append("\"").append(escape(options.get(i))).append("\"");
+                if (i < options.size() - 1) sb.append(",");
+            }
+            sb.append("]");
+            if (includeAnswer) {
+                sb.append(",\"correctIndex\":").append(correctIndex);
+                sb.append(",\"explanation\":\"").append(escape(explanation)).append("\"");
+            }
+            sb.append("}");
+            return sb.toString();
         }
 
         private static String escape(String s) {
             if (s == null) return "";
-            return s.replace("\\", "\\\\").replace("\"", "\\\"");
+            return s.replace("\\", "\\\\")
+                    .replace("\"", "\\\"")
+                    .replace("\n", "\\n")
+                    .replace("\r", "\\r")
+                    .replace("\t", "\\t");
         }
     }
 
-    public static class GameCatalog {
-        private final List<GameInfo> games = new ArrayList<>();
+    public static class QuestionBank {
+        private final List<Question> questions = new ArrayList<>();
+        private final Random random = new Random();
 
-        public GameCatalog() {
-            populateGames();
+        public QuestionBank() {
+            initQuestions();
         }
 
-        public List<GameInfo> getAllGames() {
-            return Collections.unmodifiableList(games);
+        public List<Question> getAllQuestions() {
+            return Collections.unmodifiableList(questions);
         }
 
-        public int getTotalGamesCount() {
-            return games.size();
+        public int getTotalCount() {
+            return questions.size();
         }
 
-        public List<GameInfo> filter(String category, String search) {
-            List<GameInfo> result = new ArrayList<>();
-            String catFilter = category == null ? "" : category.trim().toLowerCase();
-            String sFilter = search == null ? "" : search.trim().toLowerCase();
+        public Question getQuestionById(int id) {
+            for (Question q : questions) {
+                if (q.getId() == id) return q;
+            }
+            return null;
+        }
 
-            for (GameInfo g : games) {
-                boolean matchCat = catFilter.isEmpty() || catFilter.equals("all") || g.getCategory().toLowerCase().contains(catFilter);
-                boolean matchSearch = sFilter.isEmpty() ||
-                        g.getTitle().toLowerCase().contains(sFilter) ||
-                        g.getDeveloper().toLowerCase().contains(sFilter) ||
-                        g.getCategory().toLowerCase().contains(sFilter);
-                if (matchCat && matchSearch) {
-                    result.add(g);
+        public Question getRandomQuestion(String topic, String difficulty) {
+            List<Question> filtered = filterQuestions(topic, difficulty);
+            if (filtered.isEmpty()) {
+                filtered = questions;
+            }
+            return filtered.get(random.nextInt(filtered.size()));
+        }
+
+        public List<Question> filterQuestions(String topic, String difficulty) {
+            List<Question> res = new ArrayList<>();
+            String t = (topic == null || topic.isBlank()) ? null : topic.trim().toLowerCase();
+            String d = (difficulty == null || difficulty.isBlank()) ? null : difficulty.trim().toLowerCase();
+
+            for (Question q : questions) {
+                boolean matchTopic = (t == null || t.equals("all") || q.getTopic().toLowerCase().contains(t));
+                boolean matchDiff = (d == null || d.equals("all") || q.getDifficulty().toLowerCase().equals(d));
+                if (matchTopic && matchDiff) {
+                    res.add(q);
                 }
             }
-            return result;
+            return res;
         }
 
-        private void add(int id, String slug, String title, String category, String developer, int year, String icon, String description) {
-            // ALL 100 GAMES ARE 100% PLAYABLE!
-            games.add(new GameInfo(id, slug, title, category, developer, year, icon, true, description));
+        private void add(int id, String q, String code, List<String> opts, int correctIdx, String exp, String topic, String diff) {
+            questions.add(new Question(id, q, code, opts, correctIdx, exp, topic, diff));
         }
 
-        private void populateGames() {
-            // Action & Adventure (1-20) - ALL PLAYABLE
-            add(1, "space-impact", "Space Impact", "Action", "Nokia", 2000, "🚀", "The legendary side-scrolling space shooter pre-installed on Nokia 3310.");
-            add(2, "doom-rpg", "Doom RPG", "Action", "id Software", 2005, "👹", "Turn-based tactical combat against Martian demons with plasma cannons.");
-            add(3, "gangstar-crime-city", "Gangstar: Crime City", "Action", "Gameloft", 2006, "🏙️", "Open world crime warfare through the dangerous city streets.");
-            add(4, "assassins-creed", "Assassin's Creed Mobile", "Action", "Gameloft", 2007, "🗡️", "Altaïr's stealth parkour quest with hidden blades and rooftop jumps.");
-            add(5, "prince-of-persia", "Prince of Persia: The Two Thrones", "Action", "Gameloft", 2005, "⏳", "Acrobatic sword-fighting and time manipulation platforming.");
-            add(6, "metal-slug-4", "Metal Slug 4 Mobile", "Action", "SNK Playmore", 2005, "💥", "Fast-paced run-and-gun arcade warfare with heavy machine guns.");
-            add(7, "wolfenstein-rpg", "Wolfenstein RPG", "Action", "EA Mobile", 2008, "🏰", "Tactical dungeon crawler battle inside Castle Wolfenstein.");
-            add(8, "castlevania-shadows", "Castlevania: Order of Shadows", "Action", "Konami", 2007, "🦇", "Classic vampire hunting whip action platformer.");
-            add(9, "zombie-infection", "Zombie Infection", "Action", "Gameloft", 2008, "🧟", "Survival horror combat against undead hordes.");
-            add(10, "splinter-cell-double", "Splinter Cell: Double Agent", "Action", "Gameloft", 2006, "🕶️", "Sam Fisher's intense covert ops and stealth infiltration.");
-            add(11, "splinter-cell-pandora", "Splinter Cell: Pandora Tomorrow", "Action", "Gameloft", 2004, "🎯", "Night-vision tactical stealth espionage missions.");
-            add(12, "brothers-in-arms", "Brothers in Arms: Earned in Blood", "Action", "Gameloft", 2005, "🎖️", "WWII squad-based tactical combat in Normandy.");
-            add(13, "modern-combat-2", "Modern Combat 2: Black Pegasus", "Action", "Gameloft", 2010, "🔫", "Top-tier modern military mobile action campaigns.");
-            add(14, "nova-vanguard", "N.O.V.A. Near Orbit Vanguard", "Action", "Gameloft", 2009, "🛸", "Sci-fi futuristic combat against alien invaders.");
-            add(15, "call-of-duty-4", "Call of Duty 4: Modern Warfare", "Action", "Glu Mobile", 2007, "💣", "Intense modern military shooter across warzones.");
-            add(16, "call-of-duty-black-ops", "Call of Duty: Black Ops Mobile", "Action", "Glu Mobile", 2010, "🎖️", "Cold War covert operations and tactical combat.");
-            add(17, "spiderman-toxic", "Spider-Man: Toxic City", "Action", "Gameloft", 2009, "🕷️", "Web-slinging superhero combat through New York City.");
-            add(18, "the-dark-knight", "The Dark Knight Mobile", "Action", "Glu Mobile", 2008, "🦇", "Gotham City vigilante action against the Joker.");
-            add(19, "transformers-rotf", "Transformers: Revenge of the Fallen", "Action", "Glu Mobile", 2009, "🤖", "Autobots vs Decepticons transforming battle.");
-            add(20, "alien-quarantine", "Alien Quarantine", "Action", "Gameloft", 2013, "👽", "Atmospheric sci-fi survival horror on an infected starship.");
+        private void initQuestions() {
+            add(1, "Is Java pass-by-value or pass-by-reference?",
+                    null,
+                    List.of("Strictly pass-by-value", "Strictly pass-by-reference", "Pass-by-reference for Objects and pass-by-value for primitives", "Depends on JVM implementation"),
+                    0,
+                    "Java is strictly pass-by-value at all times. When an object is passed, a copy of the reference (pointer address) is passed by value.",
+                    "Basics", "Medium");
 
-            // Arcade & Classics (21-40) - ALL PLAYABLE
-            add(21, "snake-retro", "Nokia Snake II", "Arcade", "Nokia", 2000, "🐍", "The timeless Nokia mobile phone snake game with labyrinth walls.");
-            add(22, "brick-breaker", "Bounce Brick Breaker", "Arcade", "Nokia / J2ME", 2001, "🧱", "Paddle arcade physics with bouncing balls and combo bricks.");
-            add(23, "bounce", "Bounce Classic", "Arcade", "Nokia", 2001, "🔴", "Roll and jump the red ball through rings and dangerous spikes.");
-            add(24, "retro-asteroids", "Galaxy Asteroids", "Arcade", "Classic Java", 2002, "☄️", "360-degree space shooter dodging and blasting space asteroids.");
-            add(25, "pixel-racer", "Pixel Highway Racer", "Arcade", "Retro J2ME", 2003, "🏎️", "High-speed highway obstacle dodging with retro nitro boosts.");
-            add(26, "flappy-java", "Flappy Java", "Arcade", "Retro Java", 2014, "🐤", "Flap through retro pipes with precise tap timing.");
-            add(27, "tetris-mobile", "Tetris Mobile", "Arcade", "EA Mobile", 2006, "🟦", "The world's favorite falling block puzzle on mobile.");
-            add(28, "pac-man-mobile", "Pac-Man Mobile", "Arcade", "Namco", 2002, "🟡", "Chomp dots and dodge ghosts in iconic retro mazes.");
-            add(29, "space-invaders", "Space Invaders", "Arcade", "Taito", 2003, "👾", "Classic alien waves descending upon defensive shields.");
-            add(30, "sonic-the-hedgehog", "Sonic The Hedgehog Mobile", "Arcade", "Sega Mobile", 2006, "🦔", "Spin dash and loop-de-loop through Green Hill Zone.");
-            add(31, "crazy-taxi-2d", "Crazy Taxi 2D", "Arcade", "Sega Mobile", 2003, "🚕", "Crazy driving through heavy city traffic to deliver fares.");
-            add(32, "block-breaker-deluxe", "Block Breaker Deluxe", "Arcade", "Gameloft", 2004, "💎", "Neon nightlife themed brick busting with insane powerups.");
-            add(33, "rayman-3", "Rayman 3 Mobile", "Arcade", "Gameloft", 2003, "🎪", "Helicopter hair platforming through lush fantasy realms.");
-            add(34, "rayman-raving-rabbids", "Rayman Raving Rabbids", "Arcade", "Gameloft", 2006, "🐰", "Wacky minigame madness against the crazy Rabbids.");
-            add(35, "super-mario-j2me", "Super Mario Land J2ME", "Arcade", "Homebrew", 2004, "🍄", "Nostalgic portable plumber jumping adventures.");
-            add(36, "mega-man-mobile", "Mega Man Mobile", "Arcade", "Capcom", 2005, "🤖", "Blue bomber blaster platforming against Robot Masters.");
-            add(37, "street-fighter-2", "Street Fighter II", "Arcade", "Capcom", 2006, "🥋", "Hadouken! World warrior martial arts tournament.");
-            add(38, "boulder-dash", "Boulder Dash Mobile", "Arcade", "First Star", 2004, "💎", "Dig caverns, collect gems, and avoid falling rocks.");
-            add(39, "bomberman-mobile", "Bomberman Mobile", "Arcade", "Living Mobile", 2004, "💣", "Blast maze barriers and rival bombers with timed explosives.");
-            add(40, "moorhuhn-mobile", "Moorhuhn Mobile", "Arcade", "Phenomedia", 2003, "🐔", "Fast reflex chicken shooting carnival arcade madness.");
+            add(2, "What is the result of evaluating the following expression?",
+                    "System.out.println(10 + 20 + \"Java\" + 10 + 20);",
+                    List.of("1020Java1020", "30Java1020", "30Java30", "Compilation Error"),
+                    1,
+                    "Operator + evaluates left-to-right. 10 + 20 produces integer 30, then 30 + \"Java\" converts to String \"30Java\", and subsequent additions concatenate as strings.",
+                    "Basics", "Easy");
 
-            // Racing & Speed (41-55) - ALL PLAYABLE
-            add(41, "asphalt-3", "Asphalt 3: Street Rules", "Racing", "Gameloft", 2006, "🏎️", "Underground supercars, police pursuits, and nitro drifts.");
-            add(42, "asphalt-4", "Asphalt 4: Elite Racing", "Racing", "Gameloft", 2008, "🏁", "Exotic street races from Paris to Dubai in licensed supercars.");
-            add(43, "nfs-most-wanted", "Need for Speed: Most Wanted", "Racing", "EA Mobile", 2005, "🚓", "Blacklist street racing and intense police takedowns.");
-            add(44, "nfs-underground-2", "Need for Speed Underground 2", "Racing", "EA Mobile", 2004, "🚘", "Custom neon tuners, dyno tuning, and drag racing.");
-            add(45, "rally-pro-contest", "Rally Pro Contest 3D", "Racing", "Fishlabs", 2005, "🚙", "Revolutionary 3D mobile rally physics on dirt and snow.");
-            add(46, "ferrari-gt-evolution", "Ferrari GT: Evolution", "Racing", "Gameloft", 2008, "🏎️", "Official Ferrari test tracks and classic Prancing Horses.");
-            add(47, "moto-gp-08", "Moto GP 08", "Racing", "I-play", 2008, "🏍️", "High-octane motorcycle championship racing.");
-            add(48, "ducati-extreme", "Ducati Extreme", "Racing", "Hands-On", 2006, "🏍️", "Knee-down superbike circuits across the globe.");
-            add(49, "3d-moto-racing", "3D Moto Racing", "Racing", "I-play", 2005, "🏁", "Pure 3D superbike speedway showdown.");
-            add(50, "driver-vegas", "Driver: Vegas", "Racing", "Gameloft", 2006, "🎰", "Undercover wheelman vehicular getaway through Sin City.");
-            add(51, "fast-and-furious", "Fast & Furious: Fugitive", "Racing", "I-play", 2007, "💨", "Quarter-mile nitro drag races and cross-country chases.");
-            add(52, "townsmen-racing", "Townsmen Racing", "Racing", "HandyGames", 2006, "🚜", "Medieval cart racing with humorous sheep obstacles.");
-            add(53, "burnout-mobile", "Burnout Mobile", "Racing", "EA Mobile", 2007, "💥", "Aggressive crashes, takedowns, and speed burnout boosts.");
-            add(54, "crash-nitro-kart", "Crash Nitro Kart", "Racing", "Vivendi", 2004, "🦊", "Wumpa fruit kart combat with Crash Bandicoot.");
-            add(55, "midnight-club-3", "Midnight Club 3: DUB Edition", "Racing", "Rockstar Games", 2005, "🌃", "Cruising tuned muscle cars and luxury SUVs at night.");
+            add(3, "How does HashMap in Java 8+ handle hash collisions when a bucket exceeds 8 nodes?",
+                    null,
+                    List.of("Throws a HashCollisionException", "Rehashes into an AVL Tree", "Transforms the bucket linked list into a balanced Red-Black Tree", "Doubles the bucket capacity immediately"),
+                    2,
+                    "In Java 8+, when a single bucket linked list reaches TREEIFY_THRESHOLD (8) and the table capacity is at least 64, it converts to a Red-Black Tree (TreeNode) improving lookup from O(n) to O(log n).",
+                    "Collections", "Hard");
 
-            // Puzzle & Brain (56-75) - ALL PLAYABLE
-            add(56, "diamond-rush", "Diamond Rush", "Puzzle", "Gameloft", 2006, "💎", "Explorer puzzle adventure catching gems and dodging boulders.");
-            add(57, "tower-bloxx", "Tower Bloxx", "Puzzle", "Digital Chocolate", 2005, "🏗️", "Drop swinging skyscraper floors to build dizzying towers.");
-            add(58, "bubble-bash", "Bubble Bash", "Puzzle", "Gameloft", 2006, "🫧", "Color-matching bubble cannon fun on tropical African shores.");
-            add(59, "bejeweled", "Bejeweled", "Puzzle", "PopCap Games", 2004, "✨", "The definitive gem-swapping match-3 cascade puzzle.");
-            add(60, "zuma-mobile", "Zuma Mobile", "Puzzle", "Glu Mobile", 2005, "🐸", "Stone frog ball shooter clearing rolling ancient spirals.");
-            add(61, "bobby-carrot", "Bobby Carrot", "Puzzle", "FDG Entertainment", 2004, "🥕", "Navigate clever farm mazes and traps to harvest carrots.");
-            add(62, "bobby-carrot-5", "Bobby Carrot 5: Level Up!", "Puzzle", "FDG Entertainment", 2008, "🐇", "The biggest rabbit puzzle adventure with dragon realms.");
-            add(63, "plants-vs-zombies", "Plants vs. Zombies J2ME", "Puzzle", "PopCap Games", 2010, "🌻", "Defend your backyard lawn using peashooters and cherry bombs.");
-            add(64, "chuzzle-mobile", "Chuzzle Mobile", "Puzzle", "PopCap Games", 2006, "🧶", "Cute googly-eyed fuzzy creature matching puzzle.");
-            add(65, "peggle-mobile", "Peggle Mobile", "Puzzle", "PopCap Games", 2007, "🟠", "Extreme fever peg bouncing pachinko arcade delight.");
-            add(66, "luxor-2-mobile", "Luxor 2 Mobile", "Puzzle", "MumboJumbo", 2007, "🪲", "Egyptian winged scarab marble shooting quest.");
-            add(67, "diner-dash", "Diner Dash", "Puzzle", "Glu Mobile", 2006, "🍽️", "Flo's high-speed restaurant management and customer seating.");
-            add(68, "cafe-sudoku", "Café Sudoku", "Puzzle", "Digital Chocolate", 2006, "🔢", "Relaxing logic grid numbers in an inviting coffeehouse.");
-            add(69, "tornado-mania", "Tornado Mania!", "Puzzle", "Digital Chocolate", 2006, "🌪️", "Control a whimsical vortex to collect buildings and build utopia.");
-            add(70, "rollercoaster-rush", "Rollercoaster Rush", "Puzzle", "Digital Chocolate", 2006, "🎢", "Control coaster brake and throttle for maximum thrill.");
-            add(71, "sokoban-3d", "Sokoban 3D", "Puzzle", "Living Mobile", 2005, "📦", "The classic Japanese warehouse crate pushing logic puzzle.");
-            add(72, "lemmings-mobile", "Lemmings Mobile", "Puzzle", "Glu Mobile", 2006, "⛏️", "Assign parachute, dig, and build roles to save green-haired lemmings.");
-            add(73, "diamond-twister", "Diamond Twister", "Puzzle", "Gameloft", 2008, "💍", "High-stakes diamond heist cascading gem puzzles.");
-            add(74, "uno-3d", "UNO 3D Mobile", "Puzzle", "Gameloft", 2008, "🃏", "The classic color and number card game with wild draw 4s.");
-            add(75, "texas-holdem-poker", "Texas Hold'em Poker", "Puzzle", "Gameloft", 2006, "♠️", "All-in tournament poker bluffs in world casinos.");
+            add(4, "Which of the following Map implementations does NOT permit null keys or null values?",
+                    null,
+                    List.of("HashMap", "LinkedHashMap", "ConcurrentHashMap", "WeakHashMap"),
+                    2,
+                    "ConcurrentHashMap does not allow null keys or null values to prevent ambiguity in multithreaded environments where get(key) returning null could mean either absent or mapped to null.",
+                    "Collections", "Medium");
 
-            // Sports & Athletics (76-88) - ALL PLAYABLE
-            add(76, "real-football-2008", "Real Football 2008", "Sports", "Gameloft", 2007, "⚽", "Shoot penalty kicks and score championship goals.");
-            add(77, "fifa-07-mobile", "FIFA 07 Mobile", "Sports", "EA Mobile", 2006, "🥅", "Authentic licensed national teams and penalty shootouts.");
-            add(78, "pes-2009", "Pro Evolution Soccer 2009", "Sports", "Konami", 2008, "🏟️", "Tactical striking and goal shooting mechanics.");
-            add(79, "playman-summer", "Playman World Athletics", "Sports", "RealNetworks", 2005, "🏃", "Sprint timing and javelin throwing Olympic decathlon.");
-            add(80, "playman-winter", "Playman Winter Games", "Sports", "RealNetworks", 2006, "🎿", "Slalom skiing, bobsled, and speed skating snow games.");
-            add(81, "midnight-pool-3d", "Midnight Pool 3D", "Sports", "Gameloft", 2005, "🎱", "8-ball and 9-ball barroom trick shots and wagers.");
-            add(82, "midnight-bowling-3d", "Midnight Bowling 3D", "Sports", "Gameloft", 2006, "🎳", "Strikes, spares, and spin curves in retro neon lanes.");
-            add(83, "nba-live-08", "NBA Live 08", "Sports", "EA Mobile", 2007, "🏀", "Shoot hoops, 3-pointers, and slam dunks against the clock.");
-            add(84, "tiger-woods-07", "Tiger Woods PGA Tour 07", "Sports", "EA Mobile", 2006, "⛳", "Precision golf fairway drives and green putts.");
-            add(85, "tony-hawk-4", "Tony Hawk's Pro Skater 4", "Sports", "Activision", 2003, "🛹", "Kickflips, grinds, and halfpipe trick combos.");
-            add(86, "skate-mobile", "Skate Mobile", "Sports", "EA Mobile", 2007, "🛹", "Realistic street skateboarding flip trick mastery.");
-            add(87, "super-dynamite-fishing", "Super Dynamite Fishing", "Sports", "HandyGames", 2008, "🎣", "Crazy TNT blast fishing for monster catches.");
-            add(88, "guitar-hero-3", "Guitar Hero III Mobile", "Sports", "Hands-On", 2007, "🎸", "Rhythm solo timing on rock anthem notes.");
+            add(5, "What is the primary guarantee provided by the 'volatile' keyword on a variable in Java?",
+                    null,
+                    List.of("Prevents deadlocks completely", "Guarantees thread visibility across CPU caches and prevents instruction reordering", "Makes compound operations like count++ atomic", "Locks the object monitor"),
+                    1,
+                    "volatile establishes a happens-before relationship, guaranteeing changes made by one thread are immediately visible to all other threads and preventing compiler/CPU instruction reordering. It does NOT make non-atomic operations like ++ atomic.",
+                    "Concurrency", "Hard");
 
-            // RPG & Strategy (89-100) - ALL PLAYABLE
-            add(89, "galaxy-on-fire-2", "Galaxy On Fire 2", "RPG", "Fishlabs", 2009, "🚀", "Space combat dogfights, asteroid mining, and alien attacks.");
-            add(90, "deep-3d", "Deep 3D", "RPG", "Fishlabs", 2006, "🌊", "Underwater submarine tactical torpedo combat.");
-            add(91, "ancient-empires-2", "Ancient Empires II", "RPG", "Macrospace", 2005, "⚔️", "Turn-based tactical fantasy kingdom battles.");
-            add(92, "heroes-might-magic", "Heroes of Might & Magic", "RPG", "Gameloft", 2007, "🏰", "Turn-based kingdom warfare, spells, and mystical beasts.");
-            add(93, "age-of-empires-3", "Age of Empires III Mobile", "RPG", "Glu Mobile", 2007, "🏹", "Empire conquest, archer volleys, and siege battles.");
-            add(94, "townsmen-6", "Townsmen 6", "RPG", "HandyGames", 2009, "👑", "Town management and resource logistics strategy.");
-            add(95, "gothic-3-beginning", "Gothic 3: The Beginning", "RPG", "HandyGames", 2008, "🗡️", "Dark fantasy open world quests, spells, and orc combat.");
-            add(96, "devils-and-demons", "Devils and Demons", "RPG", "HandyGames", 2009, "🔥", "Turn-based party combat against hellish demon lords.");
-            add(97, "worms-forts", "Worms Forts: Under Siege", "RPG", "THQ Wireless", 2005, "🪱", "Fortress building and ballistic artillery worm warfare.");
-            add(98, "worms-2007", "Worms 2007", "RPG", "THQ Wireless", 2007, "💣", "Holy Hand Grenades and exploding sheep worm battles.");
-            add(99, "simcity-mobile", "SimCity Mobile", "RPG", "EA Mobile", 2007, "🏙️", "Zone city blocks, manage power, and fight disasters.");
-            add(100, "the-sims-3", "The Sims 3 Mobile", "RPG", "EA Mobile", 2009, "🏡", "Socialize, build careers, and fulfill aspirations.");
-        }
-    }
+            add(6, "Can you override a private or static method in a subclass in Java?",
+                    null,
+                    List.of("Yes, both can be overridden", "Only static methods can be overridden", "Neither can be overridden; static methods are hidden, not overridden", "Only private methods can be overridden"),
+                    2,
+                    "Private methods are not visible to subclasses and cannot be overridden. Static methods belong to the class, not instances, so redefining them in a subclass is method hiding, not overriding.",
+                    "OOP", "Medium");
 
-    public static class ScoreEntry {
-        private final String player;
-        private final String game;
-        private final int score;
-        private final long timestamp;
+            add(7, "What is the difference between '==' and '.equals()' when comparing two String objects?",
+                    "String s1 = new String(\"hello\");\nString s2 = new String(\"hello\");",
+                    List.of("They are identical", "'==' checks reference memory identity, while '.equals()' checks string content value", "'.equals()' checks reference address only", "'==' checks character values"),
+                    1,
+                    "'==' checks if both references point to the exact same memory address on the heap. '.equals()' compares the actual sequence of characters.",
+                    "Basics", "Easy");
 
-        public ScoreEntry(String player, String game, int score, long timestamp) {
-            this.player = player;
-            this.game = game;
-            this.score = score;
-            this.timestamp = timestamp;
-        }
+            add(8, "What will be the output of this code snippet?",
+                    "String s = \"Java\";\ns.concat(\" 17\");\nSystem.out.println(s);",
+                    List.of("Java 17", "Java", "null", "Compilation Error"),
+                    1,
+                    "String objects in Java are immutable. s.concat(\" 17\") returns a new String, but the return value is ignored, leaving 's' unchanged as \"Java\".",
+                    "Basics", "Easy");
 
-        public String getPlayer() { return player; }
-        public String getGame() { return game; }
-        public int getScore() { return score; }
-        public long getTimestamp() { return timestamp; }
+            add(9, "What is the contract between equals() and hashCode()?",
+                    null,
+                    List.of("If two objects are equal according to equals(), their hashCode() MUST be equal", "If two objects have the same hashCode(), they MUST be equal according to equals()", "They have no relationship", "hashCode() must return a unique integer for every distinct object"),
+                    0,
+                    "If two objects are equal via equals(), they must produce the same hashCode(). However, unequal objects may share the same hashCode (hash collision).",
+                    "OOP", "Medium");
 
-        public String toJson() {
-            return "{\"player\":\"" + escape(player) + "\",\"game\":\"" + escape(game) +
-                    "\",\"score\":" + score + ",\"timestamp\":" + timestamp + "}";
-        }
+            add(10, "What is the output of the following stream pipeline?",
+                    "List<String> list = List.of(\"a\", \"bb\", \"ccc\");\nlong count = list.stream().filter(s -> s.length() > 1).count();\nSystem.out.println(count);",
+                    List.of("1", "2", "3", "0"),
+                    1,
+                    "The filter predicate 's -> s.length() > 1' retains \"bb\" (length 2) and \"ccc\" (length 3), resulting in a count of 2.",
+                    "Modern Java", "Easy");
 
-        private static String escape(String s) {
-            return s == null ? "" : s.replace("\"", "\\\"");
-        }
-    }
+            add(11, "What is the difference between Checked and Unchecked exceptions in Java?",
+                    null,
+                    List.of("Checked exceptions extend RuntimeException; Unchecked do not", "Checked exceptions must be declared in throws or caught at compile-time; Unchecked (RuntimeExceptions) do not", "Unchecked exceptions are fatal JVM errors like OutOfMemoryError", "There is no difference in Java 17"),
+                    1,
+                    "Checked exceptions (subclasses of Exception except RuntimeException) are checked at compile time and must be handled or declared. Unchecked exceptions (subclasses of RuntimeException) do not require explicit handling.",
+                    "Basics", "Medium");
 
-    public static class ScoreRepository {
-        private final List<ScoreEntry> scores = new CopyOnWriteArrayList<>();
+            add(12, "What was introduced in Java 14/16 as a concise way to create immutable data carriers?",
+                    null,
+                    List.of("sealed classes", "record classes", "data classes", "structs"),
+                    1,
+                    "Java Records (introduced in Java 14 preview and finalized in Java 16) provide a compact syntax for declaring transparent, immutable data-carrier classes with automatic constructor, getters, equals, hashCode, and toString.",
+                    "Modern Java", "Medium");
 
-        public ScoreRepository() {
-            addScore(new ScoreEntry("Duke", "space-impact", 4200, System.currentTimeMillis() - 86400000L * 2));
-            addScore(new ScoreEntry("Neo", "snake-retro", 3100, System.currentTimeMillis() - 86400000L * 3));
-            addScore(new ScoreEntry("SpeedDemon", "asphalt-3", 5800, System.currentTimeMillis() - 86400000L));
-            addScore(new ScoreEntry("GemHunter", "diamond-rush", 4600, System.currentTimeMillis() - 3600000L));
-            addScore(new ScoreEntry("Striker", "real-football-2008", 3900, System.currentTimeMillis() - 7200000L));
-            addScore(new ScoreEntry("Warlock", "ancient-empires-2", 4850, System.currentTimeMillis() - 14400000L));
-        }
+            add(13, "What does the 'final' keyword do when applied to a class?",
+                    null,
+                    List.of("Makes all fields of the class immutable", "Prevents the class from being instantiated", "Prevents the class from being subclassed (inherited)", "Makes all methods in the class static"),
+                    2,
+                    "A 'final' class cannot be extended by any other class (e.g. java.lang.String, java.lang.Integer are final classes).",
+                    "OOP", "Easy");
 
-        public void addScore(ScoreEntry entry) {
-            scores.add(entry);
-        }
+            add(14, "Which garbage collection root is NOT a valid GC root in HotSpot JVM?",
+                    null,
+                    List.of("Active Java thread local variables in stack frames", "Static variables in loaded classes", "Unreferenced objects in the young generation", "JNI Global references"),
+                    2,
+                    "GC roots include thread stack variables, JNI references, active threads, and class static references. Unreferenced objects in heap are unreachable garbage collected targets, not GC roots.",
+                    "JVM", "Hard");
 
-        public List<ScoreEntry> getTopScores(String gameFilter, int limit) {
-            List<ScoreEntry> filtered = new ArrayList<>();
-            for (ScoreEntry s : scores) {
-                if (gameFilter == null || gameFilter.isBlank() || s.getGame().equalsIgnoreCase(gameFilter)) {
-                    filtered.add(s);
-                }
-            }
-            filtered.sort(Comparator.comparingInt(ScoreEntry::getScore).reversed());
-            if (filtered.size() > limit) {
-                return filtered.subList(0, limit);
-            }
-            return filtered;
+            add(15, "What interface must an object implement to be eligible for use in a 'try-with-resources' statement?",
+                    null,
+                    List.of("java.lang.Cloneable", "java.lang.AutoCloseable", "java.io.Serializable", "java.lang.Runnable"),
+                    1,
+                    "try-with-resources automatically closes any resource that implements java.lang.AutoCloseable (or java.io.Closeable) at the end of the block.",
+                    "Modern Java", "Medium");
+
+            add(16, "What is the time complexity of searching for an element in a standard ArrayList by index?",
+                    null,
+                    List.of("O(1)", "O(n)", "O(log n)", "O(n log n)"),
+                    0,
+                    "ArrayList is backed by a contiguous array, allowing random direct memory access via index in O(1) constant time.",
+                    "Collections", "Easy");
+
+            add(17, "What happens if two threads attempt to call synchronized methods on the SAME object simultaneously?",
+                    null,
+                    List.of("Both execute concurrently", "One thread acquires the object monitor lock, and the other thread blocks until released", "JVM throws an IllegalMonitorStateException", "Deadlock occurs automatically"),
+                    1,
+                    "Every Java object has an intrinsic monitor lock. When a thread executes a synchronized instance method, it acquires that object's lock, blocking other threads until the method completes.",
+                    "Concurrency", "Medium");
+
+            add(18, "What will this code print?",
+                    "Integer a = 127;\nInteger b = 127;\nSystem.out.println(a == b);",
+                    List.of("true", "false", "Compilation Error", "NullPointerException"),
+                    0,
+                    "Java caches Integer objects within the range -128 to 127 (IntegerCache). Autoboxing values in this range returns the same cached reference, so 'a == b' evaluates to true.",
+                    "Basics", "Hard");
+
+            add(19, "Which keyword in Java 17 is used to restrict which other classes can extend or implement an interface/class?",
+                    null,
+                    List.of("restricted", "sealed", "locked", "protected"),
+                    1,
+                    "Sealed classes and interfaces (finalized in Java 17) use the 'sealed' modifier and 'permits' clause to explicitly restrict which classes may inherit from them.",
+                    "Modern Java", "Medium");
+
+            add(20, "What is the difference between Callable and Runnable in Java concurrency?",
+                    null,
+                    List.of("Runnable cannot run on Thread", "Callable's call() method can return a result and throw checked exceptions; Runnable's run() cannot", "Callable is only for parallel streams", "They are identical in modern Java"),
+                    1,
+                    "Callable<V> has V call() throws Exception, which returns a value and can throw checked exceptions. Runnable has void run() which cannot return values or throw checked exceptions.",
+                    "Concurrency", "Medium");
         }
     }
 
-    static class GamesHandler implements HttpHandler {
-        private final GameCatalog catalog;
+    static class QuestionsHandler implements HttpHandler {
+        private final QuestionBank bank;
 
-        public GamesHandler(GameCatalog catalog) {
-            this.catalog = catalog;
+        public QuestionsHandler(QuestionBank bank) {
+            this.bank = bank;
         }
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
             String query = exchange.getRequestURI().getQuery();
-            String category = null;
-            String search = null;
+            String topic = null;
+            String difficulty = null;
 
             if (query != null) {
                 for (String param : query.split("&")) {
-                    if (param.startsWith("category=")) {
-                        category = param.substring(9);
-                    } else if (param.startsWith("search=")) {
-                        search = param.substring(7);
+                    if (param.startsWith("topic=")) {
+                        topic = param.substring(6);
+                    } else if (param.startsWith("difficulty=")) {
+                        difficulty = param.substring(11);
                     }
                 }
             }
 
-            List<GameInfo> list = catalog.filter(category, search);
+            List<Question> list = bank.filterQuestions(topic, difficulty);
             StringBuilder sb = new StringBuilder("[");
             for (int i = 0; i < list.size(); i++) {
-                sb.append(list.get(i).toJson());
+                sb.append(list.get(i).toJson(true));
                 if (i < list.size() - 1) sb.append(",");
             }
             sb.append("]");
@@ -385,17 +371,46 @@ public class App {
         }
     }
 
-    static class ScoresHandler implements HttpHandler {
-        private final ScoreRepository repo;
+    static class RandomQuestionHandler implements HttpHandler {
+        private final QuestionBank bank;
 
-        public ScoresHandler(ScoreRepository repo) {
-            this.repo = repo;
+        public RandomQuestionHandler(QuestionBank bank) {
+            this.bank = bank;
         }
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
-            exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            String query = exchange.getRequestURI().getQuery();
+            String topic = null;
+            String difficulty = null;
+
+            if (query != null) {
+                for (String param : query.split("&")) {
+                    if (param.startsWith("topic=")) {
+                        topic = param.substring(6);
+                    } else if (param.startsWith("difficulty=")) {
+                        difficulty = param.substring(11);
+                    }
+                }
+            }
+
+            Question q = bank.getRandomQuestion(topic, difficulty);
+            sendJsonResponse(exchange, 200, q.toJson(true));
+        }
+    }
+
+    static class CheckAnswerHandler implements HttpHandler {
+        private final QuestionBank bank;
+
+        public CheckAnswerHandler(QuestionBank bank) {
+            this.bank = bank;
+        }
+
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
+            exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "POST, OPTIONS");
             exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type");
 
             if ("OPTIONS".equalsIgnoreCase(exchange.getRequestMethod())) {
@@ -403,82 +418,57 @@ public class App {
                 return;
             }
 
-            if ("POST".equalsIgnoreCase(exchange.getRequestMethod())) {
-                InputStream is = exchange.getRequestBody();
-                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-                int nRead;
-                byte[] data = new byte[1024];
-                while ((nRead = is.read(data, 0, data.length)) != -1) {
-                    buffer.write(data, 0, nRead);
-                }
-                String body = buffer.toString(StandardCharsets.UTF_8);
+            InputStream is = exchange.getRequestBody();
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            int nRead;
+            byte[] data = new byte[1024];
+            while ((nRead = is.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, nRead);
+            }
+            String body = buffer.toString(StandardCharsets.UTF_8);
 
-                String player = extractJsonField(body, "player", "Player1");
-                String game = extractJsonField(body, "game", "space-impact");
-                int score = extractJsonInt(body, "score", 0);
+            int questionId = extractInt(body, "questionId", 1);
+            int selectedIndex = extractInt(body, "selectedIndex", -1);
 
-                ScoreEntry entry = new ScoreEntry(player, game, score, System.currentTimeMillis());
-                repo.addScore(entry);
-
-                sendJsonResponse(exchange, 201, "{\"status\":\"success\",\"entry\":" + entry.toJson() + "}");
+            Question q = bank.getQuestionById(questionId);
+            if (q == null) {
+                sendJsonResponse(exchange, 404, "{\"error\":\"Question not found\"}");
                 return;
             }
 
-            // GET
-            String query = exchange.getRequestURI().getQuery();
-            String gameFilter = null;
-            if (query != null && query.contains("game=")) {
-                for (String param : query.split("&")) {
-                    if (param.startsWith("game=")) {
-                        gameFilter = param.substring(5);
-                    }
-                }
-            }
-
-            List<ScoreEntry> top = repo.getTopScores(gameFilter, 10);
-            StringBuilder sb = new StringBuilder("[");
-            for (int i = 0; i < top.size(); i++) {
-                sb.append(top.get(i).toJson());
-                if (i < top.size() - 1) sb.append(",");
-            }
-            sb.append("]");
-            sendJsonResponse(exchange, 200, sb.toString());
+            boolean isCorrect = (selectedIndex == q.getCorrectIndex());
+            String json = "{" +
+                    "\"correct\":" + isCorrect + "," +
+                    "\"correctIndex\":" + q.getCorrectIndex() + "," +
+                    "\"explanation\":\"" + Question.escape(q.getExplanation()) + "\"" +
+                    "}";
+            sendJsonResponse(exchange, 200, json);
         }
 
-        private String extractJsonField(String json, String field, String defVal) {
-            String pattern = "\"" + field + "\"\\s*:\\s*\"([^\"]+)\"";
+        private int extractInt(String json, String key, int def) {
+            String pattern = "\"" + key + "\"\\s*:\\s*(\\d+)";
             java.util.regex.Matcher m = java.util.regex.Pattern.compile(pattern).matcher(json);
             if (m.find()) {
-                return m.group(1);
+                return Integer.parseInt(m.group(1));
             }
-            return defVal;
-        }
-
-        private int extractJsonInt(String json, String field, int defVal) {
-            String pattern = "\"" + field + "\"\\s*:\\s*(\\d+)";
-            java.util.regex.Matcher m = java.util.regex.Pattern.compile(pattern).matcher(json);
-            if (m.find()) {
-                try {
-                    return Integer.parseInt(m.group(1));
-                } catch (NumberFormatException ignored) {}
-            }
-            return defVal;
+            return def;
         }
     }
 
-    static class StatusHandler implements HttpHandler {
-        private final GameCatalog catalog;
+    static class StatsHandler implements HttpHandler {
+        private final QuestionBank bank;
 
-        public StatusHandler(GameCatalog catalog) {
-            this.catalog = catalog;
+        public StatsHandler(QuestionBank bank) {
+            this.bank = bank;
         }
 
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             Runtime runtime = Runtime.getRuntime();
-            String json = "{\"status\":\"ONLINE\",\"app\":\"100 Java Games Retro Vault\",\"totalGames\":" +
-                    catalog.getTotalGamesCount() + ",\"playableCount\":100,\"javaVersion\":\"" + System.getProperty("java.version") +
-                    "\",\"totalMemory\":" + runtime.totalMemory() + ",\"freeMemory\":" + runtime.freeMemory() + "}";
+            String json = "{\"status\":\"ONLINE\",\"app\":\"Java Q&A Quiz & Generator\"," +
+                    "\"totalQuestions\":" + bank.getTotalCount() + "," +
+                    "\"javaVersion\":\"" + System.getProperty("java.version") + "\"," +
+                    "\"totalMemory\":" + runtime.totalMemory() + ",\"freeMemory\":" + runtime.freeMemory() + "}";
             sendJsonResponse(exchange, 200, json);
         }
     }

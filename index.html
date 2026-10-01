@@ -2,454 +2,439 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>100 Java Games Vault | All 100 Games 100% Playable!</title>
-  <meta name="description" content="100 Classic Java mobile games in one retro arcade vault. Every single game is 100% playable directly in your browser.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java Q&A Master | Random Question Generator & Quiz</title>
+  <meta name="description" content="Interactive Java Question & Answer platform. Generate random Java interview, certification, and conceptual questions with instant feedback and explanations.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #00f2fe;
-      --secondary: #4facfe;
-      --accent: #ff007f;
-      --gold: #f9d423;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --secondary: #ec4899;
       --success: #10b981;
-      --bg: #070913;
-      --panel: #0d1224;
-      --panel-border: rgba(0, 242, 254, 0.25);
-      --card-bg: rgba(15, 22, 41, 0.8);
-      --screen-bg: #040810;
-      --text: #e2e8f0;
-      --text-dim: #7e8da9;
+      --danger: #ef4444;
+      --gold: #f59e0b;
+      --bg: #090d16;
+      --card-bg: rgba(17, 24, 39, 0.85);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f3f4f6;
+      --text-dim: #9ca3af;
+      --code-bg: #030712;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
     }
 
     body {
       background-color: var(--bg);
       background-image: 
-        radial-gradient(ellipse at 50% 0%, rgba(79, 172, 254, 0.15) 0%, transparent 60%),
-        radial-gradient(circle at 10% 90%, rgba(255, 0, 127, 0.1) 0%, transparent 40%);
+        radial-gradient(ellipse at 50% 0%, rgba(99, 102, 241, 0.18) 0%, transparent 60%),
+        radial-gradient(circle at 10% 90%, rgba(236, 72, 153, 0.12) 0%, transparent 45%);
       color: var(--text);
-      font-family: 'Rajdhani', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 1rem 0.75rem 4rem;
+      padding: 1.5rem 1rem 4rem;
+      line-height: 1.6;
     }
 
     header {
       text-align: center;
-      margin-bottom: 1.25rem;
-      max-width: 900px;
+      margin-bottom: 2rem;
+      max-width: 800px;
     }
 
-    .retro-badge {
-      display: inline-block;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.65rem;
-      background: linear-gradient(135deg, #10b981, #059669);
+    .badge-bar {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.3rem 0.75rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-java {
+      background: linear-gradient(135deg, #f97316, #ea580c);
       color: #fff;
-      padding: 0.35rem 0.85rem;
-      border-radius: 4px;
-      margin-bottom: 0.6rem;
-      letter-spacing: 1px;
-      box-shadow: 0 0 14px rgba(16, 185, 129, 0.5);
+    }
+
+    .badge-score {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: #fbbf24;
+    }
+
+    .badge-streak {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #34d399;
     }
 
     h1 {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 1.45rem;
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -1px;
       color: #fff;
-      text-shadow: 0 0 10px rgba(0, 242, 254, 0.8), 0 0 25px rgba(79, 172, 254, 0.4);
       margin-bottom: 0.4rem;
-      line-height: 1.4;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .sub-title {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       color: var(--text-dim);
-      font-weight: 600;
     }
 
-    /* Emulator Container */
-    .arcade-chassis {
-      background: linear-gradient(180deg, #151d33 0%, #0d1222 100%);
-      border: 2px solid rgba(0, 242, 254, 0.4);
-      border-radius: 24px;
-      padding: 1.25rem;
-      box-shadow: 
-        0 15px 35px rgba(0, 0, 0, 0.8),
-        0 0 25px rgba(0, 242, 254, 0.15),
-        inset 0 1px 2px rgba(255, 255, 255, 0.15);
+    /* Container */
+    .app-container {
       width: 100%;
-      max-width: 490px;
-      position: relative;
-      margin-bottom: 2.5rem;
-    }
-
-    .top-phone-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 0.5rem 0.75rem;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.6rem;
-      color: #94a3b8;
-    }
-
-    .speaker-grill {
-      width: 60px;
-      height: 4px;
-      background: #25334d;
-      border-radius: 2px;
-    }
-
-    /* Screen Bezel */
-    .screen-bezel {
-      background: #020409;
-      border: 3px solid #1e293b;
-      border-radius: 12px;
-      padding: 6px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9);
-    }
-
-    .screen-bezel::after {
-      content: " ";
-      display: block;
-      position: absolute;
-      top: 0; left: 0; bottom: 0; right: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
-      background-size: 100% 4px;
-      z-index: 2;
-      pointer-events: none;
-      opacity: 0.75;
-    }
-
-    #gameCanvas {
-      display: block;
-      width: 100%;
-      height: 280px;
-      background: var(--screen-bg);
-      border-radius: 6px;
-      image-rendering: pixelated;
-    }
-
-    .game-hud {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.4rem 0.25rem;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.65rem;
-      color: var(--primary);
-      text-shadow: 0 0 5px var(--primary);
-    }
-
-    /* Controls */
-    .controls-panel {
-      margin-top: 1rem;
+      max-width: 820px;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 1.5rem;
     }
 
-    .keypad-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 0.5rem;
-    }
-
-    .dpad-container {
-      display: grid;
-      grid-template-columns: repeat(3, 44px);
-      grid-template-rows: repeat(3, 44px);
-      gap: 4px;
-    }
-
-    .dpad-btn {
-      background: #1e2942;
-      border: 1px solid #334155;
-      color: #94a3b8;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      cursor: pointer;
-      touch-action: manipulation;
-      box-shadow: 0 3px 0 #0f172a;
-    }
-
-    .dpad-btn:active {
-      background: var(--primary);
-      color: #000;
-      transform: translateY(2px);
-    }
-
-    .dpad-center {
-      background: #111827;
-      border-radius: 50%;
-      border: 1px solid #1f293d;
-    }
-
-    .action-group {
-      display: flex;
-      gap: 0.75rem;
-    }
-
-    .action-btn {
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 0, 127, 0.4);
-      background: radial-gradient(circle at 35% 35%, #ff2a85, #b8004f);
-      color: #fff;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.7rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 0 #70002e, 0 0 12px rgba(255, 0, 127, 0.4);
-      touch-action: manipulation;
-    }
-
-    .action-btn.btn-b {
-      background: radial-gradient(circle at 35% 35%, #00f2fe, #0088cc);
-      border-color: rgba(0, 242, 254, 0.4);
-      box-shadow: 0 4px 0 #005580, 0 0 12px rgba(0, 242, 254, 0.4);
-    }
-
-    .action-btn:active {
-      transform: translateY(3px);
-    }
-
-    .system-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-top: 0.25rem;
-    }
-
-    .sys-btn {
-      background: #162036;
-      border: 1px solid #293856;
-      color: #94a3b8;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.55rem;
-      padding: 0.4rem 0.75rem;
-      border-radius: 6px;
-      cursor: pointer;
-      box-shadow: 0 2px 0 #0b1120;
-    }
-
-    /* 100 Games Catalog Section */
-    .vault-section {
-      width: 100%;
-      max-width: 1100px;
-      margin-top: 1rem;
-    }
-
-    .vault-header {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      background: var(--panel);
-      border: 1px solid var(--panel-border);
+    /* Control Toolbar */
+    .toolbar {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       border-radius: 16px;
       padding: 1.25rem;
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
     }
 
-    .vault-title-row {
+    .toolbar-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .filters-group {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    select {
+      background: #030712;
+      border: 1px solid var(--card-border);
+      color: #fff;
+      padding: 0.5rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      cursor: pointer;
+      outline: none;
+    }
+
+    select:focus {
+      border-color: var(--primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.65rem 1.4rem;
+      border-radius: 10px;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-generate {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+      font-size: 1rem;
+    }
+
+    .btn-generate:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn-sound {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text-dim);
+      padding: 0.5rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    .btn-sound:hover {
+      color: #fff;
+    }
+
+    /* Main Question Card */
+    .question-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      position: relative;
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .topic-pill {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #a5b4fc;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+    }
+
+    .diff-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+    }
+
+    .diff-easy { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .diff-medium { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .diff-hard { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+
+    .question-text {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.4;
+    }
+
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      color: #38bdf8;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+
+    /* Options List */
+    .options-grid {
+      display: flex;
+      flex-direction: column;
       gap: 0.75rem;
     }
 
-    .vault-title {
-      font-family: 'Press Start 2P', monospace;
+    .option-btn {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: all 0.2s ease;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateX(4px);
+    }
+
+    .option-letter {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      flex-shrink: 0;
+    }
+
+    .option-btn.correct {
+      background: rgba(16, 185, 129, 0.18) !important;
+      border-color: var(--success) !important;
+      color: #fff;
+    }
+
+    .option-btn.correct .option-letter {
+      background: var(--success);
+      color: #fff;
+    }
+
+    .option-btn.wrong {
+      background: rgba(239, 68, 68, 0.18) !important;
+      border-color: var(--danger) !important;
+      color: #fff;
+    }
+
+    .option-btn.wrong .option-letter {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    /* Explanation Panel */
+    .explanation-panel {
+      display: none;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 12px;
+      padding: 1.25rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .explanation-title {
+      font-weight: 700;
       font-size: 0.95rem;
-      color: var(--gold);
+      color: #818cf8;
+      margin-bottom: 0.5rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .search-box {
-      width: 100%;
-      position: relative;
+    .explanation-text {
+      color: #cbd5e1;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .card-footer {
+      display: none;
+      justify-content: flex-end;
+      padding-top: 0.5rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .btn-next {
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .btn-next:hover {
+      background: #334155;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* All Questions Browser Drawer */
+    .drawer {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
     }
 
     .search-input {
       width: 100%;
-      background: #060914;
-      border: 1px solid var(--panel-border);
+      background: #030712;
+      border: 1px solid var(--card-border);
       color: #fff;
       padding: 0.65rem 1rem;
       border-radius: 8px;
-      font-family: 'Rajdhani', sans-serif;
-      font-size: 1.05rem;
-      font-weight: 600;
+      font-size: 0.95rem;
+      font-family: inherit;
+      margin-bottom: 1rem;
     }
 
     .search-input:focus {
       outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
     }
 
-    .category-pills {
-      display: flex;
-      gap: 0.4rem;
-      overflow-x: auto;
-      padding-bottom: 0.25rem;
-    }
-
-    .cat-pill {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--text-dim);
-      font-family: 'Rajdhani', sans-serif;
-      font-weight: 700;
-      font-size: 0.95rem;
-      padding: 0.3rem 0.85rem;
-      border-radius: 20px;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-
-    .cat-pill.active {
-      background: var(--primary);
-      color: #000;
-      border-color: var(--primary);
-      box-shadow: 0 0 8px rgba(0, 242, 254, 0.4);
-    }
-
-    /* 100 Game Cards Grid */
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1rem;
-    }
-
-    .game-card {
-      background: var(--card-bg);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 1rem;
+    .questions-list {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      backdrop-filter: blur(8px);
-      transition: transform 0.15s, border-color 0.15s;
+      gap: 0.5rem;
+      max-height: 320px;
+      overflow-y: auto;
+      padding-right: 0.25rem;
     }
 
-    .game-card:hover {
-      border-color: var(--primary);
-      transform: translateY(-2px);
-    }
-
-    .game-card-top {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .game-icon {
-      font-size: 1.75rem;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 0.4rem;
-      border-radius: 8px;
-      line-height: 1;
-    }
-
-    .game-meta {
-      flex: 1;
-    }
-
-    .game-id {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.55rem;
-      color: var(--gold);
-    }
-
-    .game-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #fff;
-      line-height: 1.2;
-      margin: 0.15rem 0;
-    }
-
-    .game-dev {
-      font-size: 0.8rem;
-      color: var(--text-dim);
-    }
-
-    .game-desc {
-      font-size: 0.85rem;
-      color: #94a3b8;
-      line-height: 1.35;
-      margin-bottom: 0.75rem;
-      flex-grow: 1;
-    }
-
-    .game-card-bottom {
+    .question-list-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
-      padding-top: 0.5rem;
-    }
-
-    .game-genre-tag {
-      font-size: 0.75rem;
-      background: rgba(0, 242, 254, 0.12);
-      color: var(--primary);
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      font-weight: 600;
-    }
-
-    .play-card-btn {
-      background: linear-gradient(135deg, #10b981, #059669);
-      border: none;
-      color: #fff;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.58rem;
-      padding: 0.4rem 0.75rem;
-      border-radius: 6px;
+      padding: 0.65rem 0.85rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
       cursor: pointer;
-      font-weight: 700;
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+      font-size: 0.9rem;
       transition: all 0.15s;
     }
 
-    .play-card-btn:hover {
-      transform: scale(1.05);
-      background: linear-gradient(135deg, #34d399, #10b981);
+    .question-list-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: var(--primary);
     }
 
     footer {
       margin-top: 3rem;
       text-align: center;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: var(--text-dim);
     }
 
@@ -462,99 +447,104 @@
 <body>
 
   <header>
-    <div class="retro-badge">100 / 100 GAMES FULLY PLAYABLE!</div>
-    <h1>100 JAVA GAMES</h1>
-    <p class="sub-title">Every Single Classic J2ME Game Is Ready To Play Right Here</p>
+    <div class="badge-bar">
+      <span class="badge badge-java">☕ Java 17</span>
+      <span id="streak-badge" class="badge badge-streak">🔥 Streak: 0</span>
+      <span id="score-badge" class="badge badge-score">⭐ Score: 0</span>
+    </div>
+    <h1>Java <span class="gradient-text">Q&A Generator</span></h1>
+    <p class="sub-title">Test your Java knowledge, interview prep, and core concepts with randomized questions.</p>
   </header>
 
-  <!-- Retro Phone Arcade Device -->
-  <div class="arcade-chassis">
-    <div class="top-phone-bar">
-      <span id="active-game-title">SPACE IMPACT</span>
-      <div class="speaker-grill"></div>
-      <span id="sound-indicator" style="cursor: pointer;" onclick="toggleSound()">🔊 ON</span>
-    </div>
+  <main class="app-container">
 
-    <!-- Screen Bezel -->
-    <div class="screen-bezel">
-      <div class="game-hud">
-        <span id="hud-score">SCORE: 0</span>
-        <span id="hud-level">LVL: 1</span>
-        <span id="hud-lives">♥♥♥</span>
-      </div>
-      <canvas id="gameCanvas" width="360" height="260"></canvas>
-    </div>
+    <!-- Control Toolbar -->
+    <section class="toolbar">
+      <div class="toolbar-row">
+        <button id="gen-btn" class="btn btn-generate" onclick="generateRandomQuestion()">
+          <span>🎲</span> Generate Random Question
+        </button>
 
-    <!-- Controls -->
-    <div class="controls-panel">
-      <div class="keypad-row">
-        <!-- D-PAD -->
-        <div class="dpad-container">
-          <div></div>
-          <button class="dpad-btn" id="dpad-up" onpointerdown="handleInput('ArrowUp', true)" onpointerup="handleInput('ArrowUp', false)">▲</button>
-          <div></div>
-          <button class="dpad-btn" id="dpad-left" onpointerdown="handleInput('ArrowLeft', true)" onpointerup="handleInput('ArrowLeft', false)">◀</button>
-          <div class="dpad-btn dpad-center"></div>
-          <button class="dpad-btn" id="dpad-right" onpointerdown="handleInput('ArrowRight', true)" onpointerup="handleInput('ArrowRight', false)">▶</button>
-          <div></div>
-          <button class="dpad-btn" id="dpad-down" onpointerdown="handleInput('ArrowDown', true)" onpointerup="handleInput('ArrowDown', false)">▼</button>
-          <div></div>
-        </div>
+        <div class="filters-group">
+          <select id="topic-select" onchange="generateRandomQuestion()">
+            <option value="all">All Topics</option>
+            <option value="Basics">Basics & Syntax</option>
+            <option value="OOP">Object-Oriented (OOP)</option>
+            <option value="Collections">Collections & Data Structures</option>
+            <option value="Concurrency">Concurrency & Threads</option>
+            <option value="JVM">JVM & Memory</option>
+            <option value="Modern Java">Modern Java (Streams/Records)</option>
+          </select>
 
-        <!-- Action buttons -->
-        <div class="action-group">
-          <button class="action-btn btn-b" id="btn-action-b" onpointerdown="handleInput('KeyX', true)" onpointerup="handleInput('KeyX', false)">B</button>
-          <button class="action-btn" id="btn-action-a" onpointerdown="handleInput('Space', true)" onpointerup="handleInput('Space', false)">A</button>
+          <select id="diff-select" onchange="generateRandomQuestion()">
+            <option value="all">Any Difficulty</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+          </select>
+
+          <button id="sound-btn" class="btn btn-sound" onclick="toggleSound()">
+            🔊 Audio
+          </button>
         </div>
       </div>
+    </section>
 
-      <div class="system-buttons">
-        <button class="sys-btn" onclick="togglePause()">PAUSE [P]</button>
-        <button class="sys-btn" onclick="restartCurrentGame()">RESTART</button>
-        <button class="sys-btn" onclick="toggleSound()">AUDIO</button>
+    <!-- Active Question Card -->
+    <section class="question-card" id="q-card">
+      <div class="card-top">
+        <span id="q-topic" class="topic-pill">Collections</span>
+        <span id="q-diff" class="diff-pill diff-medium">Medium</span>
       </div>
-    </div>
-  </div>
 
-  <!-- 100 Games Catalog -->
-  <section class="vault-section">
-    <div class="vault-header">
-      <div class="vault-title-row">
-        <div class="vault-title">
-          <span>🕹️</span>
-          <span>100 PLAYABLE JAVA GAMES</span>
+      <div id="q-text" class="question-text">
+        Loading random Java question...
+      </div>
+
+      <pre id="q-code" class="code-block" style="display: none;"><code></code></pre>
+
+      <div id="options-container" class="options-grid">
+        <!-- Interactive option buttons will be rendered here -->
+      </div>
+
+      <!-- Explanation Box -->
+      <div id="explanation-box" class="explanation-panel">
+        <div class="explanation-title">
+          <span>💡</span> Explanation & Java Concept:
         </div>
-        <span id="game-count-label" style="font-size: 0.9rem; color: var(--gold); font-weight: 700;">Showing 100 of 100 Playable Games</span>
+        <div id="explanation-text" class="explanation-text"></div>
       </div>
 
-      <div class="search-box">
-        <input type="text" id="game-search" class="search-input" placeholder="🔍 Search any game (Asphalt, Snake, Doom, Diamond Rush, FIFA, Assassin's Creed)..." oninput="filterGames()">
+      <div id="card-footer" class="card-footer">
+        <button class="btn btn-next" onclick="generateRandomQuestion()">
+          Next Random Question ➔
+        </button>
+      </div>
+    </section>
+
+    <!-- Question Bank Explorer -->
+    <section class="drawer">
+      <div class="drawer-header">
+        <h3 style="font-size: 1.1rem; color: #fff;">📚 Question Bank Explorer</h3>
+        <span id="total-q-count" style="font-size: 0.85rem; color: var(--text-dim);">20 Questions Available</span>
       </div>
 
-      <div class="category-pills">
-        <button class="cat-pill active" onclick="setCategory('all')">All (100)</button>
-        <button class="cat-pill" onclick="setCategory('Action')">Action (20)</button>
-        <button class="cat-pill" onclick="setCategory('Arcade')">Arcade (20)</button>
-        <button class="cat-pill" onclick="setCategory('Racing')">Racing (15)</button>
-        <button class="cat-pill" onclick="setCategory('Puzzle')">Puzzle (20)</button>
-        <button class="cat-pill" onclick="setCategory('Sports')">Sports (13)</button>
-        <button class="cat-pill" onclick="setCategory('RPG')">RPG & Strategy (12)</button>
-      </div>
-    </div>
+      <input type="text" id="bank-search" class="search-input" placeholder="Search questions by keyword (e.g. volatile, HashMap, record, equals, stream)..." oninput="filterBankList()">
 
-    <!-- 100 Game Cards -->
-    <div id="games-grid" class="games-grid">
-      <!-- Injected by JavaScript -->
-    </div>
-  </section>
+      <div id="bank-list" class="questions-list">
+        <!-- Questions injected here -->
+      </div>
+    </section>
+
+  </main>
 
   <footer>
-    <p>100 Java Games Archive • Powered by Java 17 & Vercel Edge • <a href="https://github.com/saschool12/java" target="_blank">github.com/saschool12/java</a></p>
+    <p>Java Q&A Quiz & Random Generator • Powered by Java 17 & Vercel • <a href="https://github.com/saschool12/java" target="_blank">github.com/saschool12/java</a></p>
   </footer>
 
   <script>
     // -------------------------------------------------------------
-    // 8-BIT AUDIO SYNTHESIZER
+    // AUDIO SYNTHESIZER (Web Audio API)
     // -------------------------------------------------------------
     let audioCtx = null;
     let soundEnabled = true;
@@ -564,7 +554,7 @@
       if (audioCtx.state === 'suspended') audioCtx.resume();
     }
 
-    function playBeep(freq, type = 'square', duration = 0.08, volume = 0.12) {
+    function playTone(freq, type = 'sine', duration = 0.1, vol = 0.15) {
       if (!soundEnabled) return;
       try {
         initAudio();
@@ -572,7 +562,7 @@
         const gain = audioCtx.createGain();
         osc.type = type;
         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
         osc.connect(gain);
         gain.connect(audioCtx.destination);
@@ -581,845 +571,480 @@
       } catch (e) {}
     }
 
-    function playLaserSound() {
+    function playSuccessSound() {
       if (!soundEnabled) return;
-      try {
-        initAudio();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(850, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(140, audioCtx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.1);
-      } catch (e) {}
-    }
-
-    function playExplosionSound() {
-      if (!soundEnabled) return;
-      playBeep(90, 'sawtooth', 0.25, 0.2);
-    }
-
-    function playPowerupSound() {
-      if (!soundEnabled) return;
-      [350, 500, 700, 1050].forEach((freq, idx) => {
-        setTimeout(() => playBeep(freq, 'triangle', 0.06, 0.12), idx * 40);
+      [440, 554, 659, 880].forEach((freq, idx) => {
+        setTimeout(() => playTone(freq, 'triangle', 0.1, 0.12), idx * 60);
       });
+    }
+
+    function playWrongSound() {
+      if (!soundEnabled) return;
+      playTone(180, 'sawtooth', 0.25, 0.15);
     }
 
     function toggleSound() {
       soundEnabled = !soundEnabled;
-      document.getElementById('sound-indicator').innerText = soundEnabled ? '🔊 ON' : '🔇 OFF';
-      if (soundEnabled) playBeep(440);
+      document.getElementById('sound-btn').innerText = soundEnabled ? '🔊 Audio' : '🔇 Muted';
+      if (soundEnabled) playTone(440);
     }
 
     // -------------------------------------------------------------
-    // ARCADE GAME ENGINES FOR ALL 100 GAMES
+    // DATA & STATE
     // -------------------------------------------------------------
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    let currentGame = { slug: 'space-impact', title: 'Space Impact', category: 'Action', icon: '🚀' };
-    let isPaused = false;
+    let currentQuestion = null;
+    let answered = false;
     let score = 0;
-    let lives = 3;
-    let level = 1;
-    let gameOver = false;
+    let streak = 0;
+    let allQuestions = [];
 
-    const keys = {
-      ArrowUp: false,
-      ArrowDown: false,
-      ArrowLeft: false,
-      ArrowRight: false,
-      Space: false,
-      KeyX: false
-    };
-
-    function handleInput(code, isDown) {
-      if (isDown) initAudio();
-      if (keys.hasOwnProperty(code)) keys[code] = isDown;
-      if (isDown && (code === 'Space' || code === 'KeyX') && gameOver) {
-        restartCurrentGame();
+    // Fallback offline dataset (matches Java backend exactly for Vercel edge compatibility)
+    const localBank = [
+      {
+        id: 1,
+        question: "Is Java pass-by-value or pass-by-reference?",
+        codeSnippet: null,
+        topic: "Basics",
+        difficulty: "Medium",
+        options: [
+          "Strictly pass-by-value",
+          "Strictly pass-by-reference",
+          "Pass-by-reference for Objects and pass-by-value for primitives",
+          "Depends on JVM implementation"
+        ],
+        correctIndex: 0,
+        explanation: "Java is strictly pass-by-value at all times. When an object is passed, a copy of the reference (pointer address) is passed by value."
+      },
+      {
+        id: 2,
+        question: "What is the result of evaluating the following expression?",
+        codeSnippet: "System.out.println(10 + 20 + \"Java\" + 10 + 20);",
+        topic: "Basics",
+        difficulty: "Easy",
+        options: ["1020Java1020", "30Java1020", "30Java30", "Compilation Error"],
+        correctIndex: 1,
+        explanation: "Operator + evaluates left-to-right. 10 + 20 produces integer 30, then 30 + \"Java\" converts to String \"30Java\", and subsequent additions concatenate as strings."
+      },
+      {
+        id: 3,
+        question: "How does HashMap in Java 8+ handle hash collisions when a bucket exceeds 8 nodes?",
+        codeSnippet: null,
+        topic: "Collections",
+        difficulty: "Hard",
+        options: [
+          "Throws a HashCollisionException",
+          "Rehashes into an AVL Tree",
+          "Transforms the bucket linked list into a balanced Red-Black Tree",
+          "Doubles the bucket capacity immediately"
+        ],
+        correctIndex: 2,
+        explanation: "In Java 8+, when a single bucket linked list reaches TREEIFY_THRESHOLD (8) and the table capacity is at least 64, it converts to a Red-Black Tree (TreeNode) improving lookup from O(n) to O(log n)."
+      },
+      {
+        id: 4,
+        question: "Which of the following Map implementations does NOT permit null keys or null values?",
+        codeSnippet: null,
+        topic: "Collections",
+        difficulty: "Medium",
+        options: ["HashMap", "LinkedHashMap", "ConcurrentHashMap", "WeakHashMap"],
+        correctIndex: 2,
+        explanation: "ConcurrentHashMap does not allow null keys or null values to prevent ambiguity in multithreaded environments where get(key) returning null could mean either absent or mapped to null."
+      },
+      {
+        id: 5,
+        question: "What is the primary guarantee provided by the 'volatile' keyword on a variable in Java?",
+        codeSnippet: null,
+        topic: "Concurrency",
+        difficulty: "Hard",
+        options: [
+          "Prevents deadlocks completely",
+          "Guarantees thread visibility across CPU caches and prevents instruction reordering",
+          "Makes compound operations like count++ atomic",
+          "Locks the object monitor"
+        ],
+        correctIndex: 1,
+        explanation: "volatile establishes a happens-before relationship, guaranteeing changes made by one thread are immediately visible to all other threads and preventing compiler/CPU instruction reordering. It does NOT make non-atomic operations like ++ atomic."
+      },
+      {
+        id: 6,
+        question: "Can you override a private or static method in a subclass in Java?",
+        codeSnippet: null,
+        topic: "OOP",
+        difficulty: "Medium",
+        options: [
+          "Yes, both can be overridden",
+          "Only static methods can be overridden",
+          "Neither can be overridden; static methods are hidden, not overridden",
+          "Only private methods can be overridden"
+        ],
+        correctIndex: 2,
+        explanation: "Private methods are not visible to subclasses and cannot be overridden. Static methods belong to the class, not instances, so redefining them in a subclass is method hiding, not overriding."
+      },
+      {
+        id: 7,
+        question: "What is the difference between '==' and '.equals()' when comparing two String objects?",
+        codeSnippet: "String s1 = new String(\"hello\");\nString s2 = new String(\"hello\");",
+        topic: "Basics",
+        difficulty: "Easy",
+        options: [
+          "They are identical",
+          "'==' checks reference memory identity, while '.equals()' checks string content value",
+          "'.equals()' checks reference address only",
+          "'==' checks character values"
+        ],
+        correctIndex: 1,
+        explanation: "'==' checks if both references point to the exact same memory address on the heap. '.equals()' compares the actual sequence of characters."
+      },
+      {
+        id: 8,
+        question: "What will be the output of this code snippet?",
+        codeSnippet: "String s = \"Java\";\ns.concat(\" 17\");\nSystem.out.println(s);",
+        topic: "Basics",
+        difficulty: "Easy",
+        options: ["Java 17", "Java", "null", "Compilation Error"],
+        correctIndex: 1,
+        explanation: "String objects in Java are immutable. s.concat(\" 17\") returns a new String, but the return value is ignored, leaving 's' unchanged as \"Java\"."
+      },
+      {
+        id: 9,
+        question: "What is the contract between equals() and hashCode()?",
+        codeSnippet: null,
+        topic: "OOP",
+        difficulty: "Medium",
+        options: [
+          "If two objects are equal according to equals(), their hashCode() MUST be equal",
+          "If two objects have the same hashCode(), they MUST be equal according to equals()",
+          "They have no relationship",
+          "hashCode() must return a unique integer for every distinct object"
+        ],
+        correctIndex: 0,
+        explanation: "If two objects are equal via equals(), they must produce the same hashCode(). However, unequal objects may share the same hashCode (hash collision)."
+      },
+      {
+        id: 10,
+        question: "What is the output of the following stream pipeline?",
+        codeSnippet: "List<String> list = List.of(\"a\", \"bb\", \"ccc\");\nlong count = list.stream().filter(s -> s.length() > 1).count();\nSystem.out.println(count);",
+        topic: "Modern Java",
+        difficulty: "Easy",
+        options: ["1", "2", "3", "0"],
+        correctIndex: 1,
+        explanation: "The filter predicate 's -> s.length() > 1' retains \"bb\" (length 2) and \"ccc\" (length 3), resulting in a count of 2."
+      },
+      {
+        id: 11,
+        question: "What is the difference between Checked and Unchecked exceptions in Java?",
+        codeSnippet: null,
+        topic: "Basics",
+        difficulty: "Medium",
+        options: [
+          "Checked exceptions extend RuntimeException; Unchecked do not",
+          "Checked exceptions must be declared in throws or caught at compile-time; Unchecked (RuntimeExceptions) do not",
+          "Unchecked exceptions are fatal JVM errors like OutOfMemoryError",
+          "There is no difference in Java 17"
+        ],
+        correctIndex: 1,
+        explanation: "Checked exceptions (subclasses of Exception except RuntimeException) are checked at compile time and must be handled or declared. Unchecked exceptions (subclasses of RuntimeException) do not require explicit handling."
+      },
+      {
+        id: 12,
+        question: "What was introduced in Java 14/16 as a concise way to create immutable data carriers?",
+        codeSnippet: null,
+        topic: "Modern Java",
+        difficulty: "Medium",
+        options: ["sealed classes", "record classes", "data classes", "structs"],
+        correctIndex: 1,
+        explanation: "Java Records (introduced in Java 14 preview and finalized in Java 16) provide a compact syntax for declaring transparent, immutable data-carrier classes with automatic constructor, getters, equals, hashCode, and toString."
+      },
+      {
+        id: 13,
+        question: "What does the 'final' keyword do when applied to a class?",
+        codeSnippet: null,
+        topic: "OOP",
+        difficulty: "Easy",
+        options: [
+          "Makes all fields of the class immutable",
+          "Prevents the class from being instantiated",
+          "Prevents the class from being subclassed (inherited)",
+          "Makes all methods in the class static"
+        ],
+        correctIndex: 2,
+        explanation: "A 'final' class cannot be extended by any other class (e.g. java.lang.String, java.lang.Integer are final classes)."
+      },
+      {
+        id: 14,
+        question: "Which garbage collection root is NOT a valid GC root in HotSpot JVM?",
+        codeSnippet: null,
+        topic: "JVM",
+        difficulty: "Hard",
+        options: [
+          "Active Java thread local variables in stack frames",
+          "Static variables in loaded classes",
+          "Unreferenced objects in the young generation",
+          "JNI Global references"
+        ],
+        correctIndex: 2,
+        explanation: "GC roots include thread stack variables, JNI references, active threads, and class static references. Unreferenced objects in heap are unreachable garbage collected targets, not GC roots."
+      },
+      {
+        id: 15,
+        question: "What interface must an object implement to be eligible for use in a 'try-with-resources' statement?",
+        codeSnippet: null,
+        topic: "Modern Java",
+        difficulty: "Medium",
+        options: [
+          "java.lang.Cloneable",
+          "java.lang.AutoCloseable",
+          "java.io.Serializable",
+          "java.lang.Runnable"
+        ],
+        correctIndex: 1,
+        explanation: "try-with-resources automatically closes any resource that implements java.lang.AutoCloseable (or java.io.Closeable) at the end of the block."
+      },
+      {
+        id: 16,
+        question: "What is the time complexity of searching for an element in a standard ArrayList by index?",
+        codeSnippet: null,
+        topic: "Collections",
+        difficulty: "Easy",
+        options: ["O(1)", "O(n)", "O(log n)", "O(n log n)"],
+        correctIndex: 0,
+        explanation: "ArrayList is backed by a contiguous array, allowing random direct memory access via index in O(1) constant time."
+      },
+      {
+        id: 17,
+        question: "What happens if two threads attempt to call synchronized methods on the SAME object simultaneously?",
+        codeSnippet: null,
+        topic: "Concurrency",
+        difficulty: "Medium",
+        options: [
+          "Both execute concurrently",
+          "One thread acquires the object monitor lock, and the other thread blocks until released",
+          "JVM throws an IllegalMonitorStateException",
+          "Deadlock occurs automatically"
+        ],
+        correctIndex: 1,
+        explanation: "Every Java object has an intrinsic monitor lock. When a thread executes a synchronized instance method, it acquires that object's lock, blocking other threads until the method completes."
+      },
+      {
+        id: 18,
+        question: "What will this code print?",
+        codeSnippet: "Integer a = 127;\nInteger b = 127;\nSystem.out.println(a == b);",
+        topic: "Basics",
+        difficulty: "Hard",
+        options: ["true", "false", "Compilation Error", "NullPointerException"],
+        correctIndex: 0,
+        explanation: "Java caches Integer objects within the range -128 to 127 (IntegerCache). Autoboxing values in this range returns the same cached reference, so 'a == b' evaluates to true."
+      },
+      {
+        id: 19,
+        question: "Which keyword in Java 17 is used to restrict which other classes can extend or implement an interface/class?",
+        codeSnippet: null,
+        topic: "Modern Java",
+        difficulty: "Medium",
+        options: ["restricted", "sealed", "locked", "protected"],
+        correctIndex: 1,
+        explanation: "Sealed classes and interfaces (finalized in Java 17) use the 'sealed' modifier and 'permits' clause to explicitly restrict which classes may inherit from them."
+      },
+      {
+        id: 20,
+        question: "What is the difference between Callable and Runnable in Java concurrency?",
+        codeSnippet: null,
+        topic: "Concurrency",
+        difficulty: "Medium",
+        options: [
+          "Runnable cannot run on Thread",
+          "Callable's call() method can return a result and throw checked exceptions; Runnable's run() cannot",
+          "Callable is only for parallel streams",
+          "They are identical in modern Java"
+        ],
+        correctIndex: 1,
+        explanation: "Callable<V> has V call() throws Exception, which returns a value and can throw checked exceptions. Runnable has void run() which cannot return values or throw checked exceptions."
       }
-    }
-
-    window.addEventListener('keydown', (e) => {
-      if (e.code === 'KeyP') { togglePause(); return; }
-      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space','KeyX'].includes(e.code)) {
-        e.preventDefault();
-        handleInput(e.code, true);
-      }
-    });
-
-    window.addEventListener('keyup', (e) => {
-      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space','KeyX'].includes(e.code)) {
-        e.preventDefault();
-        handleInput(e.code, false);
-      }
-    });
-
-    // 1. COMBAT & SHOOTER ENGINE (Action category)
-    const combatEngine = {
-      player: { x: 30, y: 120, w: 24, h: 14, speed: 3.5, cooldown: 0 },
-      bullets: [], enemies: [], particles: [], stars: [], timer: 0,
-      init() {
-        this.player.x = 30; this.player.y = canvas.height / 2 - 7;
-        this.bullets = []; this.enemies = []; this.particles = []; this.stars = [];
-        for (let i = 0; i < 30; i++) {
-          this.stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, speed: 0.5 + Math.random() * 2 });
-        }
-      },
-      update() {
-        if (gameOver || isPaused) return;
-        if (keys.ArrowUp && this.player.y > 5) this.player.y -= this.player.speed;
-        if (keys.ArrowDown && this.player.y < canvas.height - this.player.h - 5) this.player.y += this.player.speed;
-        if (keys.ArrowLeft && this.player.x > 5) this.player.x -= this.player.speed;
-        if (keys.ArrowRight && this.player.x < canvas.width / 2) this.player.x += this.player.speed;
-
-        this.player.cooldown--;
-        if ((keys.Space || keys.KeyX) && this.player.cooldown <= 0) {
-          this.bullets.push({ x: this.player.x + this.player.w, y: this.player.y + 6, speed: 7, w: 8, h: 3 });
-          this.player.cooldown = 11;
-          playLaserSound();
-        }
-
-        this.stars.forEach(s => { s.x -= s.speed; if (s.x < 0) s.x = canvas.width; });
-
-        for (let i = this.bullets.length - 1; i >= 0; i--) {
-          this.bullets[i].x += this.bullets[i].speed;
-          if (this.bullets[i].x > canvas.width) this.bullets.splice(i, 1);
-        }
-
-        this.timer++;
-        if (this.timer > Math.max(22, 55 - level * 4)) {
-          this.timer = 0;
-          const isHeavy = Math.random() > 0.7;
-          this.enemies.push({
-            x: canvas.width + 10, y: 15 + Math.random() * (canvas.height - 40),
-            w: isHeavy ? 24 : 16, h: isHeavy ? 20 : 12, hp: isHeavy ? 3 : 1,
-            speed: isHeavy ? 1.5 : 2.5 + Math.random() * 1.5, isHeavy
-          });
-        }
-
-        for (let i = this.enemies.length - 1; i >= 0; i--) {
-          const e = this.enemies[i];
-          e.x -= e.speed;
-          for (let j = this.bullets.length - 1; j >= 0; j--) {
-            const b = this.bullets[j];
-            if (b.x < e.x + e.w && b.x + b.w > e.x && b.y < e.y + e.h && b.y + b.h > e.y) {
-              this.bullets.splice(j, 1);
-              e.hp--;
-              if (e.hp <= 0) {
-                playExplosionSound();
-                score += e.isHeavy ? 150 : 60;
-                if (score > level * 800) level++;
-                this.enemies.splice(i, 1);
-                updateHud();
-                break;
-              }
-            }
-          }
-          if (this.enemies[i] && this.player.x < e.x + e.w && this.player.x + this.player.w > e.x &&
-              this.player.y < e.y + e.h && this.player.y + this.player.h > e.y) {
-            this.enemies.splice(i, 1);
-            playExplosionSound();
-            lives--;
-            updateHud();
-            if (lives <= 0) gameOver = true;
-          }
-          if (e.x < -30) this.enemies.splice(i, 1);
-        }
-      },
-      draw() {
-        ctx.fillStyle = '#050711';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#475569';
-        this.stars.forEach(s => ctx.fillRect(s.x, s.y, 2, 2));
-
-        // Player Avatar
-        ctx.fillStyle = '#00f2fe';
-        const p = this.player;
-        ctx.fillRect(p.x, p.y + 3, p.w, 8);
-        ctx.fillRect(p.x + 6, p.y, 10, 14);
-        ctx.fillStyle = '#ff007f';
-        ctx.fillRect(p.x - 4, p.y + 5, 4, 4);
-
-        // Bullets
-        ctx.fillStyle = '#f9d423';
-        this.bullets.forEach(b => ctx.fillRect(b.x, b.y, b.w, b.h));
-
-        // Enemies
-        this.enemies.forEach(e => {
-          ctx.fillStyle = e.isHeavy ? '#ea580c' : '#ec4899';
-          ctx.fillRect(e.x, e.y, e.w, e.h);
-          ctx.fillStyle = '#fff';
-          ctx.fillRect(e.x + 3, e.y + 3, 3, 3);
-        });
-      }
-    };
-
-    // 2. SPEEDWAY RACER ENGINE (Racing category: Asphalt, NFS, Ferrari GT, etc.)
-    const racerEngine = {
-      carX: 180, obstacles: [], coins: [], speed: 4, timer: 0,
-      init() {
-        this.carX = canvas.width / 2 - 10;
-        this.obstacles = []; this.coins = []; this.timer = 0;
-      },
-      update() {
-        if (gameOver || isPaused) return;
-        if (keys.ArrowLeft && this.carX > 55) this.carX -= 4.5;
-        if (keys.ArrowRight && this.carX < canvas.width - 75) this.carX += 4.5;
-        if (keys.Space || keys.KeyX) {
-          // Nitro boost!
-          score += 2;
-        }
-
-        this.timer++;
-        if (this.timer > 30) {
-          this.timer = 0;
-          this.obstacles.push({
-            x: 60 + Math.random() * (canvas.width - 140),
-            y: -35, w: 20, h: 32,
-            color: Math.random() > 0.5 ? '#ef4444' : '#f97316'
-          });
-          if (Math.random() > 0.4) {
-            this.coins.push({ x: 70 + Math.random() * (canvas.width - 150), y: -20, r: 6 });
-          }
-        }
-
-        for (let i = this.obstacles.length - 1; i >= 0; i--) {
-          const o = this.obstacles[i];
-          o.y += this.speed + level * 0.5;
-          if (o.x < this.carX + 18 && o.x + o.w > this.carX && o.y < 210 + 30 && o.y + o.h > 210) {
-            playExplosionSound(); lives--; updateHud();
-            this.obstacles.splice(i, 1);
-            if (lives <= 0) gameOver = true;
-          }
-          if (o.y > canvas.height) { this.obstacles.splice(i, 1); score += 40; updateHud(); }
-        }
-
-        for (let i = this.coins.length - 1; i >= 0; i--) {
-          const c = this.coins[i];
-          c.y += this.speed + 1;
-          if (Math.hypot(c.x - (this.carX + 10), c.y - 225) < 18) {
-            playPowerupSound(); score += 100; updateHud();
-            this.coins.splice(i, 1);
-          }
-          if (c.y > canvas.height) this.coins.splice(i, 1);
-        }
-      },
-      draw() {
-        ctx.fillStyle = '#1e293b'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        // Road
-        ctx.fillStyle = '#0f172a'; ctx.fillRect(45, 0, canvas.width - 90, canvas.height);
-        // Curbs
-        ctx.fillStyle = '#ff007f'; ctx.fillRect(40, 0, 5, canvas.height);
-        ctx.fillRect(canvas.width - 45, 0, 5, canvas.height);
-
-        // Center dashes
-        ctx.fillStyle = '#f9d423';
-        for (let y = 0; y < canvas.height; y += 35) {
-          ctx.fillRect(canvas.width / 2 - 2, (y + (Date.now() / 6) % 35), 4, 18);
-        }
-
-        // Coins
-        ctx.fillStyle = '#f9d423';
-        this.coins.forEach(c => {
-          ctx.beginPath(); ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2); ctx.fill();
-        });
-
-        // Player Supercar
-        ctx.fillStyle = '#00f2fe';
-        ctx.fillRect(this.carX, 210, 20, 32);
-        ctx.fillStyle = '#fff';
-        ctx.fillRect(this.carX + 3, 216, 14, 8); // windshield
-        if (keys.Space || keys.KeyX) {
-          // Nitro exhaust
-          ctx.fillStyle = '#ff007f';
-          ctx.fillRect(this.carX + 3, 242, 4, 8);
-          ctx.fillRect(this.carX + 13, 242, 4, 8);
-        }
-
-        // Rival cars
-        this.obstacles.forEach(o => {
-          ctx.fillStyle = o.color; ctx.fillRect(o.x, o.y, o.w, o.h);
-          ctx.fillStyle = '#334155'; ctx.fillRect(o.x + 3, o.y + 6, o.w - 6, 6);
-        });
-      }
-    };
-
-    // 3. SNAKE & MAZE ENGINE (Snake II, Pacman, Bomberman)
-    const snakeEngine = {
-      grid: 10, snake: [], dir: { x: 1, y: 0 }, nextDir: { x: 1, y: 0 }, food: { x: 15, y: 12 }, timer: 0,
-      init() {
-        this.snake = [{ x: 10, y: 10 }, { x: 9, y: 10 }, { x: 8, y: 10 }];
-        this.dir = { x: 1, y: 0 }; this.nextDir = { x: 1, y: 0 };
-        this.spawnFood();
-      },
-      spawnFood() {
-        const cols = Math.floor(canvas.width / this.grid);
-        const rows = Math.floor(canvas.height / this.grid);
-        this.food = { x: Math.floor(Math.random() * (cols - 2)) + 1, y: Math.floor(Math.random() * (rows - 2)) + 1 };
-      },
-      update() {
-        if (gameOver || isPaused) return;
-        if (keys.ArrowUp && this.dir.y === 0) this.nextDir = { x: 0, y: -1 };
-        if (keys.ArrowDown && this.dir.y === 0) this.nextDir = { x: 0, y: 1 };
-        if (keys.ArrowLeft && this.dir.x === 0) this.nextDir = { x: -1, y: 0 };
-        if (keys.ArrowRight && this.dir.x === 0) this.nextDir = { x: 1, y: 0 };
-
-        this.timer++;
-        if (this.timer < Math.max(3, 8 - level)) return;
-        this.timer = 0;
-
-        this.dir = { ...this.nextDir };
-        const head = { x: this.snake[0].x + this.dir.x, y: this.snake[0].y + this.dir.y };
-        const cols = Math.floor(canvas.width / this.grid);
-        const rows = Math.floor(canvas.height / this.grid);
-
-        if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows) {
-          playExplosionSound(); lives--; updateHud();
-          if (lives <= 0) gameOver = true; else this.init();
-          return;
-        }
-
-        for (let i = 0; i < this.snake.length; i++) {
-          if (head.x === this.snake[i].x && head.y === this.snake[i].y) {
-            playExplosionSound(); lives--; updateHud();
-            if (lives <= 0) gameOver = true; else this.init();
-            return;
-          }
-        }
-
-        this.snake.unshift(head);
-        if (head.x === this.food.x && head.y === this.food.y) {
-          score += 100 * level; playPowerupSound(); this.spawnFood();
-          if (score >= level * 500) level++;
-          updateHud();
-        } else {
-          this.snake.pop();
-        }
-      },
-      draw() {
-        ctx.fillStyle = '#879b6f'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#1e2d14';
-        this.snake.forEach(part => ctx.fillRect(part.x * this.grid + 1, part.y * this.grid + 1, this.grid - 2, this.grid - 2));
-        ctx.fillStyle = '#14200d';
-        ctx.fillRect(this.food.x * this.grid + 2, this.food.y * this.grid + 2, this.grid - 4, this.grid - 4);
-      }
-    };
-
-    // 4. BOUNCE & BRICK ENGINE (Bounce Classic, Brick Breaker)
-    const bounceEngine = {
-      paddle: { x: 140, y: 240, w: 60, h: 8, speed: 5 },
-      ball: { x: 180, y: 220, r: 5, vx: 3, vy: -3 },
-      bricks: [],
-      init() {
-        this.paddle.x = canvas.width / 2 - 30;
-        this.ball.x = canvas.width / 2; this.ball.y = canvas.height - 40;
-        this.ball.vx = 2.5 * (Math.random() > 0.5 ? 1 : -1); this.ball.vy = -3;
-        this.bricks = [];
-        const colors = ['#ff007f', '#f97316', '#00f2fe', '#10b981'];
-        for (let r = 0; r < 4; r++) {
-          for (let c = 0; c < 8; c++) {
-            this.bricks.push({ x: 20 + c * 43, y: 25 + r * 18, w: 38, h: 12, color: colors[r], alive: true });
-          }
-        }
-      },
-      update() {
-        if (gameOver || isPaused) return;
-        if (keys.ArrowLeft && this.paddle.x > 5) this.paddle.x -= this.paddle.speed;
-        if (keys.ArrowRight && this.paddle.x < canvas.width - this.paddle.w - 5) this.paddle.x += this.paddle.speed;
-
-        this.ball.x += this.ball.vx; this.ball.y += this.ball.vy;
-        if (this.ball.x - this.ball.r < 0 || this.ball.x + this.ball.r > canvas.width) { this.ball.vx = -this.ball.vx; playBeep(320); }
-        if (this.ball.y - this.ball.r < 0) { this.ball.vy = -this.ball.vy; playBeep(350); }
-
-        if (this.ball.y + this.ball.r >= this.paddle.y && this.ball.y - this.ball.r <= this.paddle.y + this.paddle.h &&
-            this.ball.x >= this.paddle.x && this.ball.x <= this.paddle.x + this.paddle.w) {
-          this.ball.vy = -Math.abs(this.ball.vy);
-          const hit = (this.ball.x - (this.paddle.x + this.paddle.w / 2)) / (this.paddle.w / 2);
-          this.ball.vx = hit * 4.5;
-          playBeep(520, 'triangle');
-        }
-
-        let left = 0;
-        this.bricks.forEach(b => {
-          if (!b.alive) return;
-          left++;
-          if (this.ball.x > b.x && this.ball.x < b.x + b.w && this.ball.y > b.y && this.ball.y < b.y + b.h) {
-            b.alive = false; this.ball.vy = -this.ball.vy; score += 120;
-            playPowerupSound(); updateHud();
-          }
-        });
-
-        if (left === 0) { level++; updateHud(); this.init(); }
-        if (this.ball.y > canvas.height) {
-          lives--; playExplosionSound(); updateHud();
-          if (lives <= 0) gameOver = true;
-          else { this.ball.x = this.paddle.x + 30; this.ball.y = this.paddle.y - 10; this.ball.vy = -3; }
-        }
-      },
-      draw() {
-        ctx.fillStyle = '#050711'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#00f2fe'; ctx.fillRect(this.paddle.x, this.paddle.y, this.paddle.w, this.paddle.h);
-        ctx.fillStyle = '#ff007f'; ctx.beginPath(); ctx.arc(this.ball.x, this.ball.y, this.ball.r, 0, Math.PI * 2); ctx.fill();
-        this.bricks.forEach(b => { if (b.alive) { ctx.fillStyle = b.color; ctx.fillRect(b.x, b.y, b.w, b.h); } });
-      }
-    };
-
-    // 5. TOWER STACKER & PUZZLE ENGINE (Tower Bloxx, Diamond Rush, Bejeweled, Bubble Bash)
-    const puzzleEngine = {
-      blockX: 180, blockY: 40, dir: 1, speed: 3.5, stacked: [], currentW: 70, dropped: false,
-      init() {
-        this.stacked = [{ x: 140, y: 235, w: 80, h: 20, color: '#00f2fe' }];
-        this.currentW = 75; this.blockX = 50; this.blockY = 50; this.dir = 1; this.dropped = false;
-      },
-      update() {
-        if (gameOver || isPaused) return;
-        if (!this.dropped) {
-          this.blockX += this.speed * this.dir;
-          if (this.blockX < 20 || this.blockX + this.currentW > canvas.width - 20) {
-            this.dir *= -1;
-          }
-          if (keys.Space || keys.KeyX) {
-            this.dropped = true;
-            playBeep(480, 'square');
-          }
-        } else {
-          this.blockY += 7;
-          const top = this.stacked[this.stacked.length - 1];
-          if (this.blockY + 20 >= top.y) {
-            // Collision with stack
-            const overlap = Math.min(this.blockX + this.currentW, top.x + top.w) - Math.max(this.blockX, top.x);
-            if (overlap > 10) {
-              // Successful stack
-              const newX = Math.max(this.blockX, top.x);
-              this.stacked.push({ x: newX, y: top.y - 20, w: overlap, h: 20, color: ['#ff007f','#f97316','#00f2fe','#10b981'][this.stacked.length % 4] });
-              this.currentW = overlap;
-              score += 250;
-              playPowerupSound();
-              updateHud();
-              if (this.stacked.length > 8) {
-                this.stacked.shift();
-                this.stacked.forEach(b => b.y += 20);
-              }
-              this.blockY = 40;
-              this.dropped = false;
-            } else {
-              // Missed!
-              playExplosionSound();
-              lives--;
-              updateHud();
-              if (lives <= 0) gameOver = true;
-              else { this.blockY = 40; this.dropped = false; }
-            }
-          }
-        }
-      },
-      draw() {
-        ctx.fillStyle = '#070a18'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        // Base
-        ctx.fillStyle = '#334155'; ctx.fillRect(20, 255, canvas.width - 40, 5);
-
-        // Stacked blocks
-        this.stacked.forEach(b => {
-          ctx.fillStyle = b.color; ctx.fillRect(b.x, b.y, b.w, b.h);
-          ctx.strokeStyle = '#fff'; ctx.strokeRect(b.x, b.y, b.w, b.h);
-        });
-
-        // Dropping or swinging block
-        ctx.fillStyle = '#f9d423';
-        ctx.fillRect(this.blockX, this.blockY, this.currentW, 20);
-        ctx.strokeStyle = '#fff';
-        ctx.strokeRect(this.blockX, this.blockY, this.currentW, 20);
-      }
-    };
-
-    // 6. SPORTS & GOAL STRIKER ENGINE (Real Football, FIFA, NBA Live, Playman, Tony Hawk)
-    const sportsEngine = {
-      targetX: 180, targetDir: 1, ballX: 180, ballY: 220, shooting: false, keeperX: 180,
-      init() {
-        this.targetX = 180; this.targetDir = 1; this.ballX = 180; this.ballY = 220; this.shooting = false; this.keeperX = 180;
-      },
-      update() {
-        if (gameOver || isPaused) return;
-        // Moving target
-        this.targetX += 3.5 * this.targetDir;
-        if (this.targetX < 80 || this.targetX > canvas.width - 80) this.targetDir *= -1;
-
-        // Goalkeeper
-        this.keeperX += (Math.sin(Date.now() / 300) * 2.5);
-
-        if ((keys.Space || keys.KeyX) && !this.shooting) {
-          this.shooting = true;
-          this.ballTargetX = this.targetX;
-          playBeep(400, 'triangle');
-        }
-
-        if (this.shooting) {
-          this.ballY -= 7;
-          this.ballX += (this.ballTargetX - this.ballX) * 0.1;
-          if (this.ballY <= 85) {
-            // Check goal
-            if (Math.abs(this.ballX - this.keeperX) > 30 && this.ballX > 70 && this.ballX < canvas.width - 70) {
-              score += 300;
-              playPowerupSound();
-            } else {
-              playExplosionSound();
-              lives--;
-            }
-            updateHud();
-            if (lives <= 0) gameOver = true;
-            this.ballY = 220; this.ballX = 180; this.shooting = false;
-          }
-        }
-      },
-      draw() {
-        // Stadium turf
-        ctx.fillStyle = '#15803d'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        // Goal frame
-        ctx.strokeStyle = '#fff'; ctx.lineWidth = 4;
-        ctx.strokeRect(60, 40, canvas.width - 120, 50);
-
-        // Goalkeeper
-        ctx.fillStyle = '#ef4444';
-        ctx.fillRect(this.keeperX - 15, 60, 30, 26);
-
-        // Target reticle
-        ctx.strokeStyle = '#f9d423'; ctx.lineWidth = 2;
-        ctx.beginPath(); ctx.arc(this.targetX, 65, 12, 0, Math.PI * 2); ctx.stroke();
-
-        // Ball
-        ctx.fillStyle = '#fff';
-        ctx.beginPath(); ctx.arc(this.ballX, this.ballY, 7, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#000'; ctx.fillRect(this.ballX - 2, this.ballY - 2, 4, 4);
-      }
-    };
-
-    // 7. TACTICAL RPG & STRATEGY ENGINE (Galaxy on Fire, Ancient Empires, Heroes of Might & Magic, Gothic)
-    const rpgEngine = {
-      heroHp: 100, enemyHp: 100, actionMsg: 'CHOOSE ACTION: [A] ATTACK | [B] SPELL', turnTimer: 0,
-      init() {
-        this.heroHp = 100; this.enemyHp = 100; this.actionMsg = 'CHOOSE ACTION: [A] ATTACK | [B] SPELL';
-      },
-      update() {
-        if (gameOver || isPaused) return;
-        if (this.turnTimer > 0) {
-          this.turnTimer--;
-          if (this.turnTimer === 0 && this.enemyHp > 0) {
-            // Enemy counter-attacks
-            const dmg = 10 + Math.floor(Math.random() * 15);
-            this.heroHp = Math.max(0, this.heroHp - dmg);
-            playExplosionSound();
-            this.actionMsg = `ENEMY COUNTER-ATTACK! -${dmg} HP`;
-            if (this.heroHp <= 0) {
-              lives--;
-              updateHud();
-              if (lives <= 0) gameOver = true;
-              else { this.heroHp = 100; this.enemyHp = 100; }
-            }
-          }
-          return;
-        }
-
-        if (keys.Space && this.turnTimer === 0) {
-          // Physical Strike
-          const dmg = 20 + Math.floor(Math.random() * 15);
-          this.enemyHp = Math.max(0, this.enemyHp - dmg);
-          score += 150;
-          playLaserSound();
-          updateHud();
-          this.actionMsg = `STRIKE SUCCESSFUL! -${dmg} HP`;
-          this.turnTimer = 35;
-          if (this.enemyHp <= 0) {
-            score += 500; level++; playPowerupSound();
-            this.enemyHp = 100 + level * 20;
-            this.actionMsg = 'ENEMY DEFEATED! ADVANCING...';
-          }
-        } else if (keys.KeyX && this.turnTimer === 0) {
-          // Magic Blast / Special
-          const dmg = 35 + Math.floor(Math.random() * 20);
-          this.enemyHp = Math.max(0, this.enemyHp - dmg);
-          score += 200;
-          playPowerupSound();
-          updateHud();
-          this.actionMsg = `CRITICAL SPELL HIT! -${dmg} HP`;
-          this.turnTimer = 40;
-          if (this.enemyHp <= 0) {
-            score += 500; level++;
-            this.enemyHp = 100 + level * 20;
-            this.actionMsg = 'ENEMY DEFEATED! ADVANCING...';
-          }
-        }
-      },
-      draw() {
-        ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        // Battle arena ground
-        ctx.fillStyle = '#1e293b'; ctx.fillRect(0, 180, canvas.width, 80);
-
-        // Hero (Left)
-        ctx.fillStyle = '#00f2fe'; ctx.fillRect(50, 140, 32, 45);
-        ctx.fillStyle = '#fff'; ctx.font = '8px "Press Start 2P"'; ctx.fillText('HERO', 50, 130);
-        ctx.fillStyle = '#10b981'; ctx.fillRect(50, 195, (this.heroHp / 100) * 80, 8);
-
-        // Enemy (Right)
-        ctx.fillStyle = '#ec4899'; ctx.fillRect(canvas.width - 85, 130, 40, 55);
-        ctx.fillStyle = '#fff'; ctx.fillText('BOSS', canvas.width - 85, 120);
-        ctx.fillStyle = '#ef4444'; ctx.fillRect(canvas.width - 120, 195, (this.enemyHp / (100 + level * 20)) * 80, 8);
-
-        // Action Text
-        ctx.fillStyle = '#f9d423'; ctx.textAlign = 'center'; ctx.font = '7px "Press Start 2P"';
-        ctx.fillText(this.actionMsg, canvas.width / 2, 45);
-      }
-    };
+    ];
 
     // -------------------------------------------------------------
-    // ENGINE CONTROLLER & GAME SWITCHER
+    // LOAD & GENERATE LOGIC
     // -------------------------------------------------------------
-    function switchGame(slug, title, category, icon) {
-      currentGame = { slug, title: title || slug, category: category || 'Action', icon: icon || '🎮' };
-      document.getElementById('active-game-title').innerText = (title || slug).toUpperCase();
-      restartCurrentGame();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function getActiveEngine() {
-      const cat = (currentGame.category || '').toLowerCase();
-      const slug = (currentGame.slug || '').toLowerCase();
-
-      if (slug.includes('snake')) return snakeEngine;
-      if (slug.includes('bounce') || slug.includes('brick')) return bounceEngine;
-      if (cat.includes('racing') || slug.includes('racer')) return racerEngine;
-      if (cat.includes('puzzle') || slug.includes('bloxx') || slug.includes('diamond')) return puzzleEngine;
-      if (cat.includes('sports') || slug.includes('football') || slug.includes('fifa')) return sportsEngine;
-      if (cat.includes('rpg') || cat.includes('strategy') || slug.includes('empires')) return rpgEngine;
-      return combatEngine; // Action default
-    }
-
-    function restartCurrentGame() {
-      score = 0; lives = 3; level = 1; gameOver = false; isPaused = false;
-      updateHud();
-      getActiveEngine().init();
-    }
-
-    function togglePause() {
-      isPaused = !isPaused;
-      playBeep(isPaused ? 250 : 500);
-    }
-
-    function updateHud() {
-      document.getElementById('hud-score').innerText = `SCORE: ${score}`;
-      document.getElementById('hud-level').innerText = `LVL: ${level}`;
-      document.getElementById('hud-lives').innerText = '♥'.repeat(Math.max(0, lives));
-    }
-
-    function loop() {
-      const engine = getActiveEngine();
-      engine.update();
-      engine.draw();
-
-      if (gameOver) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#ff0055'; ctx.font = '14px "Press Start 2P"'; ctx.textAlign = 'center';
-        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 12);
-        ctx.fillStyle = '#fff'; ctx.font = '9px "Press Start 2P"';
-        ctx.fillText(`SCORE: ${score}`, canvas.width / 2, canvas.height / 2 + 10);
-        ctx.fillText('PRESS [A] TO RETRY', canvas.width / 2, canvas.height / 2 + 30);
-      } else if (isPaused) {
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.65)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#00f2fe'; ctx.font = '14px "Press Start 2P"'; ctx.textAlign = 'center';
-        ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2);
-      }
-      requestAnimationFrame(loop);
-    }
-
-    // -------------------------------------------------------------
-    // LOAD 100 GAMES & SEARCH/FILTER
-    // -------------------------------------------------------------
-    let allGames = [];
-    let currentCategory = 'all';
-
-    async function loadGames() {
+    async function loadAllQuestions() {
       try {
-        const res = await fetch('/api/games');
+        const res = await fetch('/api/questions');
         if (res.ok) {
-          allGames = await res.json();
-          renderGamesGrid(allGames);
+          allQuestions = await res.json();
+          renderBankList(allQuestions);
           return;
         }
       } catch (e) {}
 
-      // Fallback local dataset for static Vercel Edge hosting
-      allGames = generateLocal100Games();
-      renderGamesGrid(allGames);
+      allQuestions = localBank;
+      renderBankList(allQuestions);
     }
 
-    function renderGamesGrid(games) {
-      const container = document.getElementById('games-grid');
+    async function generateRandomQuestion() {
+      answered = false;
+      document.getElementById('explanation-box').style.display = 'none';
+      document.getElementById('card-footer').style.display = 'none';
+
+      const topic = document.getElementById('topic-select').value;
+      const diff = document.getElementById('diff-select').value;
+
+      try {
+        const url = `/api/questions/random?topic=${topic}&difficulty=${diff}`;
+        const res = await fetch(url);
+        if (res.ok) {
+          currentQuestion = await res.json();
+          renderQuestion(currentQuestion);
+          return;
+        }
+      } catch (e) {}
+
+      // Fallback local random generator
+      let pool = localBank.filter(q => {
+        const matchTopic = (topic === 'all' || q.topic.toLowerCase().includes(topic.toLowerCase()));
+        const matchDiff = (diff === 'all' || q.difficulty.toLowerCase() === diff.toLowerCase());
+        return matchTopic && matchDiff;
+      });
+      if (pool.length === 0) pool = localBank;
+
+      currentQuestion = pool[Math.floor(Math.random() * pool.length)];
+      renderQuestion(currentQuestion);
+    }
+
+    function renderQuestion(q) {
+      document.getElementById('q-topic').innerText = q.topic;
+      const diffEl = document.getElementById('q-diff');
+      diffEl.innerText = q.difficulty;
+      diffEl.className = `diff-pill diff-${q.difficulty.toLowerCase()}`;
+
+      document.getElementById('q-text').innerText = q.question;
+
+      const codeBlock = document.getElementById('q-code');
+      if (q.codeSnippet && q.codeSnippet.trim()) {
+        codeBlock.style.display = 'block';
+        codeBlock.querySelector('code').innerText = q.codeSnippet;
+      } else {
+        codeBlock.style.display = 'none';
+      }
+
+      const container = document.getElementById('options-container');
       container.innerHTML = '';
-      document.getElementById('game-count-label').innerText = `Showing ${games.length} of 100 Playable Games`;
 
-      games.forEach(g => {
-        const card = document.createElement('div');
-        card.className = 'game-card';
-        card.innerHTML = `
-          <div>
-            <div class="game-card-top">
-              <span class="game-icon">${g.icon}</span>
-              <div class="game-meta">
-                <span class="game-id">#${g.id}</span>
-                <h3 class="game-title">${g.title}</h3>
-                <div class="game-dev">${g.developer} • ${g.year}</div>
-              </div>
-            </div>
-            <p class="game-desc">${g.description}</p>
-          </div>
-          <div class="game-card-bottom">
-            <span class="game-genre-tag">${g.category}</span>
-            <button class="play-card-btn" onclick="switchGame('${g.slug}', '${g.title}', '${g.category}', '${g.icon}')">
-              ▶ PLAY NOW
-            </button>
-          </div>
+      const letters = ['A', 'B', 'C', 'D'];
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.id = `opt-${idx}`;
+        btn.onclick = () => selectAnswer(idx);
+        btn.innerHTML = `
+          <span class="option-letter">${letters[idx]}</span>
+          <span>${opt}</span>
         `;
-        container.appendChild(card);
+        container.appendChild(btn);
       });
     }
 
-    function setCategory(cat) {
-      currentCategory = cat;
-      document.querySelectorAll('.cat-pill').forEach(btn => {
-        btn.classList.toggle('active', btn.innerText.toLowerCase().includes(cat.toLowerCase()));
+    async function selectAnswer(selectedIndex) {
+      if (answered) return;
+      answered = true;
+
+      let isCorrect = false;
+      let correctIdx = currentQuestion.correctIndex;
+      let explanation = currentQuestion.explanation;
+
+      // Verify answer via API if available
+      try {
+        const res = await fetch('/api/questions/check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ questionId: currentQuestion.id, selectedIndex })
+        });
+        if (res.ok) {
+          const result = await res.json();
+          isCorrect = result.correct;
+          correctIdx = result.correctIndex;
+          explanation = result.explanation;
+        } else {
+          isCorrect = (selectedIndex === currentQuestion.correctIndex);
+        }
+      } catch (e) {
+        isCorrect = (selectedIndex === currentQuestion.correctIndex);
+      }
+
+      // Update UI buttons
+      const selectedBtn = document.getElementById(`opt-${selectedIndex}`);
+      const correctBtn = document.getElementById(`opt-${correctIdx}`);
+
+      if (isCorrect) {
+        selectedBtn.classList.add('correct');
+        streak++;
+        score += 100 + (streak > 1 ? streak * 20 : 0);
+        playSuccessSound();
+      } else {
+        selectedBtn.classList.add('wrong');
+        if (correctBtn) correctBtn.classList.add('correct');
+        streak = 0;
+        playWrongSound();
+      }
+
+      // Disable all options
+      document.querySelectorAll('.option-btn').forEach(btn => btn.disabled = true);
+
+      // Show stats
+      document.getElementById('score-badge').innerText = `⭐ Score: ${score}`;
+      document.getElementById('streak-badge').innerText = `🔥 Streak: ${streak}`;
+
+      // Show explanation
+      const expBox = document.getElementById('explanation-box');
+      document.getElementById('explanation-text').innerText = explanation;
+      expBox.style.display = 'block';
+
+      document.getElementById('card-footer').style.display = 'flex';
+    }
+
+    // -------------------------------------------------------------
+    // QUESTION BANK EXPLORER
+    // -------------------------------------------------------------
+    function renderBankList(questions) {
+      const container = document.getElementById('bank-list');
+      container.innerHTML = '';
+      document.getElementById('total-q-count').innerText = `${questions.length} Questions Available`;
+
+      questions.forEach((q, idx) => {
+        const item = document.createElement('div');
+        item.className = 'question-list-item';
+        item.onclick = () => {
+          currentQuestion = q;
+          renderQuestion(q);
+          answered = false;
+          document.getElementById('explanation-box').style.display = 'none';
+          document.getElementById('card-footer').style.display = 'none';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+        item.innerHTML = `
+          <div>
+            <span style="font-weight: 700; color: #818cf8; margin-right: 0.5rem;">#${q.id}</span>
+            <span>${q.question}</span>
+          </div>
+          <span class="topic-pill" style="font-size: 0.75rem; white-space: nowrap;">${q.topic}</span>
+        `;
+        container.appendChild(item);
       });
-      filterGames();
     }
 
-    function filterGames() {
-      const query = document.getElementById('game-search').value.toLowerCase().trim();
-      const filtered = allGames.filter(g => {
-        const matchCat = currentCategory === 'all' || g.category.toLowerCase().includes(currentCategory.toLowerCase());
-        const matchQuery = !query || 
-          g.title.toLowerCase().includes(query) || 
-          g.developer.toLowerCase().includes(query) ||
-          g.category.toLowerCase().includes(query);
-        return matchCat && matchQuery;
+    function filterBankList() {
+      const query = document.getElementById('bank-search').value.toLowerCase().trim();
+      const filtered = allQuestions.filter(q => {
+        return !query || 
+          q.question.toLowerCase().includes(query) || 
+          q.topic.toLowerCase().includes(query) || 
+          q.explanation.toLowerCase().includes(query) ||
+          (q.codeSnippet && q.codeSnippet.toLowerCase().includes(query));
       });
-      renderGamesGrid(filtered);
+      renderBankList(filtered);
     }
 
-    function generateLocal100Games() {
-      const list = [
-        {id:1, slug:"space-impact", title:"Space Impact", category:"Action", developer:"Nokia", year:2000, icon:"🚀", description:"The legendary Nokia 3310 space shooter."},
-        {id:2, slug:"doom-rpg", title:"Doom RPG", category:"Action", developer:"id Software", year:2005, icon:"👹", description:"Tactical DOOM RPG shooter on Mars."},
-        {id:3, slug:"gangstar-crime-city", title:"Gangstar: Crime City", category:"Action", developer:"Gameloft", year:2006, icon:"🏙️", description:"Open world mobile crime adventure."},
-        {id:4, slug:"assassins-creed", title:"Assassin's Creed", category:"Action", developer:"Gameloft", year:2007, icon:"🗡️", description:"Altaïr's historical stealth parkour quest."},
-        {id:5, slug:"prince-of-persia", title:"Prince of Persia: The Two Thrones", category:"Action", developer:"Gameloft", year:2005, icon:"⏳", description:"Acrobatic sword fighting and time manipulation."},
-        {id:6, slug:"metal-slug-4", title:"Metal Slug 4 Mobile", category:"Action", developer:"SNK Playmore", year:2005, icon:"💥", description:"Run-and-gun warfare with heavy artillery."},
-        {id:7, slug:"wolfenstein-rpg", title:"Wolfenstein RPG", category:"Action", developer:"EA Mobile", year:2008, icon:"🏰", description:"Turn-based dungeon crawler battle."},
-        {id:8, slug:"castlevania-shadows", title:"Castlevania: Order of Shadows", category:"Action", developer:"Konami", year:2007, icon:"🦇", description:"Vampire hunting whip action platformer."},
-        {id:9, slug:"zombie-infection", title:"Zombie Infection", category:"Action", developer:"Gameloft", year:2008, icon:"🧟", description:"Survival horror against South American undead."},
-        {id:10, slug:"splinter-cell-double", title:"Splinter Cell: Double Agent", category:"Action", developer:"Gameloft", year:2006, icon:"🕶️", description:"Sam Fisher's covert stealth missions."},
-        {id:11, slug:"splinter-cell-pandora", title:"Splinter Cell: Pandora Tomorrow", category:"Action", developer:"Gameloft", year:2004, icon:"🎯", description:"Tactical night vision espionage missions."},
-        {id:12, slug:"brothers-in-arms", title:"Brothers in Arms: Earned in Blood", category:"Action", developer:"Gameloft", year:2005, icon:"🎖️", description:"Squad-based WWII Normandy warfare."},
-        {id:13, slug:"modern-combat-2", title:"Modern Combat 2: Black Pegasus", category:"Action", developer:"Gameloft", year:2010, icon:"🔫", description:"Top tier modern military mobile action."},
-        {id:14, slug:"nova-vanguard", title:"N.O.V.A. Near Orbit Vanguard", category:"Action", developer:"Gameloft", year:2009, icon:"🛸", description:"Sci-fi futuristic combat against alien invaders."},
-        {id:15, slug:"call-of-duty-4", title:"Call of Duty 4: Modern Warfare", category:"Action", developer:"Glu Mobile", year:2007, icon:"💣", description:"Modern military firefights across warzones."},
-        {id:16, slug:"call-of-duty-black-ops", title:"Call of Duty: Black Ops Mobile", category:"Action", developer:"Glu Mobile", year:2010, icon:"🎖️", description:"Cold War covert ops and tactical battles."},
-        {id:17, slug:"spiderman-toxic", title:"Spider-Man: Toxic City", category:"Action", developer:"Gameloft", year:2009, icon:"🕷️", description:"Web-slinging superhero combat through NYC."},
-        {id:18, slug:"the-dark-knight", title:"The Dark Knight Mobile", category:"Action", developer:"Glu Mobile", year:2008, icon:"🦇", description:"Gotham vigilante action against the Joker."},
-        {id:19, slug:"transformers-rotf", title:"Transformers: Revenge of the Fallen", category:"Action", developer:"Glu Mobile", year:2009, icon:"🤖", description:"Autobots vs Decepticons transformation battle."},
-        {id:20, slug:"alien-quarantine", title:"Alien Quarantine", category:"Action", developer:"Gameloft", year:2013, icon:"👽", description:"Atmospheric survival horror on an infected ship."},
-        {id:21, slug:"snake-retro", title:"Nokia Snake II", category:"Arcade", developer:"Nokia", year:2000, icon:"🐍", description:"The timeless Nokia phone snake game with labyrinth walls."},
-        {id:22, slug:"brick-breaker", title:"Bounce Brick Breaker", category:"Arcade", developer:"Nokia / J2ME", year:2001, icon:"🧱", description:"Paddle arcade physics with bouncing balls and combo bricks."},
-        {id:23, slug:"bounce", title:"Bounce Classic", category:"Arcade", developer:"Nokia", year:2001, icon:"🔴", description:"Roll and jump the red ball through rings and spikes."},
-        {id:24, slug:"retro-asteroids", title:"Galaxy Asteroids", category:"Arcade", developer:"Classic Java", year:2002, icon:"☄️", description:"360-degree space shooter dodging and blasting space rocks."},
-        {id:25, slug:"pixel-racer", title:"Pixel Highway Racer", category:"Arcade", developer:"Retro J2ME", year:2003, icon:"🏎️", description:"High-speed highway obstacle dodging with nitro boosts."},
-        {id:26, slug:"flappy-java", title:"Flappy Java", category:"Arcade", developer:"Retro Java", year:2014, icon:"🐤", description:"Flap through retro pipes with precise tap timing."},
-        {id:27, slug:"tetris-mobile", title:"Tetris Mobile", category:"Arcade", developer:"EA Mobile", year:2006, icon:"🟦", description:"The world's favorite falling block puzzle on mobile."},
-        {id:28, slug:"pac-man-mobile", title:"Pac-Man Mobile", category:"Arcade", developer:"Namco", year:2002, icon:"🟡", description:"Chomp dots and dodge ghosts in iconic retro mazes."},
-        {id:29, slug:"space-invaders", title:"Space Invaders", category:"Arcade", developer:"Taito", year:2003, icon:"👾", description:"Classic alien waves descending upon defensive shields."},
-        {id:30, slug:"sonic-the-hedgehog", title:"Sonic The Hedgehog Mobile", category:"Arcade", developer:"Sega Mobile", year:2006, icon:"🦔", description:"Spin dash and loop-de-loop through Green Hill Zone."},
-        {id:31, slug:"crazy-taxi-2d", title:"Crazy Taxi 2D", category:"Arcade", developer:"Sega Mobile", year:2003, icon:"🚕", description:"Crazy driving through heavy city traffic for fares."},
-        {id:32, slug:"block-breaker-deluxe", title:"Block Breaker Deluxe", category:"Arcade", developer:"Gameloft", year:2004, icon:"💎", description:"Neon nightlife themed brick busting with insane powerups."},
-        {id:33, slug:"rayman-3", title:"Rayman 3 Mobile", category:"Arcade", developer:"Gameloft", year:2003, icon:"🎪", description:"Helicopter hair platforming through lush fantasy realms."},
-        {id:34, slug:"rayman-raving-rabbids", title:"Rayman Raving Rabbids", category:"Arcade", developer:"Gameloft", year:2006, icon:"🐰", description:"Wacky minigame madness against the crazy Rabbids."},
-        {id:35, slug:"super-mario-j2me", title:"Super Mario Land J2ME", category:"Arcade", developer:"Homebrew", year:2004, icon:"🍄", description:"Nostalgic portable plumber jumping adventures."},
-        {id:36, slug:"mega-man-mobile", title:"Mega Man Mobile", category:"Arcade", developer:"Capcom", year:2005, icon:"🤖", description:"Blue bomber blaster platforming against Robot Masters."},
-        {id:37, slug:"street-fighter-2", title:"Street Fighter II", category:"Arcade", developer:"Capcom", year:2006, icon:"🥋", description:"Hadouken! World warrior martial arts tournament."},
-        {id:38, slug:"boulder-dash", title:"Boulder Dash Mobile", category:"Arcade", developer:"First Star", year:2004, icon:"💎", description:"Dig caverns, collect gems, and avoid falling rocks."},
-        {id:39, slug:"bomberman-mobile", title:"Bomberman Mobile", category:"Arcade", developer:"Living Mobile", year:2004, icon:"💣", description:"Blast maze barriers and rival bombers with timed explosives."},
-        {id:40, slug:"moorhuhn-mobile", title:"Moorhuhn Mobile", category:"Arcade", developer:"Phenomedia", year:2003, icon:"🐔", description:"Fast reflex chicken shooting carnival arcade madness."},
-        {id:41, slug:"asphalt-3", title:"Asphalt 3: Street Rules", category:"Racing", developer:"Gameloft", year:2006, icon:"🏎️", description:"Underground supercars, police pursuits, and nitro drifts."},
-        {id:42, slug:"asphalt-4", title:"Asphalt 4: Elite Racing", category:"Racing", developer:"Gameloft", year:2008, icon:"🏁", description:"Exotic street races from Paris to Dubai in supercars."},
-        {id:43, slug:"nfs-most-wanted", title:"Need for Speed: Most Wanted", category:"Racing", developer:"EA Mobile", year:2005, icon:"🚓", description:"Blacklist street racing and intense police takedowns."},
-        {id:44, slug:"nfs-underground-2", title:"Need for Speed Underground 2", category:"Racing", developer:"EA Mobile", year:2004, icon:"🚘", description:"Custom neon tuners, dyno tuning, and drag racing."},
-        {id:45, slug:"rally-pro-contest", title:"Rally Pro Contest 3D", category:"Racing", developer:"Fishlabs", year:2005, icon:"🚙", description:"Revolutionary 3D mobile rally physics on dirt and snow."},
-        {id:46, slug:"ferrari-gt-evolution", title:"Ferrari GT: Evolution", category:"Racing", developer:"Gameloft", year:2008, icon:"🏎️", description:"Official Ferrari test tracks and classic Prancing Horses."},
-        {id:47, slug:"moto-gp-08", title:"Moto GP 08", category:"Racing", developer:"I-play", year:2008, icon:"🏍️", description:"High-octane motorcycle championship racing."},
-        {id:48, slug:"ducati-extreme", title:"Ducati Extreme", category:"Racing", developer:"Hands-On", year:2006, icon:"🏍️", description:"Knee-down superbike circuits across the globe."},
-        {id:49, slug:"3d-moto-racing", title:"3D Moto Racing", category:"Racing", developer:"I-play", year:2005, icon:"🏁", description:"Pure 3D superbike speedway showdown."},
-        {id:50, slug:"driver-vegas", title:"Driver: Vegas", category:"Racing", developer:"Gameloft", year:2006, icon:"🎰", description:"Undercover wheelman vehicular getaway through Sin City."},
-        {id:51, slug:"fast-and-furious", title:"Fast & Furious: Fugitive", category:"Racing", developer:"I-play", year:2007, icon:"💨", description:"Quarter-mile nitro drag races and cross-country chases."},
-        {id:52, slug:"townsmen-racing", title:"Townsmen Racing", category:"Racing", developer:"HandyGames", year:2006, icon:"🚜", description:"Medieval cart racing with humorous sheep obstacles."},
-        {id:53, slug:"burnout-mobile", title:"Burnout Mobile", category:"Racing", developer:"EA Mobile", year:2007, icon:"💥", description:"Aggressive crashes, takedowns, and speed burnout boosts."},
-        {id:54, slug:"crash-nitro-kart", title:"Crash Nitro Kart", category:"Racing", developer:"Vivendi", year:2004, icon:"🦊", description:"Wumpa fruit kart combat with Crash Bandicoot."},
-        {id:55, slug:"midnight-club-3", title:"Midnight Club 3: DUB Edition", category:"Racing", developer:"Rockstar Games", year:2005, icon:"🌃", description:"Cruising tuned muscle cars and luxury SUVs at night."},
-        {id:56, slug:"diamond-rush", title:"Diamond Rush", category:"Puzzle", developer:"Gameloft", year:2006, icon:"💎", description:"Explorer puzzle adventure catching gems and dodging boulders."},
-        {id:57, slug:"tower-bloxx", title:"Tower Bloxx", category:"Puzzle", developer:"Digital Chocolate", year:2005, icon:"🏗️", description:"Drop swinging skyscraper floors to build dizzying towers."},
-        {id:58, slug:"bubble-bash", title:"Bubble Bash", category:"Puzzle", developer:"Gameloft", year:2006, icon:"🫧", description:"Color-matching bubble cannon fun on tropical African shores."},
-        {id:59, slug:"bejeweled", title:"Bejeweled", category:"Puzzle", developer:"PopCap Games", year:2004, icon:"✨", description:"The definitive gem-swapping match-3 cascade puzzle."},
-        {id:60, slug:"zuma-mobile", title:"Zuma Mobile", category:"Puzzle", developer:"Glu Mobile", year:2005, icon:"🐸", description:"Stone frog ball shooter clearing rolling ancient spirals."},
-        {id:61, slug:"bobby-carrot", title:"Bobby Carrot", category:"Puzzle", developer:"FDG Entertainment", year:2004, icon:"🥕", description:"Navigate clever farm mazes and traps to harvest carrots."},
-        {id:62, slug:"bobby-carrot-5", title:"Bobby Carrot 5: Level Up!", category:"Puzzle", developer:"FDG Entertainment", year:2008, icon:"🐇", description:"The biggest rabbit puzzle adventure with dragon realms."},
-        {id:63, slug:"plants-vs-zombies", title:"Plants vs. Zombies J2ME", category:"Puzzle", developer:"PopCap Games", year:2010, icon:"🌻", description:"Defend your lawn using peashooters and cherry bombs."},
-        {id:64, slug:"chuzzle-mobile", title:"Chuzzle Mobile", category:"Puzzle", developer:"PopCap Games", year:2006, icon:"🧶", description:"Cute googly-eyed fuzzy creature matching puzzle."},
-        {id:65, slug:"peggle-mobile", title:"Peggle Mobile", category:"Puzzle", developer:"PopCap Games", year:2007, icon:"🟠", description:"Extreme fever peg bouncing pachinko arcade delight."},
-        {id:66, slug:"luxor-2-mobile", title:"Luxor 2 Mobile", category:"Puzzle", developer:"MumboJumbo", year:2007, icon:"🪲", description:"Egyptian winged scarab marble shooting quest."},
-        {id:67, slug:"diner-dash", title:"Diner Dash", category:"Puzzle", developer:"Glu Mobile", year:2006, icon:"🍽️", description:"Flo's high-speed restaurant management and customer seating."},
-        {id:68, slug:"cafe-sudoku", title:"Café Sudoku", category:"Puzzle", developer:"Digital Chocolate", year:2006, icon:"🔢", description:"Relaxing logic grid numbers in an inviting coffeehouse."},
-        {id:69, slug:"tornado-mania", title:"Tornado Mania!", category:"Puzzle", developer:"Digital Chocolate", year:2006, icon:"🌪️", description:"Control a whimsical vortex to collect buildings and build utopia."},
-        {id:70, slug:"rollercoaster-rush", title:"Rollercoaster Rush", category:"Puzzle", developer:"Digital Chocolate", year:2006, icon:"🎢", description:"Control coaster throttle for maximum passenger thrill."},
-        {id:71, slug:"sokoban-3d", title:"Sokoban 3D", category:"Puzzle", developer:"Living Mobile", year:2005, icon:"📦", description:"The classic Japanese warehouse crate pushing logic puzzle."},
-        {id:72, slug:"lemmings-mobile", title:"Lemmings Mobile", category:"Puzzle", developer:"Glu Mobile", year:2006, icon:"⛏️", description:"Assign parachute, dig, and build roles to save lemmings."},
-        {id:73, slug:"diamond-twister", title:"Diamond Twister", category:"Puzzle", developer:"Gameloft", year:2008, icon:"💍", description:"High-stakes diamond heist cascading gem puzzles."},
-        {id:74, slug:"uno-3d", title:"UNO 3D Mobile", category:"Puzzle", developer:"Gameloft", year:2008, icon:"🃏", description:"The classic card game with wild draw 4s."},
-        {id:75, slug:"texas-holdem-poker", title:"Texas Hold'em Poker", category:"Puzzle", developer:"Gameloft", year:2006, icon:"♠️", description:"All-in tournament poker bluffs in world casinos."},
-        {id:76, slug:"real-football-2008", title:"Real Football 2008", category:"Sports", developer:"Gameloft", year:2007, icon:"⚽", description:"Shoot penalty kicks and score championship goals."},
-        {id:77, slug:"fifa-07-mobile", title:"FIFA 07 Mobile", category:"Sports", developer:"EA Mobile", year:2006, icon:"🥅", description:"Authentic licensed national teams and penalty shootouts."},
-        {id:78, slug:"pes-2009", title:"Pro Evolution Soccer 2009", category:"Sports", developer:"Konami", year:2008, icon:"🏟️", description:"Tactical striking and goal shooting mechanics."},
-        {id:79, slug:"playman-summer", title:"Playman World Athletics", category:"Sports", developer:"RealNetworks", year:2005, icon:"🏃", description:"Sprint timing and javelin throwing decathlon."},
-        {id:80, slug:"playman-winter", title:"Playman Winter Games", category:"Sports", developer:"RealNetworks", year:2006, icon:"🎿", description:"Slalom skiing, bobsled, and speed skating snow games."},
-        {id:81, slug:"midnight-pool-3d", title:"Midnight Pool 3D", category:"Sports", developer:"Gameloft", year:2005, icon:"🎱", description:"8-ball and 9-ball barroom trick shots and wagers."},
-        {id:82, slug:"midnight-bowling-3d", title:"Midnight Bowling 3D", category:"Sports", developer:"Gameloft", year:2006, icon:"🎳", description:"Strikes, spares, and spin curves in retro neon lanes."},
-        {id:83, slug:"nba-live-08", title:"NBA Live 08", category:"Sports", developer:"EA Mobile", year:2007, icon:"🏀", description:"Shoot hoops, 3-pointers, and slam dunks against the clock."},
-        {id:84, slug:"tiger-woods-07", title:"Tiger Woods PGA Tour 07", category:"Sports", developer:"EA Mobile", year:2006, icon:"⛳", description:"Precision golf fairway drives and green putts."},
-        {id:85, slug:"tony-hawk-4", title:"Tony Hawk's Pro Skater 4", category:"Sports", developer:"Activision", year:2003, icon:"🛹", description:"Kickflips, grinds, and halfpipe trick combos."},
-        {id:86, slug:"skate-mobile", title:"Skate Mobile", category:"Sports", developer:"EA Mobile", year:2007, icon:"🛹", description:"Realistic street skateboarding flip trick mastery."},
-        {id:87, slug:"super-dynamite-fishing", title:"Super Dynamite Fishing", category:"Sports", developer:"HandyGames", year:2008, icon:"🎣", description:"Crazy TNT blast fishing for monster catches."},
-        {id:88, slug:"guitar-hero-3", title:"Guitar Hero III Mobile", category:"Sports", developer:"Hands-On", year:2007, icon:"🎸", description:"Rhythm solo timing on rock anthem notes."},
-        {id:89, slug:"galaxy-on-fire-2", title:"Galaxy On Fire 2", category:"RPG", developer:"Fishlabs", year:2009, icon:"🚀", description:"Space combat dogfights, asteroid mining, and alien attacks."},
-        {id:90, slug:"deep-3d", title:"Deep 3D", category:"RPG", developer:"Fishlabs", year:2006, icon:"🌊", description:"Underwater submarine tactical torpedo combat."},
-        {id:91, slug:"ancient-empires-2", title:"Ancient Empires II", category:"RPG", developer:"Macrospace", year:2005, icon:"⚔️", description:"Turn-based tactical fantasy kingdom battles."},
-        {id:92, slug:"heroes-might-magic", title:"Heroes of Might & Magic", category:"RPG", developer:"Gameloft", year:2007, icon:"🏰", description:"Turn-based kingdom warfare, spells, and beasts."},
-        {id:93, slug:"age-of-empires-3", title:"Age of Empires III Mobile", category:"RPG", developer:"Glu Mobile", year:2007, icon:"🏹", description:"Colonial conquest, resource gathering, and siege engines."},
-        {id:94, slug:"townsmen-6", title:"Townsmen 6", category:"RPG", developer:"HandyGames", year:2009, icon:"👑", description:"French Revolution town management and resource logistics."},
-        {id:95, slug:"gothic-3-beginning", title:"Gothic 3: The Beginning", category:"RPG", developer:"HandyGames", year:2008, icon:"🗡️", description:"Dark fantasy open world quests, spells, and orc combat."},
-        {id:96, slug:"devils-and-demons", title:"Devils and Demons", category:"RPG", developer:"HandyGames", year:2009, icon:"🔥", description:"Turn-based party combat against hellish demon lords."},
-        {id:97, slug:"worms-forts", title:"Worms Forts: Under Siege", category:"RPG", developer:"THQ Wireless", year:2005, icon:"🪱", description:"Fortress building and ballistic artillery worm warfare."},
-        {id:98, slug:"worms-2007", title:"Worms 2007", category:"RPG", developer:"THQ Wireless", year:2007, icon:"💣", description:"Holy Hand Grenades and exploding sheep worm battles."},
-        {id:99, slug:"simcity-mobile", title:"SimCity Mobile", category:"RPG", developer:"EA Mobile", year:2007, icon:"🏙️", description:"Zone residential, commercial, and fight disasters."},
-        {id:100, slug:"the-sims-3", title:"The Sims 3 Mobile", category:"RPG", developer:"EA Mobile", year:2009, icon:"🏡", description:"Socialize, build homes, fulfill aspirations, and live life."}
-      ];
-      return list;
-    }
-
-    // Launch!
-    restartCurrentGame();
-    loadGames();
-    requestAnimationFrame(loop);
+    // Initialize
+    loadAllQuestions();
+    generateRandomQuestion();
   </script>
 </body>
 </html>

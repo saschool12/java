@@ -12,45 +12,43 @@ class AppTest {
     void appGreetingIsPresent() {
         App app = new App();
         assertNotNull(app.getGreeting());
-        assertTrue(app.getGreeting().contains("All 100 Games Fully Playable"));
+        assertTrue(app.getGreeting().contains("Java Q&A Quiz & Random Question Generator"));
     }
 
     @Test
-    void gameCatalogContainsExactly100Games() {
-        App.GameCatalog catalog = new App.GameCatalog();
-        assertEquals(100, catalog.getTotalGamesCount(), "Game catalog must contain exactly 100 games");
+    void questionBankLoadsQuestions() {
+        App.QuestionBank bank = new App.QuestionBank();
+        assertTrue(bank.getTotalCount() >= 20, "Question bank should contain at least 20 questions");
     }
 
     @Test
-    void all100GamesArePlayable() {
-        App.GameCatalog catalog = new App.GameCatalog();
-        for (App.GameInfo game : catalog.getAllGames()) {
-            assertTrue(game.isPlayable(), "Game " + game.getTitle() + " must be playable!");
-        }
+    void randomQuestionGeneratorWorks() {
+        App.QuestionBank bank = new App.QuestionBank();
+        App.Question q = bank.getRandomQuestion("Collections", "Medium");
+        assertNotNull(q);
+        assertNotNull(q.getQuestion());
+        assertFalse(q.getOptions().isEmpty());
+        assertTrue(q.getCorrectIndex() >= 0 && q.getCorrectIndex() < q.getOptions().size());
     }
 
     @Test
-    void gameCatalogFiltersByCategoryAndSearch() {
-        App.GameCatalog catalog = new App.GameCatalog();
+    void filterQuestionsByTopicAndDifficulty() {
+        App.QuestionBank bank = new App.QuestionBank();
+        List<App.Question> oopList = bank.filterQuestions("OOP", null);
+        assertNotNull(oopList);
+        assertFalse(oopList.isEmpty());
 
-        List<App.GameInfo> actionGames = catalog.filter("Action", null);
-        assertNotNull(actionGames);
-        assertFalse(actionGames.isEmpty());
-
-        List<App.GameInfo> asphaltSearch = catalog.filter(null, "asphalt");
-        assertNotNull(asphaltSearch);
-        assertTrue(asphaltSearch.size() >= 2);
+        List<App.Question> easyList = bank.filterQuestions(null, "Easy");
+        assertNotNull(easyList);
+        assertFalse(easyList.isEmpty());
     }
 
     @Test
-    void scoreRepositoryTracksLeaderboard() {
-        App.ScoreRepository repo = new App.ScoreRepository();
-        repo.addScore(new App.ScoreEntry("Duke99", "space-impact", 8888, System.currentTimeMillis()));
-
-        List<App.ScoreEntry> top = repo.getTopScores("space-impact", 5);
-        assertNotNull(top);
-        assertTrue(top.size() >= 1);
-        assertEquals("Duke99", top.get(0).getPlayer());
-        assertEquals(8888, top.get(0).getScore());
+    void verifyQuestionAnswerIntegrity() {
+        App.QuestionBank bank = new App.QuestionBank();
+        App.Question q1 = bank.getQuestionById(1);
+        assertNotNull(q1);
+        assertEquals(0, q1.getCorrectIndex());
+        assertTrue(q1.getExplanation().contains("pass-by-value"));
     }
 }
