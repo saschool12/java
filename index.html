@@ -2,576 +2,1152 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Java Web Project | Powered by Java & Vercel</title>
-  <meta name="description" content="Modern Java web application ready for deployment on Vercel, Railway, and Render.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Java Retro Games Arcade | Play Classic J2ME Games</title>
+  <meta name="description" content="Nostalgic Java mobile games emulator & arcade. Play Space Impact, Nokia Snake II, and Brick Breaker directly in your browser.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #6366f1;
-      --primary-hover: #4f46e5;
-      --secondary: #ec4899;
-      --accent: #06b6d4;
-      --bg: #090d16;
-      --bg-card: rgba(17, 24, 39, 0.7);
-      --bg-card-border: rgba(255, 255, 255, 0.08);
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --code-bg: #111827;
-      --success: #10b981;
+      --primary: #00f2fe;
+      --secondary: #4facfe;
+      --accent: #ff007f;
+      --gold: #f9d423;
+      --bg: #070913;
+      --panel: #0d1224;
+      --panel-border: rgba(0, 242, 254, 0.25);
+      --screen-bg: #040810;
+      --text: #e2e8f0;
+      --text-dim: #7987a5;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: var(--bg);
-      color: var(--text-main);
+      background-image: 
+        radial-gradient(ellipse at 50% 0%, rgba(79, 172, 254, 0.15) 0%, transparent 60%),
+        radial-gradient(circle at 10% 90%, rgba(255, 0, 127, 0.1) 0%, transparent 40%);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
       min-height: 100vh;
-      line-height: 1.6;
-      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 0.5rem 3rem;
     }
 
-    /* Glow Background Elements */
-    .glow-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      pointer-events: none;
-      z-index: -1;
-      overflow: hidden;
-    }
-
-    .glow-blob-1 {
-      position: absolute;
-      top: -150px;
-      left: 15%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(0, 0, 0, 0) 70%);
-      filter: blur(40px);
-    }
-
-    .glow-blob-2 {
-      position: absolute;
-      top: 250px;
-      right: 10%;
-      width: 450px;
-      height: 450px;
-      background: radial-gradient(circle, rgba(236, 72, 153, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
-      filter: blur(50px);
-    }
-
-    /* Navigation */
     header {
-      border-bottom: 1px solid var(--bg-card-border);
-      backdrop-filter: blur(12px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(9, 13, 22, 0.85);
-    }
-
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #fff;
-      text-decoration: none;
-    }
-
-    .logo-badge {
-      background: linear-gradient(135deg, #f97316, #ea580c);
-      color: white;
-      padding: 0.25rem 0.6rem;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
-
-    .nav-link {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-
-    .nav-link:hover {
-      color: #fff;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.6rem 1.25rem;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      text-decoration: none;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      border: none;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: #fff;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
-    }
-
-    .btn-primary:hover {
-      opacity: 0.92;
-      transform: translateY(-1px);
-    }
-
-    .btn-outline {
-      background: transparent;
-      border: 1px solid var(--bg-card-border);
-      color: var(--text-main);
-    }
-
-    .btn-outline:hover {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    /* Hero Section */
-    .hero {
-      max-width: 1000px;
-      margin: 4.5rem auto 3rem;
-      padding: 0 1.5rem;
       text-align: center;
+      margin-bottom: 1rem;
     }
 
-    .tagline {
-      display: inline-flex;
+    .retro-badge {
+      display: inline-block;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.65rem;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: #fff;
+      padding: 0.35rem 0.75rem;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+      box-shadow: 0 0 12px rgba(249, 115, 22, 0.5);
+    }
+
+    h1 {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 1.35rem;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(0, 242, 254, 0.8), 0 0 20px rgba(79, 172, 254, 0.4);
+      margin-bottom: 0.25rem;
+    }
+
+    .sub-title {
+      font-size: 1.05rem;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    /* Game Selector Bar */
+    .game-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 600px;
+    }
+
+    .game-tab-btn {
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      color: var(--text);
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.35rem 0.9rem;
-      border-radius: 9999px;
-      background: rgba(99, 102, 241, 0.12);
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      color: #a5b4fc;
-      font-size: 0.85rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
+      transition: all 0.2s;
     }
 
-    .hero h1 {
-      font-size: 3.25rem;
-      font-weight: 800;
-      letter-spacing: -1.5px;
-      line-height: 1.15;
-      margin-bottom: 1.25rem;
-    }
-
-    .gradient-text {
-      background: linear-gradient(135deg, #60a5fa, #a855f7, #ec4899);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    .hero p {
-      font-size: 1.2rem;
-      color: var(--text-muted);
-      max-width: 680px;
-      margin: 0 auto 2.25rem;
-    }
-
-    .hero-actions {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    /* Container */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem 5rem;
-    }
-
-    /* Grid cards */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 1.5rem;
-      margin-top: 3.5rem;
-    }
-
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--bg-card-border);
-      border-radius: 14px;
-      padding: 1.75rem;
-      backdrop-filter: blur(10px);
-      transition: transform 0.2s, border-color 0.2s;
-    }
-
-    .card:hover {
-      border-color: rgba(99, 102, 241, 0.4);
-      transform: translateY(-2px);
-    }
-
-    .card-icon {
-      font-size: 1.75rem;
-      margin-bottom: 1rem;
-      display: inline-block;
-    }
-
-    .card h3 {
-      font-size: 1.25rem;
-      margin-bottom: 0.5rem;
+    .game-tab-btn.active {
+      background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(255, 0, 127, 0.2));
+      border-color: var(--primary);
       color: #fff;
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
     }
 
-    .card p {
-      color: var(--text-muted);
-      font-size: 0.95rem;
+    .game-tab-btn:hover {
+      border-color: var(--primary);
     }
 
-    /* Live Interactive Playground */
-    .interactive-panel {
-      margin-top: 4rem;
-      background: var(--bg-card);
-      border: 1px solid var(--bg-card-border);
-      border-radius: 16px;
-      overflow: hidden;
-      backdrop-filter: blur(10px);
+    /* Retro Device Enclosure */
+    .arcade-chassis {
+      background: linear-gradient(180deg, #151d33 0%, #0d1222 100%);
+      border: 2px solid rgba(0, 242, 254, 0.4);
+      border-radius: 24px;
+      padding: 1.25rem;
+      box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.8),
+        0 0 25px rgba(0, 242, 254, 0.15),
+        inset 0 1px 2px rgba(255, 255, 255, 0.15);
+      width: 100%;
+      max-width: 480px;
+      position: relative;
     }
 
-    .panel-header {
-      background: rgba(0, 0, 0, 0.35);
-      border-bottom: 1px solid var(--bg-card-border);
-      padding: 1rem 1.5rem;
+    .top-phone-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 0 0.5rem 0.75rem;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.6rem;
+      color: #64748b;
     }
 
-    .panel-title {
-      font-weight: 600;
-      font-size: 1rem;
+    .speaker-grill {
+      width: 60px;
+      height: 4px;
+      background: #25334d;
+      border-radius: 2px;
+      margin: 0 auto;
+    }
+
+    /* Screen Bezel */
+    .screen-bezel {
+      background: #020409;
+      border: 3px solid #1e293b;
+      border-radius: 12px;
+      padding: 6px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.9);
+    }
+
+    .screen-bezel::after {
+      /* CRT scanline effect */
+      content: " ";
+      display: block;
+      position: absolute;
+      top: 0; left: 0; bottom: 0; right: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%);
+      background-size: 100% 4px;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.75;
+    }
+
+    #gameCanvas {
+      display: block;
+      width: 100%;
+      height: 320px;
+      background: var(--screen-bg);
+      border-radius: 6px;
+      image-rendering: pixelated;
+    }
+
+    /* Game HUD overlay */
+    .game-hud {
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      justify-content: space-between;
+      padding: 0.5rem 0.25rem;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.65rem;
+      color: var(--primary);
+      text-shadow: 0 0 5px var(--primary);
     }
 
-    .panel-indicator {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--success);
-      box-shadow: 0 0 8px var(--success);
-    }
-
-    .panel-body {
-      padding: 1.75rem;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-    }
-
-    @media (max-width: 820px) {
-      .hero h1 { font-size: 2.25rem; }
-      .panel-body { grid-template-columns: 1fr; }
-    }
-
-    .code-block {
-      background: var(--code-bg);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      padding: 1.25rem;
-      font-family: 'Fira Code', monospace;
-      font-size: 0.88rem;
-      color: #e2e8f0;
-      overflow-x: auto;
-      line-height: 1.6;
-    }
-
-    .api-tester {
+    /* Physical Phone Controls */
+    .controls-panel {
+      margin-top: 1rem;
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
 
-    .api-endpoint-box {
+    .keypad-row {
       display: flex;
-      gap: 0.5rem;
-      background: var(--code-bg);
-      padding: 0.5rem 0.75rem;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 0.5rem;
+    }
+
+    /* D-PAD */
+    .dpad-container {
+      display: grid;
+      grid-template-columns: repeat(3, 44px);
+      grid-template-rows: repeat(3, 44px);
+      gap: 4px;
+    }
+
+    .dpad-btn {
+      background: #1e2942;
+      border: 1px solid #334155;
+      color: #94a3b8;
       border-radius: 8px;
-      border: 1px solid var(--bg-card-border);
-    }
-
-    .api-method {
-      background: rgba(16, 185, 129, 0.2);
-      color: var(--success);
-      font-family: 'Fira Code', monospace;
-      font-weight: 700;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.8rem;
-    }
-
-    .api-path {
-      font-family: 'Fira Code', monospace;
-      font-size: 0.9rem;
       display: flex;
       align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: background 0.1s, transform 0.1s;
+      box-shadow: 0 3px 0 #0f172a;
+    }
+
+    .dpad-btn:active, .dpad-btn.pressed {
+      background: var(--primary);
+      color: #000;
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #0f172a;
+    }
+
+    .dpad-center {
+      background: #111827;
+      border-radius: 50%;
+      border: 1px solid #1f293d;
+    }
+
+    /* Action Buttons */
+    .action-group {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .action-btn {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 0, 127, 0.4);
+      background: radial-gradient(circle at 35% 35%, #ff2a85, #b8004f);
+      color: #fff;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #70002e, 0 0 12px rgba(255, 0, 127, 0.4);
+      touch-action: manipulation;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    .action-btn.btn-b {
+      background: radial-gradient(circle at 35% 35%, #00f2fe, #0088cc);
+      border-color: rgba(0, 242, 254, 0.4);
+      box-shadow: 0 4px 0 #005580, 0 0 12px rgba(0, 242, 254, 0.4);
+    }
+
+    .action-btn:active, .action-btn.pressed {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #70002e;
+    }
+
+    .action-btn.btn-b:active, .action-btn.btn-b.pressed {
+      box-shadow: 0 1px 0 #005580;
+    }
+
+    /* System Utility Buttons */
+    .system-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .sys-btn {
+      background: #162036;
+      border: 1px solid #293856;
       color: #94a3b8;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.55rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 0 #0b1120;
     }
 
-    .api-response {
-      background: var(--code-bg);
-      border: 1px solid var(--bg-card-border);
-      border-radius: 8px;
-      padding: 1rem;
-      font-family: 'Fira Code', monospace;
-      font-size: 0.85rem;
-      min-height: 120px;
-      color: #38bdf8;
-      white-space: pre-wrap;
-      word-break: break-all;
+    .sys-btn:active {
+      transform: translateY(1px);
     }
 
-    /* Deployment guides */
-    .deploy-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.25rem;
-      margin-top: 2rem;
-    }
-
-    .deploy-item {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--bg-card-border);
-      border-radius: 12px;
+    /* Leaderboard & Info Section */
+    .arcade-drawer {
+      margin-top: 1.5rem;
+      width: 100%;
+      max-width: 480px;
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
       padding: 1.25rem;
     }
 
-    .deploy-item h4 {
+    .drawer-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.8rem;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      font-size: 1.05rem;
-      margin-bottom: 0.5rem;
     }
 
-    .deploy-item p {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      margin-bottom: 0.75rem;
+    .leaderboard-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0.6rem;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 6px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.65rem;
+    }
+
+    .leaderboard-item.rank-1 {
+      color: var(--gold);
+      border: 1px solid rgba(249, 212, 35, 0.3);
+    }
+
+    .submit-score-box {
+      margin-top: 0.75rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .submit-input {
+      background: #060913;
+      border: 1px solid var(--panel-border);
+      color: #fff;
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.65rem;
+      flex: 1;
+    }
+
+    .submit-btn {
+      background: var(--primary);
+      border: none;
+      color: #000;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 0.65rem;
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
     }
 
     footer {
-      border-top: 1px solid var(--bg-card-border);
+      margin-top: 2rem;
       text-align: center;
-      padding: 2.5rem 1.5rem;
-      color: var(--text-muted);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
 
-  <div class="glow-bg">
-    <div class="glow-blob-1"></div>
-    <div class="glow-blob-2"></div>
-  </div>
-
   <header>
-    <div class="nav-container">
-      <a href="#" class="logo">
-        <span class="logo-badge">JAVA 17</span>
-        <span>java-web</span>
-      </a>
-      <div class="nav-links">
-        <a href="#features" class="nav-link">Features</a>
-        <a href="#playground" class="nav-link">Playground</a>
-        <a href="#deploy" class="nav-link">Deploy</a>
-        <a href="https://github.com/saschool12/java" target="_blank" rel="noopener" class="btn btn-outline">
-          <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-          </svg>
-          GitHub
-        </a>
-      </div>
-    </div>
+    <div class="retro-badge">JAVA 17 • J2ME RETRO ARCADE</div>
+    <h1>JAVA GAMES</h1>
+    <p class="sub-title">Classic J2ME Mobile Phone Gaming in Your Browser</p>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="tagline">⚡ Ready for Vercel, Railway, and Render</div>
-      <h1>Java Application & <span class="gradient-text">Modern Web Platform</span></h1>
-      <p>A lightweight, full-stack Java 17 and HTML web application with integrated Gradle build tooling, embedded HTTP server, and instant edge deployment.</p>
-      <div class="hero-actions">
-        <a href="#playground" class="btn btn-primary">Try Live API</a>
-        <a href="https://github.com/saschool12/java" target="_blank" rel="noopener" class="btn btn-outline">View on GitHub</a>
-      </div>
-    </section>
+  <!-- Game Selector -->
+  <div class="game-tabs">
+    <button class="game-tab-btn active" onclick="switchGame('space-impact')">
+      <span>🚀</span> Space Impact
+    </button>
+    <button class="game-tab-btn" onclick="switchGame('snake-retro')">
+      <span>🐍</span> Nokia Snake II
+    </button>
+    <button class="game-tab-btn" onclick="switchGame('brick-breaker')">
+      <span>🧱</span> Brick Breaker
+    </button>
+  </div>
 
-    <div class="container">
-      <section id="features" class="grid">
-        <div class="card">
-          <div class="card-icon">🚀</div>
-          <h3>Vercel Deployment</h3>
-          <p>Instant edge-hosted static front-end. Deploy in seconds by connecting your GitHub repository to Vercel.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">☕</div>
-          <h3>Java 17 Embedded Server</h3>
-          <p>Built with Java's standard <code>jdk.httpserver</code>. Run locally or containerize for zero-dependency web serving.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">⚡</div>
-          <h3>Gradle 8.14.3 Tooling</h3>
-          <p>Full Gradle wrapper support for automated builds, JUnit testing, dependency management, and packaging.</p>
-        </div>
-      </section>
-
-      <section id="playground" class="interactive-panel">
-        <div class="panel-header">
-          <div class="panel-title">
-            <span class="panel-indicator"></span>
-            <span>Interactive Endpoint & Code Playground</span>
-          </div>
-          <span style="font-size: 0.85rem; color: var(--text-muted);">Java 17 Runtime</span>
-        </div>
-
-        <div class="panel-body">
-          <div>
-            <h4 style="margin-bottom: 0.75rem; font-size: 1rem;">Java Implementation (App.java)</h4>
-            <pre class="code-block"><code>public class App {
-  public static void main(String[] args) {
-    HttpServer server = HttpServer.create(
-      new InetSocketAddress(8080), 0
-    );
-    server.createContext("/api/greeting", 
-      (exchange) -> {
-        String res = "{\"message\":\"Hello, World!\"}";
-        exchange.sendResponseHeaders(200, res.length());
-        exchange.getResponseBody().write(res.getBytes());
-      }
-    );
-    server.start();
-  }
-}</code></pre>
-          </div>
-
-          <div class="api-tester">
-            <h4 style="font-size: 1rem;">Live Endpoint Tester</h4>
-            <div class="api-endpoint-box">
-              <span class="api-method">GET</span>
-              <span class="api-path">/api/greeting</span>
-            </div>
-            <button id="test-btn" class="btn btn-primary" onclick="testGreetingApi()">Test Greeting Endpoint</button>
-            <button id="status-btn" class="btn btn-outline" onclick="testStatusApi()">Test Status Endpoint</button>
-
-            <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">Response:</div>
-            <div id="api-output" class="api-response">// Click a test button above to fetch data</div>
-          </div>
-        </div>
-      </section>
-
-      <section id="deploy" style="margin-top: 4rem;">
-        <h2 style="font-size: 1.75rem; margin-bottom: 0.5rem;">Deployment Instructions</h2>
-        <p style="color: var(--text-muted);">Easily deploy this project to your preferred platform.</p>
-
-        <div class="deploy-grid">
-          <div class="deploy-item">
-            <h4>▲ Vercel (Front-end)</h4>
-            <p>Go to <a href="https://vercel.com/new" target="_blank" style="color: #60a5fa;">vercel.com/new</a>, import <code>saschool12/java</code>, and click <strong>Deploy</strong>. Vercel serves the web UI at your custom <code>.vercel.app</code> URL.</p>
-          </div>
-          <div class="deploy-item">
-            <h4>🚂 Railway (Full-stack Java)</h4>
-            <p>Create a new project on Railway from <code>saschool12/java</code>. Railway automatically detects Gradle and executes <code>./gradlew run</code> on port 8080.</p>
-          </div>
-          <div class="deploy-item">
-            <h4>🖥️ Local Development</h4>
-            <p>Run <code>./gradlew run</code> in your terminal. Open <code>http://localhost:8080</code> in any web browser to see the live app.</p>
-          </div>
-        </div>
-      </section>
+  <!-- Retro Phone Arcade Device -->
+  <div class="arcade-chassis">
+    <div class="top-phone-bar">
+      <span>JAVA ME</span>
+      <div class="speaker-grill"></div>
+      <span id="sound-indicator">🔊 ON</span>
     </div>
-  </main>
+
+    <!-- Screen Bezel -->
+    <div class="screen-bezel">
+      <div class="game-hud">
+        <span id="hud-score">SCORE: 0</span>
+        <span id="hud-level">LVL: 1</span>
+        <span id="hud-lives">♥♥♥</span>
+      </div>
+      <canvas id="gameCanvas" width="360" height="260"></canvas>
+    </div>
+
+    <!-- Device Controls -->
+    <div class="controls-panel">
+      <div class="keypad-row">
+        <!-- D-PAD -->
+        <div class="dpad-container">
+          <div></div>
+          <button class="dpad-btn" id="dpad-up" onpointerdown="handleInput('ArrowUp', true)" onpointerup="handleInput('ArrowUp', false)">▲</button>
+          <div></div>
+          <button class="dpad-btn" id="dpad-left" onpointerdown="handleInput('ArrowLeft', true)" onpointerup="handleInput('ArrowLeft', false)">◀</button>
+          <div class="dpad-btn dpad-center"></div>
+          <button class="dpad-btn" id="dpad-right" onpointerdown="handleInput('ArrowRight', true)" onpointerup="handleInput('ArrowRight', false)">▶</button>
+          <div></div>
+          <button class="dpad-btn" id="dpad-down" onpointerdown="handleInput('ArrowDown', true)" onpointerup="handleInput('ArrowDown', false)">▼</button>
+          <div></div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="action-group">
+          <button class="action-btn btn-b" id="btn-action-b" onpointerdown="handleInput('KeyX', true)" onpointerup="handleInput('KeyX', false)">B</button>
+          <button class="action-btn" id="btn-action-a" onpointerdown="handleInput('Space', true)" onpointerup="handleInput('Space', false)">A</button>
+        </div>
+      </div>
+
+      <div class="system-buttons">
+        <button class="sys-btn" onclick="togglePause()">PAUSE [P]</button>
+        <button class="sys-btn" onclick="restartCurrentGame()">RESTART</button>
+        <button class="sys-btn" onclick="toggleSound()">AUDIO</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaderboard & Java Server Drawer -->
+  <div class="arcade-drawer">
+    <div class="drawer-title">
+      <span>🏆</span>
+      <span>HALL OF FAME (JAVA API)</span>
+    </div>
+    <ul id="leaderboard-list" class="leaderboard-list">
+      <li class="leaderboard-item rank-1"><span>1. DUKE</span><span>4200 PTS</span></li>
+      <li class="leaderboard-item"><span>2. NEO</span><span>3100 PTS</span></li>
+      <li class="leaderboard-item"><span>3. PIXELKING</span><span>2850 PTS</span></li>
+    </ul>
+
+    <div class="submit-score-box">
+      <input type="text" id="player-name" class="submit-input" placeholder="YOUR INITIALS" maxlength="8">
+      <button class="submit-btn" onclick="submitCurrentScore()">SUBMIT</button>
+    </div>
+  </div>
 
   <footer>
-    <p>Repository: <a href="https://github.com/saschool12/java" target="_blank" style="color: #818cf8; text-decoration: none;">github.com/saschool12/java</a> • Built with Java 17 & Gradle</p>
+    <p>Powered by Java 17 & Vercel Edge • <a href="https://github.com/saschool12/java" target="_blank">saschool12/java</a></p>
   </footer>
 
   <script>
-    async function testGreetingApi() {
-      const output = document.getElementById('api-output');
-      output.innerText = '// Fetching /api/greeting...';
-      try {
-        const res = await fetch('/api/greeting');
-        if (res.ok) {
-          const data = await res.json();
-          output.innerText = JSON.stringify(data, null, 2);
-          return;
-        }
-      } catch (err) {
-        // Fallback for static client simulation (e.g. on Vercel preview)
+    // -------------------------------------------------------------
+    // 8-BIT AUDIO SYNTHESIZER (Web Audio API)
+    // -------------------------------------------------------------
+    let audioCtx = null;
+    let soundEnabled = true;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       }
-      output.innerText = JSON.stringify({
-        status: 200,
-        message: "Hello, World! Java Web Server is running.",
-        timestamp: Date.now(),
-        source: window.location.hostname.includes('vercel') ? 'Vercel Edge (Simulated)' : 'Java Server'
-      }, null, 2);
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
     }
 
-    async function testStatusApi() {
-      const output = document.getElementById('api-output');
-      output.innerText = '// Fetching /api/status...';
+    function playBeep(freq, type = 'square', duration = 0.08, volume = 0.12) {
+      if (!soundEnabled) return;
       try {
-        const res = await fetch('/api/status');
-        if (res.ok) {
-          const data = await res.json();
-          output.innerText = JSON.stringify(data, null, 2);
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playLaserSound() {
+      if (!soundEnabled) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.12);
+      } catch (e) {}
+    }
+
+    function playExplosionSound() {
+      if (!soundEnabled) return;
+      playBeep(90, 'sawtooth', 0.25, 0.2);
+    }
+
+    function playPowerupSound() {
+      if (!soundEnabled) return;
+      [300, 450, 600, 850].forEach((freq, idx) => {
+        setTimeout(() => playBeep(freq, 'triangle', 0.07, 0.12), idx * 50);
+      });
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('sound-indicator').innerText = soundEnabled ? '🔊 ON' : '🔇 OFF';
+      if (soundEnabled) playBeep(440);
+    }
+
+    // -------------------------------------------------------------
+    // ARCADE ENGINE & CANVAS
+    // -------------------------------------------------------------
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    let currentGame = 'space-impact';
+    let isPaused = false;
+    let score = 0;
+    let lives = 3;
+    let level = 1;
+    let gameOver = false;
+
+    const keys = {
+      ArrowUp: false,
+      ArrowDown: false,
+      ArrowLeft: false,
+      ArrowRight: false,
+      Space: false,
+      KeyX: false
+    };
+
+    function handleInput(code, isDown) {
+      if (isDown) initAudio();
+      if (code === 'Space' || code === 'KeyX' || code.startsWith('Arrow')) {
+        keys[code] = isDown;
+      }
+      if (isDown && (code === 'Space' || code === 'KeyX') && gameOver) {
+        restartCurrentGame();
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'KeyP') { togglePause(); return; }
+      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space','KeyX'].includes(e.code)) {
+        e.preventDefault();
+        handleInput(e.code, true);
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space','KeyX'].includes(e.code)) {
+        e.preventDefault();
+        handleInput(e.code, false);
+      }
+    });
+
+    // -------------------------------------------------------------
+    // GAME 1: SPACE IMPACT (J2ME Classic)
+    // -------------------------------------------------------------
+    const spaceImpact = {
+      player: { x: 30, y: 120, w: 24, h: 14, speed: 3.5, shootCooldown: 0 },
+      bullets: [],
+      enemies: [],
+      particles: [],
+      stars: [],
+      spawnTimer: 0,
+
+      init() {
+        this.player.x = 30;
+        this.player.y = canvas.height / 2 - 7;
+        this.bullets = [];
+        this.enemies = [];
+        this.particles = [];
+        this.stars = [];
+        for (let i = 0; i < 35; i++) {
+          this.stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            speed: 0.5 + Math.random() * 2
+          });
+        }
+      },
+
+      update() {
+        if (gameOver || isPaused) return;
+
+        // Player Movement
+        if (keys.ArrowUp && this.player.y > 5) this.player.y -= this.player.speed;
+        if (keys.ArrowDown && this.player.y < canvas.height - this.player.h - 5) this.player.y += this.player.speed;
+        if (keys.ArrowLeft && this.player.x > 5) this.player.x -= this.player.speed;
+        if (keys.ArrowRight && this.player.x < canvas.width / 2) this.player.x += this.player.speed;
+
+        // Shooting
+        this.player.shootCooldown--;
+        if ((keys.Space || keys.KeyX) && this.player.shootCooldown <= 0) {
+          this.bullets.push({ x: this.player.x + this.player.w, y: this.player.y + 6, speed: 6.5, w: 8, h: 3 });
+          this.player.shootCooldown = 12;
+          playLaserSound();
+        }
+
+        // Stars
+        this.stars.forEach(s => {
+          s.x -= s.speed;
+          if (s.x < 0) s.x = canvas.width;
+        });
+
+        // Bullets
+        for (let i = this.bullets.length - 1; i >= 0; i--) {
+          const b = this.bullets[i];
+          b.x += b.speed;
+          if (b.x > canvas.width) this.bullets.splice(i, 1);
+        }
+
+        // Spawn Enemies
+        this.spawnTimer++;
+        if (this.spawnTimer > Math.max(25, 60 - level * 5)) {
+          this.spawnTimer = 0;
+          const isHeavy = Math.random() > 0.7;
+          this.enemies.push({
+            x: canvas.width + 10,
+            y: 15 + Math.random() * (canvas.height - 40),
+            w: isHeavy ? 24 : 16,
+            h: isHeavy ? 20 : 12,
+            hp: isHeavy ? 3 : 1,
+            speed: isHeavy ? 1.5 : 2.5 + Math.random() * 1.5,
+            isHeavy
+          });
+        }
+
+        // Enemies
+        for (let i = this.enemies.length - 1; i >= 0; i--) {
+          const e = this.enemies[i];
+          e.x -= e.speed;
+
+          // Bullet collision
+          for (let j = this.bullets.length - 1; j >= 0; j--) {
+            const b = this.bullets[j];
+            if (b.x < e.x + e.w && b.x + b.w > e.x && b.y < e.y + e.h && b.y + b.h > e.y) {
+              this.bullets.splice(j, 1);
+              e.hp--;
+              this.createExplosion(b.x, b.y, '#00f2fe', 4);
+              if (e.hp <= 0) {
+                this.createExplosion(e.x + e.w/2, e.y + e.h/2, e.isHeavy ? '#f97316' : '#ff007f', 12);
+                playExplosionSound();
+                score += e.isHeavy ? 150 : 50;
+                if (score > level * 800) level++;
+                this.enemies.splice(i, 1);
+                updateHud();
+                break;
+              }
+            }
+          }
+
+          // Player collision
+          if (this.enemies[i] && this.player.x < e.x + e.w && this.player.x + this.player.w > e.x &&
+              this.player.y < e.y + e.h && this.player.y + this.player.h > e.y) {
+            this.enemies.splice(i, 1);
+            this.createExplosion(this.player.x, this.player.y, '#ff0055', 18);
+            playExplosionSound();
+            lives--;
+            updateHud();
+            if (lives <= 0) {
+              gameOver = true;
+            }
+          }
+
+          if (e.x < -30) this.enemies.splice(i, 1);
+        }
+
+        // Particles
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life--;
+          if (p.life <= 0) this.particles.splice(i, 1);
+        }
+      },
+
+      createExplosion(x, y, color, count) {
+        for (let i = 0; i < count; i++) {
+          this.particles.push({
+            x, y,
+            vx: (Math.random() - 0.5) * 4,
+            vy: (Math.random() - 0.5) * 4,
+            color,
+            life: 15 + Math.random() * 10
+          });
+        }
+      },
+
+      draw() {
+        ctx.fillStyle = '#050711';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Stars
+        ctx.fillStyle = '#475569';
+        this.stars.forEach(s => {
+          ctx.fillRect(s.x, s.y, 2, 2);
+        });
+
+        // Player Spacecraft (Pixel Art)
+        ctx.fillStyle = '#00f2fe';
+        const p = this.player;
+        ctx.fillRect(p.x, p.y + 4, p.w, 6);
+        ctx.fillRect(p.x + 6, p.y, 10, 14);
+        ctx.fillStyle = '#38bdf8';
+        ctx.fillRect(p.x + p.w - 4, p.y + 5, 6, 4); // cockpit
+        // Thruster flame
+        ctx.fillStyle = Math.random() > 0.5 ? '#f97316' : '#ef4444';
+        ctx.fillRect(p.x - 5, p.y + 5, 5, 4);
+
+        // Bullets
+        ctx.fillStyle = '#f9d423';
+        this.bullets.forEach(b => {
+          ctx.fillRect(b.x, b.y, b.w, b.h);
+        });
+
+        // Enemies
+        this.enemies.forEach(e => {
+          ctx.fillStyle = e.isHeavy ? '#ea580c' : '#ec4899';
+          ctx.fillRect(e.x, e.y, e.w, e.h);
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(e.x + 3, e.y + 3, 3, 3);
+        });
+
+        // Particles
+        this.particles.forEach(p => {
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, 3, 3);
+        });
+      }
+    };
+
+    // -------------------------------------------------------------
+    // GAME 2: NOKIA SNAKE II (Classic Nokia style)
+    // -------------------------------------------------------------
+    const snakeGame = {
+      gridSize: 10,
+      snake: [],
+      dir: { x: 1, y: 0 },
+      nextDir: { x: 1, y: 0 },
+      food: { x: 15, y: 12 },
+      bonus: null,
+      bonusTimer: 0,
+      moveTimer: 0,
+
+      init() {
+        this.snake = [
+          { x: 10, y: 10 },
+          { x: 9, y: 10 },
+          { x: 8, y: 10 }
+        ];
+        this.dir = { x: 1, y: 0 };
+        this.nextDir = { x: 1, y: 0 };
+        this.spawnFood();
+        this.bonus = null;
+        this.bonusTimer = 0;
+      },
+
+      spawnFood() {
+        const cols = Math.floor(canvas.width / this.gridSize);
+        const rows = Math.floor(canvas.height / this.gridSize);
+        this.food = {
+          x: Math.floor(Math.random() * (cols - 2)) + 1,
+          y: Math.floor(Math.random() * (rows - 2)) + 1
+        };
+      },
+
+      update() {
+        if (gameOver || isPaused) return;
+
+        if (keys.ArrowUp && this.dir.y === 0) this.nextDir = { x: 0, y: -1 };
+        if (keys.ArrowDown && this.dir.y === 0) this.nextDir = { x: 0, y: 1 };
+        if (keys.ArrowLeft && this.dir.x === 0) this.nextDir = { x: -1, y: 0 };
+        if (keys.ArrowRight && this.dir.x === 0) this.nextDir = { x: 1, y: 0 };
+
+        this.moveTimer++;
+        const speedThreshold = Math.max(4, 9 - level);
+        if (this.moveTimer < speedThreshold) return;
+        this.moveTimer = 0;
+
+        this.dir = { ...this.nextDir };
+        const head = { x: this.snake[0].x + this.dir.x, y: this.snake[0].y + this.dir.y };
+
+        const cols = Math.floor(canvas.width / this.gridSize);
+        const rows = Math.floor(canvas.height / this.gridSize);
+
+        // Screen wrap or wall hit
+        if (head.x < 0 || head.x >= cols || head.y < 0 || head.y >= rows) {
+          playExplosionSound();
+          lives--;
+          updateHud();
+          if (lives <= 0) gameOver = true;
+          else this.init();
           return;
         }
-      } catch (err) {
-        // Fallback
+
+        // Self collision
+        for (let i = 0; i < this.snake.length; i++) {
+          if (head.x === this.snake[i].x && head.y === this.snake[i].y) {
+            playExplosionSound();
+            lives--;
+            updateHud();
+            if (lives <= 0) gameOver = true;
+            else this.init();
+            return;
+          }
+        }
+
+        this.snake.unshift(head);
+
+        // Food hit
+        if (head.x === this.food.x && head.y === this.food.y) {
+          score += 100 * level;
+          playPowerupSound();
+          this.spawnFood();
+          if (score >= level * 500) level++;
+          updateHud();
+        } else {
+          this.snake.pop();
+        }
+      },
+
+      draw() {
+        // Classic Nokia green monochrome LCD tone
+        ctx.fillStyle = '#879b6f';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Snake Body
+        ctx.fillStyle = '#1e2d14';
+        this.snake.forEach((part, i) => {
+          ctx.fillRect(part.x * this.gridSize + 1, part.y * this.gridSize + 1, this.gridSize - 2, this.gridSize - 2);
+        });
+
+        // Food (Pixel Apple)
+        ctx.fillStyle = '#14200d';
+        ctx.fillRect(this.food.x * this.gridSize + 2, this.food.y * this.gridSize + 2, this.gridSize - 4, this.gridSize - 4);
       }
-      output.innerText = JSON.stringify({
-        status: "UP",
-        runtime: "Java 17 OpenJDK",
-        environment: "Production",
-        host: window.location.host,
-        timestamp: new Date().toISOString()
-      }, null, 2);
+    };
+
+    // -------------------------------------------------------------
+    // GAME 3: BRICK BREAKER (Bounce arcade)
+    // -------------------------------------------------------------
+    const brickBreaker = {
+      paddle: { x: 140, y: 240, w: 60, h: 8, speed: 5 },
+      ball: { x: 180, y: 220, r: 4, vx: 3, vy: -3 },
+      bricks: [],
+
+      init() {
+        this.paddle.x = canvas.width / 2 - 30;
+        this.ball.x = canvas.width / 2;
+        this.ball.y = canvas.height - 40;
+        this.ball.vx = 2.5 * (Math.random() > 0.5 ? 1 : -1);
+        this.ball.vy = -3;
+
+        this.bricks = [];
+        const rows = 4;
+        const cols = 8;
+        const bW = 38;
+        const bH = 12;
+        const offsetLeft = 20;
+        const offsetTop = 25;
+
+        const colors = ['#ff007f', '#f97316', '#00f2fe', '#10b981'];
+
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            this.bricks.push({
+              x: offsetLeft + c * (bW + 5),
+              y: offsetTop + r * (bH + 6),
+              w: bW,
+              h: bH,
+              color: colors[r % colors.length],
+              alive: true
+            });
+          }
+        }
+      },
+
+      update() {
+        if (gameOver || isPaused) return;
+
+        // Paddle move
+        if (keys.ArrowLeft && this.paddle.x > 5) this.paddle.x -= this.paddle.speed;
+        if (keys.ArrowRight && this.paddle.x < canvas.width - this.paddle.w - 5) this.paddle.x += this.paddle.speed;
+
+        // Ball movement
+        this.ball.x += this.ball.vx;
+        this.ball.y += this.ball.vy;
+
+        // Wall collisions
+        if (this.ball.x - this.ball.r < 0 || this.ball.x + this.ball.r > canvas.width) {
+          this.ball.vx = -this.ball.vx;
+          playBeep(320);
+        }
+        if (this.ball.y - this.ball.r < 0) {
+          this.ball.vy = -this.ball.vy;
+          playBeep(350);
+        }
+
+        // Paddle hit
+        if (this.ball.y + this.ball.r >= this.paddle.y &&
+            this.ball.y - this.ball.r <= this.paddle.y + this.paddle.h &&
+            this.ball.x >= this.paddle.x && this.ball.x <= this.paddle.x + this.paddle.w) {
+          this.ball.vy = -Math.abs(this.ball.vy);
+          // Angle modifier based on hit position
+          const hitPos = (this.ball.x - (this.paddle.x + this.paddle.w / 2)) / (this.paddle.w / 2);
+          this.ball.vx = hitPos * 4.5;
+          playBeep(520, 'triangle');
+        }
+
+        // Brick collision
+        let remaining = 0;
+        this.bricks.forEach(b => {
+          if (!b.alive) return;
+          remaining++;
+          if (this.ball.x > b.x && this.ball.x < b.x + b.w &&
+              this.ball.y > b.y && this.ball.y < b.y + b.h) {
+            b.alive = false;
+            this.ball.vy = -this.ball.vy;
+            score += 120;
+            playPowerupSound();
+            updateHud();
+          }
+        });
+
+        // Check if cleared
+        if (remaining === 0) {
+          level++;
+          updateHud();
+          this.init();
+        }
+
+        // Ball drop out
+        if (this.ball.y > canvas.height) {
+          lives--;
+          playExplosionSound();
+          updateHud();
+          if (lives <= 0) {
+            gameOver = true;
+          } else {
+            this.ball.x = this.paddle.x + this.paddle.w / 2;
+            this.ball.y = this.paddle.y - 10;
+            this.ball.vy = -3;
+          }
+        }
+      },
+
+      draw() {
+        ctx.fillStyle = '#050711';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Paddle
+        ctx.fillStyle = '#00f2fe';
+        ctx.fillRect(this.paddle.x, this.paddle.y, this.paddle.w, this.paddle.h);
+
+        // Ball
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.arc(this.ball.x, this.ball.y, this.ball.r, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Bricks
+        this.bricks.forEach(b => {
+          if (!b.alive) return;
+          ctx.fillStyle = b.color;
+          ctx.fillRect(b.x, b.y, b.w, b.h);
+        });
+      }
+    };
+
+    // -------------------------------------------------------------
+    // ENGINE CONTROLLER & MAIN LOOP
+    // -------------------------------------------------------------
+    function switchGame(gameId) {
+      currentGame = gameId;
+      document.querySelectorAll('.game-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('onclick').includes(gameId));
+      });
+      restartCurrentGame();
+      fetchLeaderboard();
     }
+
+    function restartCurrentGame() {
+      score = 0;
+      lives = 3;
+      level = 1;
+      gameOver = false;
+      isPaused = false;
+      updateHud();
+
+      if (currentGame === 'space-impact') spaceImpact.init();
+      else if (currentGame === 'snake-retro') snakeGame.init();
+      else if (currentGame === 'brick-breaker') brickBreaker.init();
+    }
+
+    function togglePause() {
+      isPaused = !isPaused;
+      playBeep(isPaused ? 250 : 500);
+    }
+
+    function updateHud() {
+      document.getElementById('hud-score').innerText = `SCORE: ${score}`;
+      document.getElementById('hud-level').innerText = `LVL: ${level}`;
+      document.getElementById('hud-lives').innerText = '♥'.repeat(Math.max(0, lives));
+    }
+
+    function loop() {
+      if (currentGame === 'space-impact') {
+        spaceImpact.update();
+        spaceImpact.draw();
+      } else if (currentGame === 'snake-retro') {
+        snakeGame.update();
+        snakeGame.draw();
+      } else if (currentGame === 'brick-breaker') {
+        brickBreaker.update();
+        brickBreaker.draw();
+      }
+
+      // Overlays
+      if (gameOver) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#ff0055';
+        ctx.font = '16px "Press Start 2P"';
+        ctx.textAlign = 'center';
+        ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 10);
+        ctx.fillStyle = '#fff';
+        ctx.font = '10px "Press Start 2P"';
+        ctx.fillText(`FINAL SCORE: ${score}`, canvas.width / 2, canvas.height / 2 + 15);
+        ctx.fillText('PRESS [A] TO RESTART', canvas.width / 2, canvas.height / 2 + 35);
+      } else if (isPaused) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#00f2fe';
+        ctx.font = '14px "Press Start 2P"';
+        ctx.textAlign = 'center';
+        ctx.fillText('PAUSED', canvas.width / 2, canvas.height / 2);
+      }
+
+      requestAnimationFrame(loop);
+    }
+
+    // -------------------------------------------------------------
+    // LEADERBOARD API INTEGRATION
+    // -------------------------------------------------------------
+    async function fetchLeaderboard() {
+      try {
+        const res = await fetch(`/api/scores?game=${currentGame}`);
+        if (res.ok) {
+          const list = await res.json();
+          renderLeaderboard(list);
+          return;
+        }
+      } catch (e) {}
+
+      // Fallback local records for Vercel edge / static preview
+      const local = JSON.parse(localStorage.getItem(`java_scores_${currentGame}`) || '[]');
+      const defaultScores = [
+        { player: 'DUKE', score: 4200 },
+        { player: 'NEO', score: 3100 },
+        { player: 'PIXELKING', score: 2850 }
+      ];
+      renderLeaderboard(local.length ? local : defaultScores);
+    }
+
+    function renderLeaderboard(scores) {
+      const ul = document.getElementById('leaderboard-list');
+      ul.innerHTML = '';
+      scores.slice(0, 5).forEach((s, idx) => {
+        const li = document.createElement('li');
+        li.className = `leaderboard-item ${idx === 0 ? 'rank-1' : ''}`;
+        li.innerHTML = `<span>${idx + 1}. ${s.player}</span><span>${s.score} PTS</span>`;
+        ul.appendChild(li);
+      });
+    }
+
+    async function submitCurrentScore() {
+      const nameInput = document.getElementById('player-name');
+      const player = (nameInput.value || 'GUEST').trim().toUpperCase();
+      if (!player) return;
+
+      const newEntry = { player, game: currentGame, score: Math.max(score, 100) };
+
+      try {
+        await fetch('/api/scores', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newEntry)
+        });
+      } catch (e) {
+        // Save locally if Java backend offline
+        const local = JSON.parse(localStorage.getItem(`java_scores_${currentGame}`) || '[]');
+        local.push(newEntry);
+        local.sort((a, b) => b.score - a.score);
+        localStorage.setItem(`java_scores_${currentGame}`, JSON.stringify(local));
+      }
+
+      playPowerupSound();
+      nameInput.value = '';
+      fetchLeaderboard();
+    }
+
+    // Start Arcade
+    restartCurrentGame();
+    fetchLeaderboard();
+    requestAnimationFrame(loop);
   </script>
 </body>
 </html>
