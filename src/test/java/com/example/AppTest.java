@@ -9,6 +9,12 @@ class AppTest {
     void appHasAGreeting() {
         App classUnderTest = new App();
         assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
-        assertEquals("Hello, World!", classUnderTest.getGreeting());
+        assertEquals("Hello, World! Java Web Server is running.", classUnderTest.getGreeting());
+    }
+
+    @Test
+    void appConfiguresPort() {
+        App app = new App(9090);
+        assertEquals(9090, app.getPort());
     }
 }
